@@ -5,6 +5,7 @@ import Home from '@/views/Home'
 import Login from '@/views/Login'
 import Register from '@/views/Register'
 import Center from '@/views/Center'
+import Projects from '@/views/Projects'
 
 Vue.use(Router)
 
@@ -25,5 +26,9 @@ export default new Router({
         path: '/center',
         name: 'Center',
         component: Center
+    }, {
+        path: '/projects',
+        name: 'Projects',
+        component: Projects
     }]
 })

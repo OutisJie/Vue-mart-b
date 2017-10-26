@@ -1,22 +1,26 @@
 <!-- 登陆文件 -->
 <template>
   <div class="login_section">
-  <Header></Header>
-  
-  <div class="login_content">
-  <p>
-    登录
-  </p>
-  <el-input  placeholder="请输入用户名"></el-input>
-  <el-input  placeholder="请输入密码" type="password"></el-input>
-  <el-button type="primary">提交</el-button>
-  <div class="no_account"> 
-    <router-link to='/register'> 没有账号</router-link>
+    <Header></Header>
+    
+    <div class="login_content">
+      <p>
+        登录
+      </p>
+      <el-input  placeholder="请输入用户名"></el-input>
+      <el-input  placeholder="请输入密码" type="password"></el-input>
+      <div style="padding-top: 5px">
+        <el-checkbox style="margin-left: 5px; float: left">记住我</el-checkbox>
+        <div class="no_account">
+          <router-link to='/register'> 找回密码</router-link>
+        </div>
+      </div>
+      <el-button type="primary">提交</el-button>
+      <div class="no_account"> 
+        <router-link to='/register'> 没有账号</router-link>
+      </div>
+    </div>
   </div>
-  </div>
-
-  </div>
-  
 </template>
 
 <script>
@@ -37,7 +41,7 @@ export default {
 
 .login_content {
   text-align: center;
-  margin-top: 300px;
+  margin-top: 200px;
   width: 20%;
   margin-left: auto;
   margin-right: auto;

@@ -1,8 +1,9 @@
 <!-- 头部组件 -->
 <template>
 <div class="header">
-  <p>基于人工智能的软件外包服务平台</p>
-  
+  <p>
+    <router-link to='/' style="color:#323A45;">基于人工智能的软件外包服务平台</router-link>
+  </p>
 </div>
 </template>
 
@@ -21,7 +22,6 @@ export default {
   color:#323A45;
   padding:10px;
   border-bottom: 1px solid #DDD;
-
 }
 
 </style>

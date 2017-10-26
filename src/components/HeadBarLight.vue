@@ -7,7 +7,7 @@
   <el-menu class="el-menu" theme="light" mode="horizontal" style="padding-top:0px; margin-left:300px">
     <el-menu-item index="1">项目</el-menu-item>
     <el-menu-item index="2">估价</el-menu-item>
-
+    <el-menu-item index="3">帮助</el-menu-item>
     <el-dropdown class="el-dropdown">
       <span class="el-dropdown-link">
         <div>

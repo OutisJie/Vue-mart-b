@@ -131,9 +131,7 @@ export default {
                 $('.head_home').css(beforeScroll);
                 $('.head_center > a').css({ 'color': '#ffffff' });
             }
-
         })
-
     }
 }
 

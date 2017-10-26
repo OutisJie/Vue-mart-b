@@ -2,7 +2,7 @@
 <template>
   <div id="Cnter" style="height: 100%;">
     <div class="person_center">
-      <HeadBarDark></HeadBarDark>
+      <HeadBarLight style="z-index:1 "></HeadBarLight>
       <div class="main_content">
         <div class="main_theme">
             <el-breadcrumb separator="/" class="breadcrumb_size">
@@ -10,7 +10,7 @@
               <el-breadcrumb-item :to="{ path: '/center' }">个人中心</el-breadcrumb-item>
             </el-breadcrumb>
               <div class="user_menu">
-                  <el-menu mode="vertical" default-active="1" class="el-menu-vertical-demo">
+                  <el-menu mode="vertical" default-active="1" class="el-menu-vertical-demo" style="margin-left:20px">
                     <el-menu-item-group  title="账户信息">
                       <el-menu-item index="1" ><i class="el-icon-information"></i>账户信息</el-menu-item>
                     </el-menu-item-group>
@@ -30,30 +30,41 @@
                     <span>OutisJie</span>
                     <el-button type="primary" class="header_button">升级为团队</el-button>
                   </div>
-                  <span>性别</span>
-                  <span>个性签名</span>
                 </el-card>
                 <div class="detail_info">
-                  <span style="font-size:20px;">账户信息</span>
-                  <hr>
-                  <span style="font-size: 10px; opacity: 0.5;">您的个人信息不会透露给第三方，请放心填写</span>
-                  <div class="bar_type">
-                    <span style="margin-right:5rem;">工作邮箱</span>
-                    <span>1552700@tongji.com</span>
+                  <div>
+                    <span style="font-size:20px;">账户信息</span>
+                    <hr>
+                    <span style="font-size: 10px; opacity: 0.5;">您的个人信息不会透露给第三方</span>
+                    <div class="bar_type">
+                      <span style="margin-right:5rem;">工作邮箱</span>
+                      <span>1552700@tongji.com</span>
+                      <el-button type="primary" class="header_button"><i class="el-icon-edit" style="margin-right:0.4rem;"></i>修改</el-button>
+                    </div>
+                    <div class="bar_type">
+                      <span style="margin-right:5rem;">工作手机</span>
+                      <span>135558546815</span>
+                      <el-button type="primary" class="header_button"><i class="el-icon-edit" style="margin-right:0.4rem;"></i>修改</el-button>
+                    </div>
                   </div>
-                  <div class="bar_type">
-                    <span style="margin-right:5rem;">工作手机</span>
-                    <span>135558546815</span>
+                  <div style="margin-top: 30px;">
+                    <span style="font-size:20px;">个人资料</span>
+                    <hr>
+                    <div class="bar_type">
+                      <span style="margin-right:5rem;">姓名</span>
+                      <span>OutisJie</span>
+                      <el-button type="primary" class="header_button"><i class="el-icon-edit" style="margin-right:0.4rem;"></i>修改</el-button>
+                    </div>
+                    <div class="bar_type">
+                      <span style="margin-right:5rem;">QQ</span>
+                      <span>454545545</span>
+                    </div>
+                    <div class="bar_type">
+                      <span style="margin-right:6rem;">所在地</span>
+                      <span >上海</span>
+                    </div>
                   </div>
-                  <div class="bar_type">
-                    <span style="margin-right:6rem;">所在地</span>
-                    <span >上海</span>
-                  </div>
-
-                  <el-button type="primary" class="bar_type" >修改个人信息</el-button>
                 </div>
-
-
               </div>
         </div>
       </div>
@@ -62,15 +73,14 @@
 </template>
 
 <script>
-import Head2 from "../components/Head2";
 import InfoForm from "../components/InfoForm.vue"
 import HeadBarDark from "../components/HeadBarDark.vue"
 import HeadBarLight from "../components/HeadBarLight.vue"
 
+
 export default {
   name: "Center",
   components: {
-    Head2,
     InfoForm,
     HeadBarLight,
     HeadBarDark,
@@ -86,6 +96,9 @@ export default {
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
+    },
+    modify:function(){
+      this.$router.push( {path:'../components/InfoForm'});
     }
   }
 };
@@ -99,7 +112,7 @@ export default {
   }
   .main_content {
      padding-top:80px;
-     min-height: 600px;
+     min-height: 900px;
      margin-left: auto;
      margin-right: auto;
      background:#EFF2F7;
@@ -123,7 +136,7 @@ export default {
   }
   .detail {
     margin-left:230px;
-    min-height: 40rem;
+    min-height: 700px;
     box-shadow: 0 1px 2px rgba(183,195,192,.95);
     font-size: 14px;
     background-color:  #FFFFFF;

@@ -10,6 +10,15 @@
             <el-option label="女" value="female"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="所在地" prop="adress">
+          <el-select v-model="ruleForm.adress" placeholder="请选择城市">
+            <el-option label="北京" value="Beijing"></el-option>
+            <el-option label="上海" value="Shanghai"></el-option>
+            <el-option label="广州" value="Guangzhou"></el-option>
+            <el-option label="武汉" value="Wuhan"></el-option>
+            <el-option label="南京" value="Nanjing"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="邮箱" prop="mail">
           <el-input v-model="ruleForm.mail"></el-input>
         </el-form-item>
@@ -35,6 +44,7 @@
           ruleForm: {
             name: '',
             sex: '',
+            address:'',
             mail: '',
             sign: ''
           },
@@ -45,6 +55,9 @@
             ],
             sex: [
               {required: true, message: '请选择性别', trigger: 'change'}
+            ],
+            sex: [
+              {required: true, message: '请选择城市', trigger: 'change'}
             ],
             mail: [
               {required: true, message: '请输入邮箱', trigger: 'change'}
