@@ -16,7 +16,7 @@
     </el-dropdown>
 
 </div>
-  
+
 </div>
 
 
@@ -35,6 +35,7 @@ export default {
   top: 0px;
   width: 100%;
   color: #323a45;
+  background-color: #FFFFFF;
   padding-top:30px;
   margin-left: 10px;
   border-bottom: 1px solid #ddd;
@@ -46,7 +47,7 @@ export default {
 
 .header .drop{
     margin-right: 30px;
-  
+
 }
 </style>
 
