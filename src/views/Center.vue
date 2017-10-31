@@ -1,6 +1,6 @@
 <!-- 个人中心 -->
 <template>
-  <div id="Cnter" style="height: 100%;">
+  <div id="Center" style="height: 100%;">
     <div class="person_center">
       <HeadBarLight style="z-index:1 "></HeadBarLight>
       <div class="main_content">
@@ -36,32 +36,18 @@
                     <span style="font-size:20px;">账户信息</span>
                     <hr>
                     <span style="font-size: 10px; opacity: 0.5;">您的个人信息不会透露给第三方</span>
-                    <div class="bar_type">
-                      <span style="margin-right:5rem;">工作邮箱</span>
-                      <span>1552700@tongji.com</span>
-                      <el-button type="primary" class="header_button"><i class="el-icon-edit" style="margin-right:0.4rem;"></i>修改</el-button>
+                    <div class="bar_type" >
+                      <Mail></Mail>
                     </div>
                     <div class="bar_type">
-                      <span style="margin-right:5rem;">工作手机</span>
-                      <span>135558546815</span>
-                      <el-button type="primary" class="header_button"><i class="el-icon-edit" style="margin-right:0.4rem;"></i>修改</el-button>
+                      <Phone></Phone>
                     </div>
                   </div>
                   <div style="margin-top: 30px;">
                     <span style="font-size:20px;">个人资料</span>
                     <hr>
-                    <div class="bar_type">
-                      <span style="margin-right:5rem;">姓名</span>
-                      <span>OutisJie</span>
-                      <el-button type="primary" class="header_button"><i class="el-icon-edit" style="margin-right:0.4rem;"></i>修改</el-button>
-                    </div>
-                    <div class="bar_type">
-                      <span style="margin-right:5rem;">QQ</span>
-                      <span>454545545</span>
-                    </div>
-                    <div class="bar_type">
-                      <span style="margin-right:6rem;">所在地</span>
-                      <span >上海</span>
+                    <div>
+                      <Profile></Profile>
                     </div>
                   </div>
                 </div>
@@ -76,7 +62,9 @@
 import InfoForm from "../components/InfoForm.vue"
 import HeadBarDark from "../components/HeadBarDark.vue"
 import HeadBarLight from "../components/HeadBarLight.vue"
-
+import Mail from "../components/e-mail/Mail.vue"
+import Phone from "../components/phone/Phone.vue"
+import Profile from "../components/profile/Profile.vue"
 
 export default {
   name: "Center",
@@ -84,6 +72,9 @@ export default {
     InfoForm,
     HeadBarLight,
     HeadBarDark,
+    Mail,
+    Phone,
+    Profile
   },
   data() {
     return {
@@ -102,6 +93,7 @@ export default {
     }
   }
 };
+
 </script>
 
 
