@@ -2,7 +2,7 @@
 <template>
   <div class="register_section">
   <Header></Header>
-  
+
   <div class="register_content">
     <p>
       注册
@@ -14,11 +14,11 @@
   <el-button type="primary">提交</el-button>
   </div>
 </div>
-  
+
 </template>
 
 <script>
-import Header from "../components/Head";
+import Header from "../components/head/Head";
 export default {
   name: "Register",
   components: { Header }

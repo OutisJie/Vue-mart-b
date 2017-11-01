@@ -2,7 +2,7 @@
 <template>
   <div class="login_section">
     <Header></Header>
-    
+
     <div class="login_content">
       <p>
         登录
@@ -16,7 +16,7 @@
         </div>
       </div>
       <el-button type="primary">提交</el-button>
-      <div class="no_account"> 
+      <div class="no_account">
         <router-link to='/register'> 没有账号</router-link>
       </div>
     </div>
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import Header from "../components/Head";
+import Header from "../components/head/Head";
 export default {
   name: "Login",
   components: { Header }
@@ -60,7 +60,7 @@ export default {
   float: right;
   cursor: pointer;
   font-size: 12px;
- 
+
 }
 
  .no_account > a {

@@ -1,7 +1,7 @@
 <template>
-  <div id = "mail" style="margin-top: 2rem">
+  <div style="margin-top: 2rem">
     <el-button type="primary" class="header_button" @click="changeView(message)"><i class="el-icon-edit" style="margin-right:0.4rem;"></i>{{message}}</el-button>
-    <mail1 v-bind:is="currentView" ></mail1>
+    <profile1 v-bind:is="currentView" style="margin-right: 10rem" ></profile1>
   </div>
 </template>
 
@@ -15,10 +15,10 @@
     },
     data(){
       return{
-        phone1: "profile1", //导航栏文本1
-        phone2: "profile2", //导航栏文本2
+        phone1: "profile1",
+        phone2: "profile2",
         message:"修改",
-        currentView: "profile1", //默认选中first子组件
+        currentView: "profile1",
       }
     },
     methods:{
@@ -28,6 +28,7 @@
           this.message = "保存";
         }
         else {
+          console.log("nihao");
           this.currentView = "profile1";
           this.message = "修改";
         }

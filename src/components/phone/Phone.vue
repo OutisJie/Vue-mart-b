@@ -1,7 +1,7 @@
 <template>
-  <div id = "mail" style="margin-top: 2rem">
+  <div style="margin-top: 2rem">
     <el-button type="primary" class="header_button" @click="changeView(message)"><i class="el-icon-edit" style="margin-right:0.4rem;"></i>{{message}}</el-button>
-    <mail1 v-bind:is="currentView" ></mail1>
+    <phone1 v-bind:is="currentView" ></phone1>
   </div>
 </template>
 
@@ -15,10 +15,10 @@
     },
     data(){
       return{
-        phone1: "phone1", //导航栏文本1
-        phone2: "phone2", //导航栏文本2
+        phone1: "phone1",
+        phone2: "phone2",
         message:"修改",
-        currentView: "phone1", //默认选中first子组件
+        currentView: "phone1",
       }
     },
     methods:{

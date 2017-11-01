@@ -1,6 +1,6 @@
 <template>
-  <div class="ProjectsView">
-    <el-row :gutter="24" type="flex" justify="center">
+  <div class="ProjectsView" style="margin-left:50px; margin-right:50px;">
+    <el-row :gutter="50" type="flex" justify="center">
 
       <el-col :span="8">
         <ProjectView></ProjectView>
@@ -11,7 +11,7 @@
       </el-col>
 
       <el-col :span="8">
-        <ProjectView></ProjectView>
+
       </el-col>
 
     </el-row>
@@ -30,6 +30,6 @@ export default {
 <style>
 .ProjectsView{
     background: #EEF1F5;
-    height: 800px;
+    padding-top:50px;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div class="home">
         <!-- 头部 -->
-        
+
         <div class="head_home">
             <a>项目</a>
             <a>估算</a>
@@ -24,7 +24,7 @@
             </el-carousel-item>
         </el-carousel>
         </div>
-        
+
 
         <!-- 详细 -->
 
@@ -54,11 +54,11 @@
                         提供了需求项目发布平台，和迄今为止最权威的项目估价系统
                     </div>
                 </div>
-                <img src="../assets/app.png">
+                <img class="img_icon" src="../assets/app.png">
             </div>
 
             <div class="home_flow">
-                <img src="../assets/coder.png">
+                <img class="img_icon" src="../assets/coder.png">
                 <div class="content">
                     高质量开发者
                     <div class="content_child">
@@ -74,11 +74,11 @@
                         规范化，透明的软件开发管理平台
                     </div>
                 </div>
-                <img src="../assets/monitor.png">
+                <img class="img_icon" src="../assets/monitor.png">
             </div>
 
             <div class="home_flow">
-                <img src="../assets/security.png">
+                <img class="img_icon" src="../assets/security.png">
                 <div class="content">
                     高校质保
                     <div class="content_child">
@@ -150,7 +150,7 @@ export default {
     margin: auto;
 }
 
-img {
+.img_icon {
     width: 150px;
     height: 150px;
     margin-left: 200px;
@@ -182,7 +182,7 @@ img {
     padding-top: 30px;
     width: 55%;
     margin:auto;
- 
+
 }
 
 .content_child {

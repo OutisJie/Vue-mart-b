@@ -12,73 +12,46 @@
               <div class="user_menu">
                   <el-menu mode="vertical" default-active="1" class="el-menu-vertical-demo" style="margin-left:20px">
                     <el-menu-item-group  title="账户信息">
-                      <el-menu-item index="1" ><i class="el-icon-information"></i>账户信息</el-menu-item>
+                      <el-menu-item index="1" @click="changeView1" ><i class="el-icon-information"></i>账户信息</el-menu-item>
                     </el-menu-item-group>
                     <el-menu-item-group title="开发者信息">
-                      <el-menu-item index="2"><i class="el-icon-star-on"></i>技能展示</el-menu-item>
-                      <el-menu-item index="3"><i class="el-icon-circle-check"></i>参与项目</el-menu-item>
-                      <el-menu-item index="4"><i class="el-icon-message"></i>我的需求</el-menu-item>
+                      <el-menu-item index="2" @click="changeView2"><i class="el-icon-star-on"></i>技能展示</el-menu-item>
+                      <el-menu-item index="3" @click="changeView3"><i class="el-icon-circle-check"></i>参与项目</el-menu-item>
+                      <el-menu-item index="4" @click="changeView4"><i class="el-icon-message"></i>我的需求</el-menu-item>
                     </el-menu-item-group>
                   </el-menu>
               </div>
-              <div class="detail">
-                <el-card class="header_info">
-                  <div>
-                    <img src="../assets/coder.png" class="header_image" style="margin-left:0px;" >
-                  </div>
-                  <div style="padding:0.5rem 1.5rem; font-size: 20px">
-                    <span>OutisJie</span>
-                    <el-button type="primary" class="header_button">升级为团队</el-button>
-                  </div>
-                </el-card>
-                <div class="detail_info">
-                  <div>
-                    <span style="font-size:20px;">账户信息</span>
-                    <hr>
-                    <span style="font-size: 10px; opacity: 0.5;">您的个人信息不会透露给第三方</span>
-                    <div class="bar_type" >
-                      <Mail></Mail>
-                    </div>
-                    <div class="bar_type">
-                      <Phone></Phone>
-                    </div>
-                  </div>
-                  <div style="margin-top: 30px;">
-                    <span style="font-size:20px;">个人资料</span>
-                    <hr>
-                    <div>
-                      <Profile></Profile>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <div class="detail"><Account v-bind:is="currentView"></Account></div>
         </div>
       </div>
-  </div>
+    </div>
   </div>
 </template>
 
 <script>
-import InfoForm from "../components/InfoForm.vue"
-import HeadBarDark from "../components/HeadBarDark.vue"
-import HeadBarLight from "../components/HeadBarLight.vue"
-import Mail from "../components/e-mail/Mail.vue"
-import Phone from "../components/phone/Phone.vue"
-import Profile from "../components/profile/Profile.vue"
+import HeadBarDark from "../components/head/HeadBarDark.vue"
+import HeadBarLight from "../components/head/HeadBarLight.vue"
+import Account from "../components/personalcenter/Account.vue"
+import Skills from "../components/personalcenter/Skills.vue"
+import Participate from "../components/personalcenter/ParticipateProject.vue"
+import MyNeeds from "../components/personalcenter/MyNeeds.vue"
 
 export default {
   name: "Center",
   components: {
-    InfoForm,
     HeadBarLight,
     HeadBarDark,
-    Mail,
-    Phone,
-    Profile
+    Account,
+    Skills,
+    Participate,
+    MyNeeds
   },
   data() {
     return {
-      isCollapse: true
+      isCollapse: true,
+      Account:"Account",
+      Skills:"Skills",
+      currentView:"Account"
     };
   },
   methods: {
@@ -88,8 +61,21 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
+
     modify:function(){
       this.$router.push( {path:'../components/InfoForm'});
+    },
+    changeView1:function() {
+      this.currentView = Account;
+    },
+    changeView2:function () {
+      this.currentView = Skills;
+    },
+    changeView3:function () {
+      this.currentView = Participate;
+    },
+    changeView4:function () {
+      this.currentView = MyNeeds;
     }
   }
 };
@@ -128,38 +114,11 @@ export default {
   }
   .detail {
     margin-left:230px;
-    min-height: 700px;
+    min-height: 800px;
     box-shadow: 0 1px 2px rgba(183,195,192,.95);
     font-size: 14px;
     background-color:  #FFFFFF;
     overflow: hidden;
   }
-  .header_info{
-    margin:3rem 4rem 0;
-    height:10rem;
-    position:relative;
-  }
-  .header_image{
-    width:8rem;
-    height:8rem;
-    float:left;
-    border:1px;
-    border-radius:6px;
-  }
-  .header_button{
-    float: right;
-    height: 24px;
-    font-size: 12px;
-    padding: auto;
-    padding-top: 6px;
-  }
-  .detail_info{
-    font-size: 14px;
-    margin:2rem 4rem 0;
-    height:10rem;
-    position:relative;
-  }
-  .bar_type{
-    margin-top:2rem;
-  }
+
 </style>

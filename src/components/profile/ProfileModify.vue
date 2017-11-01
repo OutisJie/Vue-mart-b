@@ -4,8 +4,8 @@
         <el-form-item label="姓名" prop="name">
           <el-input style="width: 18em" v-model="ruleForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="QQ" prop="mail">
-          <el-input v-model="ruleForm.qq"></el-input>
+        <el-form-item label="QQ" prop="qq">
+          <el-input style="width: 18em" v-model="ruleForm.qq"></el-input>
         </el-form-item>
         <el-form-item label="所在地" prop="adress">
           <el-select v-model="ruleForm.address" placeholder="请选择城市">
@@ -17,7 +17,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>

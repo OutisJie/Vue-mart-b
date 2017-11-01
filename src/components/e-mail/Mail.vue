@@ -15,10 +15,10 @@
     },
     data(){
       return{
-        mail1: "mail1", //导航栏文本1
-        mail2: "mail2", //导航栏文本2
+        mail1: "mail1",
+        mail2: "mail2",
         message:"修改",
-        currentView: "mail1", //默认选中first子组件
+        currentView: "mail1",
       }
     },
     methods:{

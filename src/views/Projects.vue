@@ -2,7 +2,7 @@
 <template>
   <div class="projects">
     <!-- 头部 -->
-        
+
     <div class="head_projects">
       <a>基于人工智能的软件外包服务平台</a>
       <a>项目</a>
@@ -15,18 +15,20 @@
     </div>
 
     <!-- 轮播 -->
-    <div class="picshow">
-      <el-carousel :interval="5000" arrow="no" :autoplay="false">
-        <el-carousel-item :key="1">
-          <div class="button_group">
-            <el-button>发布需求</el-button>
-            <el-button>查看需求</el-button>
-          </div>
-        </el-carousel-item>
-        <el-carousel-item :key="2">
-        </el-carousel-item>
-      </el-carousel>
+    <div>
+      <img  src="../assets/projectbackground.jpg" style="height: 400px;width: 100%">
     </div>
+      <!--<el-carousel :interval="5000" arrow="no" :autoplay="false">-->
+        <!--<el-carousel-item :key="1">-->
+          <!--<div class="button_group">-->
+            <!--<el-button>发布需求</el-button>-->
+            <!--<el-button>查看需求</el-button>-->
+          <!--</div>-->
+        <!--</el-carousel-item>-->
+        <!--<el-carousel-item :key="2">-->
+        <!--</el-carousel-item>-->
+      <!--</el-carousel>-->
+
 
     <div class="projects_select">
       <el-row :gutter="24" type="flex" justify="center">
@@ -87,17 +89,21 @@
       <ProjectsView></ProjectsView>
     </div>
 
+    <div class="projects_footer">
+        同济大学 XLab
+    </div>
+
   </div>
 </template>
 
 <script>
-import HeadBarDark from "../components/HeadBarDark";
-import Head from "../components/Head";
+import HeadBarDark from "../components/head/HeadBarDark";
+import Head from "../components/head/Head";
 import ProjectsView from "../components/ProjectsView";
 
 export default {
   name: "Projects",
-  components: { 
+  components: {
     HeadBarDark,
     ProjectsView
    },
@@ -112,7 +118,11 @@ export default {
   color: #323a45;
 }
 
-.footer {
+.projects_view{
+    background: #EEF1F5;
+}
+
+.projects_footer {
     text-align: center;
     margin-top: 100px;
     margin-bottom: 20px;
@@ -123,10 +133,9 @@ export default {
     margin: auto;
 }
 
-img {
-    width: 150px;
-    height: 150px;
-    margin-left: 200px;
+img_background {
+    width: 720px;
+    height: 400px;
 }
 
 .head_projects {
@@ -155,7 +164,7 @@ img {
     padding-top: 30px;
     width: 55%;
     margin:auto;
- 
+
 }
 
 .content_child {
