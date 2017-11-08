@@ -1,5 +1,5 @@
 <template>
-  <div class="ProjectView">
+  <div class="project_view">
     <el-row :gutter="0" type="flex" justify="center" style="background: #FFFFFF; height:150px;">
       <img class="project_pic" src='../assets/head_pic.jpg'></img>
     </el-row>
@@ -27,8 +27,8 @@ export default {
 };
 </script>
 
-<style scoped>
-.ProjectView{
+<style>
+.project_view{
     background: #EEF1F5;
     -moz-box-shadow:0px 0px 5px #000000;
     -webkit-box-shadow:0px 0px 5px #000000;
@@ -60,6 +60,7 @@ export default {
 }
 
 .project_role{
+
     color: #c7c7c7;
 }
 

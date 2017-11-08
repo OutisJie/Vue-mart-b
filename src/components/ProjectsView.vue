@@ -1,5 +1,5 @@
 <template>
-  <div class="ProjectsView" style="margin-left:50px; margin-right:50px;">
+  <div class="ProjectsView" style="margin-left:50px;">
     <el-row :gutter="50" type="flex" justify="center">
 
       <el-col :span="8">
@@ -11,7 +11,7 @@
       </el-col>
 
       <el-col :span="8">
-
+        
       </el-col>
 
     </el-row>

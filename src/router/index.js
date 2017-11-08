@@ -6,6 +6,7 @@ import Login from '@/views/Login'
 import Register from '@/views/Register'
 import Center from '@/views/Center'
 import Projects from '@/views/Projects'
+import ProjectDetail from '@/views/ProjectDetail'
 
 Vue.use(Router)
 
@@ -30,5 +31,9 @@ export default new Router({
         path: '/projects',
         name: 'Projects',
         component: Projects
+    }, {
+        path: '/projectDetail',
+        name: 'ProjectDetail',
+        component: ProjectDetail
     }]
 })

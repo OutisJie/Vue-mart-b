@@ -16,7 +16,7 @@
 
     <!-- 轮播 -->
     <div>
-      <img  src="../assets/projectbackground.jpg" style="height: 400px;width: 100%">
+      <img  src="../assets/projectbackground.jpg" style="height: 400px; width: 100%">
     </div>
       <!--<el-carousel :interval="5000" arrow="no" :autoplay="false">-->
         <!--<el-carousel-item :key="1">-->
@@ -30,10 +30,10 @@
       <!--</el-carousel>-->
 
 
-    <div class="projects_select">
-      <el-row :gutter="24" type="flex" justify="center">
-        <el-col :span="3">
-          <el-dropdown>
+    <div class="projects_select" >
+      <el-row :gutter="24" type="flex" justify="center" style="margin-top: 15px;">
+        <el-col :span="3" itemscope>
+          <el-dropdown style="padding-top: 0px">
             <span class="el-dropdown-link">
               <i class="el-icon-menu"></i>
               所有类型 <i class="el-icon-arrow-down"></i>
@@ -53,7 +53,7 @@
         <el-col :span="1">|</el-col>
 
         <el-col :span="2">
-          <el-dropdown>
+          <el-dropdown style="padding-top: 0px">
             <span class="el-dropdown-link">
               所有进度 <i class="el-icon-arrow-down"></i>
             </span>
@@ -67,7 +67,7 @@
         </el-col>
 
         <el-col :span="2">
-          <el-dropdown>
+          <el-dropdown style="padding-top: 0px">
             <span class="el-dropdown-link">
               所有角色 <i class="el-icon-arrow-down"></i>
             </span>
@@ -87,12 +87,12 @@
 
     <div class="projects_view">
       <ProjectsView></ProjectsView>
+      <div style="height: 50px"></div>
     </div>
 
     <div class="projects_footer">
-        同济大学 XLab
+      同济大学 XLab
     </div>
-
   </div>
 </template>
 
@@ -111,6 +111,9 @@ export default {
 </script>
 
 <style>
+  .projects{
+    overflow: hidden;
+  }
 .header {
   position: fixed;
   top: 0px;
@@ -195,11 +198,6 @@ img_background {
     border-bottom: 1px solid #DDD;
     height: 50px;
     color: #657182;
-}
-
-.projects_select>.el-row {
-    text-align: center;
-    margin-top: 40px;
 }
 
 .el-carousel__item {

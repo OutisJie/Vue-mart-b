@@ -10,6 +10,7 @@
     <el-input  placeholder="请输入用户名"></el-input>
     <el-input  placeholder="请输入密码" type="password"></el-input>
     <el-input  placeholder="请再次输入密码" type="password"></el-input>
+    <el-input  placeholder="请输入邮箱" type="email"></el-input>
     <el-checkbox style="margin-left: 5px; padding-top: 5px; float: left">我已同意相关协议</el-checkbox>
   <el-button type="primary">提交</el-button>
   </div>

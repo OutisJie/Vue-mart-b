@@ -1,7 +1,6 @@
 <!-- 个人中心 -->
 <template>
-  <div id="Center" style="height: 100%;">
-    <div class="person_center">
+    <div id="" class="person_center">
       <HeadBarLight style="z-index:1 "></HeadBarLight>
       <div class="main_content">
         <div class="main_theme">
@@ -15,7 +14,7 @@
                       <el-menu-item index="1" @click="changeView1" ><i class="el-icon-information"></i>账户信息</el-menu-item>
                     </el-menu-item-group>
                     <el-menu-item-group title="开发者信息">
-                      <el-menu-item index="2" @click="changeView2"><i class="el-icon-star-on"></i>技能展示</el-menu-item>
+                      <el-menu-item index="2" @click="changeView2"><i class="el-icon-star-on"></i>项目经历</el-menu-item>
                       <el-menu-item index="3" @click="changeView3"><i class="el-icon-circle-check"></i>参与项目</el-menu-item>
                       <el-menu-item index="4" @click="changeView4"><i class="el-icon-message"></i>我的需求</el-menu-item>
                     </el-menu-item-group>
@@ -25,14 +24,13 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
 import HeadBarDark from "../components/head/HeadBarDark.vue"
 import HeadBarLight from "../components/head/HeadBarLight.vue"
 import Account from "../components/personalcenter/Account.vue"
-import Skills from "../components/personalcenter/Skills.vue"
+import Experience from "../components/personalcenter/Experience.vue"
 import Participate from "../components/personalcenter/ParticipateProject.vue"
 import MyNeeds from "../components/personalcenter/MyNeeds.vue"
 
@@ -42,7 +40,7 @@ export default {
     HeadBarLight,
     HeadBarDark,
     Account,
-    Skills,
+    Experience,
     Participate,
     MyNeeds
   },
@@ -50,7 +48,7 @@ export default {
     return {
       isCollapse: true,
       Account:"Account",
-      Skills:"Skills",
+      Experience:"Experience",
       currentView:"Account"
     };
   },
@@ -69,7 +67,7 @@ export default {
       this.currentView = Account;
     },
     changeView2:function () {
-      this.currentView = Skills;
+      this.currentView = Experience;
     },
     changeView3:function () {
       this.currentView = Participate;
@@ -87,6 +85,7 @@ export default {
   .person_center{
     min-height:100%;
     position:relative;
+    overflow: hidden;
   }
   .main_content {
      padding-top:80px;

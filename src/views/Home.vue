@@ -139,6 +139,9 @@ export default {
 
 
 <style>
+  .home{
+    overflow: hidden;
+  }
 .footer {
     text-align: center;
     margin-top: 100px;
