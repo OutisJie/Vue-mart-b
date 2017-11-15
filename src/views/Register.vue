@@ -1,7 +1,7 @@
 <!-- 注册 -->
 <template>
   <div class="register_section">
-  <Header></Header>
+  <HeadBarLight></HeadBarLight>
 
   <div class="register_content">
     <p>
@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import Header from "../components/head/Head";
+import HeadBarLight from "../components/head/HeadBarLight.vue";
 export default {
   name: "Register",
-  components: { Header }
+  components: { HeadBarLight }
 };
 </script>
 

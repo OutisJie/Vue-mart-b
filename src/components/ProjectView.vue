@@ -18,6 +18,11 @@
       <el-col class="project_type">type</el-col>
       <el-col class="project_time">time</el-col>
     </el-row>
+    <el-row>
+      <el-button type="primary" style="float: right;margin-right:1rem;margin-bottom: 0.5rem;" >
+        <router-link to="/projectdetail">详情</router-link>
+      </el-button>
+    </el-row>
   </div>
 </template>
 

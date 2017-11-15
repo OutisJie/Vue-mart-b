@@ -3,12 +3,13 @@
         <!-- 头部 -->
 
         <div class="head_home">
-            <a>项目</a>
+            <router-link to='/'>基于人工智能的软件外包服务平台</router-link>
+            <router-link to="/projects">项目</router-link>
             <a>估算</a>
             <a>帮助</a>
             <div class="head_center">
                 <router-link to="/login">登陆</router-link>
-                <a>注册</a>
+                <router-link to="/register">注册</router-link>
             </div>
         </div>
         <!-- 轮播 -->
