@@ -24,6 +24,25 @@ import ProjectView from "../components/ProjectView"
 export default {
   name: "ProjectsView",
   components: { ProjectView },
+  data() {
+    return{
+      tableData:{
+
+      },
+      url: server.url + '/api/requirements'
+    }
+  },
+  methods: {
+    getProjects() {
+      axios.get(this.url, {}).then(response => {
+        if(response.data.status == 200){
+          this.tableData = response.data.result;
+        }
+      },function(){
+        alert('服务器错误');
+      });
+    }
+  }
 };
 </script>
 

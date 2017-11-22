@@ -26,11 +26,11 @@ export default new Router({
     }, {
         path: '/center',
         name: 'Center',
-        meta:{
-          //meta元素
-          requireAuth:true,
-        },
-        component: Center
+       // meta:{
+        //   //meta元素
+        //   requireAuth:true,
+        // },
+         component: Center
     }, {
         path: '/projects',
         name: 'Projects',

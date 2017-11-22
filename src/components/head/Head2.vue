@@ -1,11 +1,14 @@
 <!-- 头部组件样式2 -->
 
 <template>
-<div class="header">
+<div class="header2">
   <div>基于人工智能的软件外包服务平台</div>
+    <router-link to="/projects">项目</router-link>
+    <a>估算</a>
+    <a>帮助</a>
 
-  <div class="drop">
- <el-dropdown>
+  <div class="drop2">
+    <el-dropdown>
       <span class="el-dropdown-link">
         个人中心<i class="el-icon-caret-bottom el-icon--right"></i>
       </span>
@@ -14,12 +17,8 @@
         <el-dropdown-item>退出</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
-
+  </div>
 </div>
-
-</div>
-
-
 
 </template>
 
@@ -30,7 +29,7 @@ export default {
 </script>
 
 <style>
-.header {
+.header2 {
   position: fixed;
   top: 0px;
   width: 100%;
@@ -45,7 +44,7 @@ export default {
 
 }
 
-.header .drop{
+.header2.drop2{
     margin-right: 30px;
 
 }

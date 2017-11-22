@@ -10,6 +10,7 @@ import VueResource from 'vue-resource'
 import VueRouter from 'vue-router'
 import router from './router'
 import store from './vuex/store'
+import axios from 'http'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
@@ -21,29 +22,29 @@ Vue.use(VueRouter)
 //   index
 // })
 //全局导航钩子
-router.beforeEach((to,from,next) => {
-  if(to.meta.requireAuth){
-    if(!isEmptyObject(store.state.user)){
-      next();
-    }
-    else {
-      next({
-        path:'/login',
-        query:{redirect:to.fullPath}//将跳转的路由path作为参数，登陆成功后跳转到该路由
-      })
-    }
-  }
-  else {
-    next();
-  }
-})
+// router.beforeEach((to,from,next) => {
+//   if(to.meta.requireAuth){
+//     if(!isEmptyObject(store.state.user)){
+//       next();
+//     }
+//     else {
+//       next({
+//         path:'/login',
+//         query:{redirect:to.fullPath}//将跳转的路由path作为参数，登陆成功后跳转到该路由
+//       })
+//     }
+//   }
+//   else {
+//     next();
+//   }
+// })
 //判断object是否为空
-function isEmptyObject(obj) {
-  for(var key in obj){
-    return false;
-  }
-  return true;
-}
+// function isEmptyObject(obj) {
+//   for(var key in obj){
+//     return false;
+//   }
+//   return true;
+// }
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

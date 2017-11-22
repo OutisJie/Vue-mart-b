@@ -2,18 +2,8 @@
 <template>
   <div class="projects">
     <!-- 头部 -->
-
-    <div class="head_projects">
-      <router-link to="/">基于人工智能的软件外包服务平台</router-link>
-      <a>项目</a>
-      <a>估算</a>
-      <a>帮助</a>
-      <div class="head_center">
-        <router-link to="/login">登陆</router-link>
-        <router-link to="/register">注册</router-link>
-      </div>
-    </div>
-
+    <Head2 v-show="isLogin"></Head2>
+    <Head v-show="!isLogin"></Head>
     <!-- 轮播 -->
     <div>
       <img  src="../assets/projectbackground.jpg" style="height: 400px; width: 100%">
@@ -97,16 +87,23 @@
 </template>
 
 <script>
-import HeadBarDark from "../components/head/HeadBarDark";
+import Head2 from "../components/head/Head2";
 import Head from "../components/head/Head";
 import ProjectsView from "../components/ProjectsView";
 
 export default {
   name: "Projects",
   components: {
-    HeadBarDark,
+    Head2,
+    Head,
     ProjectsView
-   },
+  },
+
+  computed:{
+    isLogin(){
+      return this.$store.state.isLogin
+    }
+  }
 };
 </script>
 

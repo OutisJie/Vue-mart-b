@@ -2,10 +2,7 @@
 <template>
     <div id="" class="person_center">
       <HeadBarLight style="z-index:1 "></HeadBarLight>
-      <section v-show="user">
-        <!-- 这里的user是从下面JavaScript的computed的user()方法中得到的。 -->
-        <p>欢迎{{user.username}}</p>
-      </section>
+
       <div class="main_content">
         <div class="main_theme">
             <el-breadcrumb separator="/" class="breadcrumb_size">
@@ -40,11 +37,6 @@ import MyNeeds from "../components/personalcenter/MyNeeds.vue"
 
 export default {
   name: "Center",
-  computed:{
-    user(){
-      return this.$store.state.user
-    }
-  },
   components: {
     HeadBarLight,
     HeadBarDark,

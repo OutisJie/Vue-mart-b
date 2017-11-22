@@ -4,7 +4,7 @@
 
       <div style="margin-left: 30px; padding-top: 25px;">
         <el-row>
-          <el-col class="requirement_name">需求名称<span class="requirement_state">状态</span>
+          <el-col class="requirement_name">{{form.name}}<span class="requirement_state">{{form.state}}</span>
           </el-col>
         </el-row>
       </div>
@@ -12,18 +12,18 @@
       <div style="margin-left: 30px; padding-top: 15px;">
         <el-row :gutter="0" type="flex" justify="left" align="middle">
           <el-col :span="2" class="summary_content">
-            <span style="background-color: #8796A8; color: #FFFFFF;">No. 编号</span>
+            <span style="background-color: #8796A8; color: #FFFFFF;">{{projectId}}</span>
           </el-col>
-          <el-col :span="5" class="summary_content">需求角色</el-col>
+          <el-col :span="5" class="summary_content">需要项目经理：{{form.need_manager}}</el-col>
         </el-row>
       </div>
 
       <div style="margin-left: 30px; padding-top: 30px;">
         <el-row :gutter="20" type="flex" justify="left" align="middle">
-          <el-col :span="4" class="summary_content"><span style="color: #979FA8">金额：</span>¥价格</el-col>
-          <el-col :span="4" class="summary_content"><span style="color: #979FA8">类型：</span>类型</el-col>
-          <el-col :span="5" class="summary_content"><span style="color: #979FA8">开始时间：</span>开始时间</el-col>
-          <el-col :span="5" class="summary_content"><span style="color: #979FA8">结束时间：</span>结束时间</el-col>
+          <el-col :span="4" class="summary_content"><span style="color: #979FA8">金额：</span>¥0</el-col>
+          <el-col :span="4" class="summary_content"><span style="color: #979FA8">类型：</span>{{form.type}}</el-col>
+          <el-col :span="6" class="summary_content"><span style="color: #979FA8">开始时间：</span>{{form.date1}}</el-col>
+          <el-col :span="6" class="summary_content"><span style="color: #979FA8">结束时间：</span>{{form.date2}}</el-col>
           <el-col :span="12">
             <el-button type="primary" style="float: right; margin-right: 30px;">参与项目</el-button>
           </el-col>
@@ -76,7 +76,7 @@
         <el-row class="info_title">项目描述</el-row>
         <div style="height:10px"></div>
         <el-row>
-          <el-col class="info_detail">具体描述</el-col>
+          <el-col class="info_detail">{{form.description}}</el-col>
         </el-row>
         <div style="height:10px"></div>
       </div>
@@ -100,8 +100,87 @@
 </template>
 
 <script>
+import server from '../../config/index';
+import axios from 'axios';
+
 export default {
-  name: "RequirementInfo"
+  name: "RequirementInfo",
+  data() {
+    return {
+      form: {
+        name: '名称',
+        type: '类型',
+        state: '状态',
+        date1: '2017-11-21',
+        date2: '2017-11-21',
+        need_manager: false,
+        description: '描述',
+        file: null
+      },
+      tableData: [{
+        name: '',
+        email: '',
+        phone_number: ''
+      }],
+      url: server.url + '/api/requirement/',
+      projectId: 0
+    }
+  },
+  created() {
+    this.projectId = this.$store.state.projectId;
+    this.getProject();
+  },
+  methods: {
+    getProject() {
+      axios.get(this.url + this.projectId.toString(), {}).then(response => {
+        if(response.data.status == 200){
+          this.form.name = response.data.result.requirement_name;
+          this.form.type = response.data.result.requirement_type;
+          this.form.state = response.data.requirement_state;
+          //需要转换
+          this.form.date1 = response.data.result.start_time;
+          this.form.date2 = response.data.result.end_time;
+
+          this.form.need_manager = response.data.result.need_manager;
+          this.form.description = response.data.result.requirement_detail;
+
+          this.tableData = response.data.result.developer;
+        }
+        else if(response.data.status == 400){
+          alert('获取需求内容失败');
+        }
+        else if(response.data.status == 401){
+          alert('查询权限不足');
+        }
+        else if(response.data.status == 404){
+          alert('目标需求不存在');
+        }
+        else if(response.data.status == 500){
+          alert('服务器错误');
+        }
+      },function(){
+        alert('服务器错误');
+      });
+    },
+    participateProject() {
+      axios.post(this.url + this.projectId.toString() + '/enroll', {}).then(response => {
+        if(response.data.status == 200){
+          alert('报名成功');
+        }
+        else if(response.data.status == 400){
+          alert('报名失败：不能报名自己建立的需求');
+        }
+        else if(response.data.status == 401){
+          alert('报名失败：你已在该项目中');
+        }
+        else if(response.data.status == 404){
+          alert('报名失败：目标项目不存在');
+        }
+      },function(){
+        alert('服务器错误');
+      });
+    }
+  }
 };
 </script>
 

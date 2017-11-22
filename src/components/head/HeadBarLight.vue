@@ -13,11 +13,11 @@
     <el-dropdown class="el-dropdown">
       <span class="el-dropdown-link">
         <div>
+          <span>{{username}}</span>
           <img src="../../assets/coder.png" class="header_image" style="margin-left:0px;height: 30px;width: 30px">
           <i class="el-icon-caret-bottom el-icon--right" style="padding-top:8px"></i>
         </div>
       </span>
-
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item><router-link to="/center" style="color: black">个人中心</router-link></el-dropdown-item>
         <el-dropdown-item><router-link to="/center" style="color: black">我的项目</router-link></el-dropdown-item>
@@ -36,7 +36,12 @@
 
 <script>
 export default {
-  name: "HeadBarLight"
+  name: "HeadBarLight",
+  computed:{
+    username(){
+      return this.$store.state.username
+    }
+  },
 };
 </script>
 
@@ -50,7 +55,6 @@ export default {
   height: 60px;
   background: #EEF1F5;
 }
-
 .el-menu{
   margin-left: 50px;
 }

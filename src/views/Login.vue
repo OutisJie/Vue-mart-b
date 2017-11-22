@@ -15,7 +15,7 @@
           <router-link to='/register'> 找回密码</router-link>
         </div>
       </div>
-      <el-button type="primary" @click="isLogin">提交</el-button>
+      <el-button type="primary" :loading=this.button_disabled @click="doLogin">提交</el-button>
       <div class="no_account">
         <router-link to='/register'> 没有账号</router-link>
       </div>
@@ -25,37 +25,54 @@
 
 <script>
 import HeadBarLight from "../components/head/HeadBarLight.vue";
+import server from '../../config/index';
+import axios from 'axios';
+
 export default {
   name: "Login",
   components: { HeadBarLight },
   data(){
     return{
-      account:'',
-      pwd:'',
-      error:''
-    }
-  },
-  computed:{
-    user(){
-      return this.$store.state.user
+      account: '',
+      pwd: '',
+      error: '',
+      url: server.url + '/api/session',
+      button_disabled: false
     }
   },
   methods:{
-    isLogin:function () {
-      this.$http.get('http://localhost:3000/users?username='+this.account+'&password='+this.pwd).then((response)=>{
-        //这里在isLogin方法中先判断一下后台返回的是否为空值，如果不是然后提交后台返回的值。
-        //注意这里是个难点，Vuex与Vue-Resource结合使用。
-        if(response.body != null && response.body.length > 0){
-          this.$store.commit('isLogin',response.body[0]);
-          this.account='';
-          this.pwd= '';
-          this.$router.push({ path: 'main' });
-        }else{
-          alert('请输入正确的用户名和密码！！！');
-          this.account='';
-          this.pwd= ''
-        }
-      }).then((error)=>this.error=error)
+    doLogin:function () {
+      this.button_disabled = true;
+      if(this.account == ""){
+        alert('请输入用户名');
+      }
+      else if(this.pwd == ""){
+        alert('请输入密码');
+      }
+      else{
+        axios.post(this.url, {"username": this.account, "password": this.pwd}).then(response => {
+
+          if(response.data.status == 200){
+            alert('登录成功');
+            this.$store.commit('doLogin',this.account,this.data.token);
+            this.account='';
+            this.pwd= '';
+            this.$router.push( '/center' );
+          }
+          else if(response.data.status == 401){
+            alert('密码错误');
+            this.pwd= '';
+          }
+          else if(response.data.status == 404){
+            alert('用户名不存在');
+            this.account='';
+            this.pwd= '';
+          }
+        },function(){
+          alert('服务器错误');
+        });
+      }
+      this.button_disabled = false;
     }
   }
 };

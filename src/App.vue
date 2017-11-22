@@ -26,6 +26,4 @@ a{
   text-decoration: none;
   color:#ffffff;
 }
-
-
 </style>

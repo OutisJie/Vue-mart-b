@@ -2,16 +2,8 @@
     <div class="home">
         <!-- 头部 -->
 
-        <div class="head_home">
-            <router-link to='/'>基于人工智能的软件外包服务平台</router-link>
-            <router-link to="/projects">项目</router-link>
-            <a>估算</a>
-            <a>帮助</a>
-            <div class="head_center">
-                <router-link to="/login">登陆</router-link>
-                <router-link to="/register">注册</router-link>
-            </div>
-        </div>
+        <Head2 v-show="true"></Head2>
+        <Head v-show="!isLogin"></Head>
         <!-- 轮播 -->
         <div class="picshow">
         <el-carousel :interval="5000" arrow="always" :autoplay="false">
@@ -97,8 +89,19 @@
 </template>
 
 <script>
+  import Head from "../components/head/Head.vue"
+  import Head2 from "../components/head/Head2.vue"
 export default {
     name: 'Home',
+    components:{
+      Head,
+      Head2
+    },
+    computed:{
+      isLogin(){
+        return this.$store.state.isLogin
+      }
+    },
     data() {
         return {
             msg: 'welcome'
@@ -160,14 +163,7 @@ export default {
     margin-left: 200px;
 }
 
-.head_home {
-    position: fixed;
-    top: 0px;
-    width: 100%;
-    z-index: 3;
-    color: #ffffff;
-    padding-top: 30px;
-}
+
 
 .content {
     padding-top: 20px;
