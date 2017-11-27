@@ -1,8 +1,7 @@
 <!-- 个人中心 -->
 <template>
     <div id="" class="person_center">
-      <HeadBarLight style="z-index:1 "></HeadBarLight>
-
+      <HeadBarLight style="z-index:1"></HeadBarLight>
       <div class="main_content">
         <div class="main_theme">
             <el-breadcrumb separator="/" class="breadcrumb_size">
@@ -28,8 +27,8 @@
 </template>
 
 <script>
-import HeadBarDark from "../components/head/HeadBarDark.vue"
 import HeadBarLight from "../components/head/HeadBarLight.vue"
+import HeadBarLight2 from "../components/head/HeadBarLight2.vue"
 import Account from "../components/personalcenter/Account.vue"
 import Experience from "../components/personalcenter/Experience.vue"
 import Participate from "../components/personalcenter/ParticipateProject.vue"
@@ -39,7 +38,7 @@ export default {
   name: "Center",
   components: {
     HeadBarLight,
-    HeadBarDark,
+    HeadBarLight2,
     Account,
     Experience,
     Participate,
@@ -60,7 +59,6 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
-
     modify:function(){
       this.$router.push( {path:'../components/InfoForm'});
     },
@@ -76,6 +74,7 @@ export default {
     changeView4:function () {
       this.currentView = MyNeeds;
     }
+
   }
 };
 

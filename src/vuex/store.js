@@ -11,28 +11,30 @@ const state = {
     mobile: '',
     email: ''
   },
-  projectId: 0
+  projectId: ''
 }
 
 const mutations = {
-  doLogin (user_input) {
+  doLogin (state, user_input) {
     state.user.tokenid = user_input.tokenid;
     state.user.username = user_input.username;
     state.user.realname = user_input.realname;
     state.user.mobile = user_input.mobile;
     state.user.email = user_input.email;
   },
-  setProjectId (projectId_input) {
-    projectId = projectId_input;
+  setProjectId (state, projectId_input) {
+    state.projectId = projectId_input;
   },
-  getProjectId () {
-    return projectId;
+  setToken(state, token){
+    state.user.tokenid = token;
+  },
+  setUsername(state,account){
+    state.user.username = account;
   }
 }
 
 
 export default new Vuex.Store({
   state,
-  //projectId: 0,
   mutations
 })

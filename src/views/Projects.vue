@@ -2,8 +2,10 @@
 <template>
   <div class="projects">
     <!-- 头部 -->
-    <Head2 v-show="isLogin"></Head2>
-    <Head v-show="!isLogin"></Head>
+    <div v-show="!isLogin"><Head ></Head>
+    </div>
+    <div v-show="isLogin"><Head2 ></Head2>
+    </div>
     <!-- 轮播 -->
     <div>
       <img  src="../assets/projectbackground.jpg" style="height: 400px; width: 100%">
@@ -18,7 +20,6 @@
         <!--<el-carousel-item :key="2">-->
         <!--</el-carousel-item>-->
       <!--</el-carousel>-->
-
 
     <div class="projects_select" >
       <el-row :gutter="24" type="flex" justify="center" style="margin-top: 15px;">
@@ -89,7 +90,7 @@
 <script>
 import Head2 from "../components/head/Head2";
 import Head from "../components/head/Head";
-import ProjectsView from "../components/ProjectsView";
+import ProjectsView from "../components/ProjectsView.vue"
 
 export default {
   name: "Projects",
@@ -98,10 +99,21 @@ export default {
     Head,
     ProjectsView
   },
-
-  computed:{
-    isLogin(){
-      return this.$store.state.isLogin
+  data() {
+    return {
+      isLogin:false
+    }
+  },
+  created() {
+    this.checkToken();
+  },
+  methods:{
+    checkToken:function () {
+      if(this.$store.state.user.tokenid === ''){
+        this.isLogin = false;
+      }
+      else
+        this.isLogin = true;
     }
   }
 };

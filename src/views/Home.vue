@@ -1,9 +1,11 @@
 <template>
     <div class="home">
-        <!-- 头部 -->
 
-        <Head2 v-show="true"></Head2>
-        <Head v-show="!isLogin"></Head>
+      <!-- 头部 -->
+      <div v-show="!isLogin"><Head ></Head>
+      </div>
+      <div v-show="isLogin"><Head2 ></Head2>
+      </div>
         <!-- 轮播 -->
         <div class="picshow">
         <el-carousel :interval="5000" arrow="always" :autoplay="false">
@@ -18,9 +20,7 @@
         </el-carousel>
         </div>
 
-
         <!-- 详细 -->
-
         <div class="home_status">
             <el-row :gutter="24">
                 <el-col :span="8">
@@ -36,7 +36,6 @@
                     <div style="display:block">88888</div>
                 </el-col>
             </el-row>
-
         </div>
 
         <div class="main_content">
@@ -97,45 +96,22 @@ export default {
       Head,
       Head2
     },
-    computed:{
-      isLogin(){
-        return this.$store.state.isLogin
-      }
-    },
     data() {
         return {
-            msg: 'welcome'
+          isLogin:false
         }
     },
-    mounted: function() {
-        //窗口滚动事件
-        var beforeScroll = {
-            'background-color': 'transparent',
-            'color': '#ffffff',
-            'border': 'none'
-        };
-        var afterScroll = {
-            'background-color': '#ffffff',
-            'color': '#323A45',
-            'height': '65px',
-            'border-bottom': '1px solid #DDD'
+    created() {
+      this.checkToken();
+    },
+    methods:{
+      checkToken:function () {
+        if(this.$store.state.user.tokenid === ''){
+          this.isLogin = false;
         }
-        $(window).bind('scroll', function() {
-            var topValue = $(window).scrollTop();
-            if (topValue >= 390) {
-                $('.head_home').fadeIn('slow');
-                $('.head_home').css(afterScroll);
-                $('.head_center > a').css({ 'color': '#323A45' });
-            }
-            else if (topValue < 400 && topValue > 10) {
-                $('.head_home').fadeOut('slow');
-            }
-            else {
-                $('.head_home').fadeIn('slow');
-                $('.head_home').css(beforeScroll);
-                $('.head_center > a').css({ 'color': '#ffffff' });
-            }
-        })
+        else
+          this.isLogin = true;
+      }
     }
 }
 
@@ -192,22 +168,6 @@ export default {
     width: 250px;
 }
 
-.head_home>a {
-    margin-left: 30px;
-    cursor: pointer;
-    color: inherit;
-}
-
-.head_home :last-child {
-    /* display: inline; */
-    float: right;
-    margin-right: 10px;
-}
-
-.head_center>a {
-    margin-right: 10px;
-    cursor: pointer;
-}
 
 .home_status {
     border-bottom: 1px solid #DDD;

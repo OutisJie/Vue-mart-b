@@ -7,10 +7,11 @@ import Register from '@/views/Register'
 import Center from '@/views/Center'
 import Projects from '@/views/Projects'
 import ProjectDetail from '@/views/ProjectDetail'
+import store from '../vuex/store'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
     routes: [{
         path: '/',
         name: 'Home',
@@ -26,11 +27,10 @@ export default new Router({
     }, {
         path: '/center',
         name: 'Center',
-       // meta:{
-        //   //meta元素
-        //   requireAuth:true,
-        // },
-         component: Center
+        meta: { 
+            requireAuth: true
+        },
+        component: Center
     }, {
         path: '/projects',
         name: 'Projects',
@@ -41,3 +41,21 @@ export default new Router({
         component: ProjectDetail
     }]
 })
+
+//  判断是否需要登录权限 以及是否登录
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(res => res.meta.requireAuth)) {// 判断是否需要登录权限
+        if(store.state.user.tokenid){// 判断是否登录
+        next()
+      } else {// 没登录则跳转到登录界面
+        next({
+          path: '/login',
+          query: {redirect: to.fullPath}
+        })
+      }
+    } else {
+      next()
+    }
+  })
+
+export default router

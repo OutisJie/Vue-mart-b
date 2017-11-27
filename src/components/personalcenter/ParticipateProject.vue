@@ -51,11 +51,20 @@ import axios from 'axios';
           if(response.data.status == 200){
             this.tableData = response.data.result;
           }
-          else if(response.data.status == 400){
-            alert('获取列表失败');
+        }).catch(function(error){
+          if(error.response){
+            switch (error.response.status) {
+                  case 400:
+                    alert('获取列表失败');
+                    break;
+                  case 401:
+                    alert('权限不足');
+                    break;
+                  case 500:
+                    alert('服务器错误');
+                    break;
+            }
           }
-        },function(){
-          alert('服务器错误');
         });
       }
     }

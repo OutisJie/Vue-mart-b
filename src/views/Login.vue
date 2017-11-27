@@ -1,7 +1,7 @@
 <!-- 登陆文件 -->
 <template>
   <div class="login_section">
-    <HeadBarLight></HeadBarLight>
+    <HeadBarLight2></HeadBarLight2>
 
     <div class="login_content">
       <p>
@@ -24,20 +24,20 @@
 </template>
 
 <script>
-import HeadBarLight from "../components/head/HeadBarLight.vue";
+import HeadBarLight2 from "../components/head/HeadBarLight2.vue";
 import server from '../../config/index';
-import axios from 'axios';
+import axios from '../axios/http';
 
 export default {
   name: "Login",
-  components: { HeadBarLight },
+  components: { HeadBarLight2 },
   data(){
     return{
       account: '',
       pwd: '',
       error: '',
       url: server.url + '/api/session',
-      button_disabled: false
+      button_disabled: false,
     }
   },
   methods:{
@@ -51,25 +51,37 @@ export default {
       }
       else{
         axios.post(this.url, {"username": this.account, "password": this.pwd}).then(response => {
-
           if(response.data.status == 200){
             alert('登录成功');
-            this.$store.commit('doLogin',this.account,this.data.token);
+            alert(response.data.result.token + this.account);
+            this.$store.commit('setToken', response.data.result.token);
+            this.$store.commit('setUsername', this.account);
+
+            alert(this.$store.state.user.username);
+
+            alert(this.$store.state.user.tokenid);
+            //store.state.user.tokenid = response.data.user.tokenid;
+            //store.state.user.realname = response.data.user.realname;
+            //store.state.user.mobile = response.data.user.mobile;
+            //store.state.user.email = response.data.user.email;
             this.account='';
             this.pwd= '';
             this.$router.push( '/center' );
           }
-          else if(response.data.status == 401){
-            alert('密码错误');
-            this.pwd= '';
+        }).catch(function(error){
+          if(error.response){
+            switch (error.response.status) {
+                  case 401:
+                    alert('密码错误');
+                    break;
+                  case 404:
+                    alert('用户名不存在');
+                    break;
+                  case 500:
+                    alert('服务器错误');
+                    break;
+            }
           }
-          else if(response.data.status == 404){
-            alert('用户名不存在');
-            this.account='';
-            this.pwd= '';
-          }
-        },function(){
-          alert('服务器错误');
         });
       }
       this.button_disabled = false;

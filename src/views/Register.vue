@@ -1,7 +1,7 @@
 <!-- 注册 -->
 <template>
   <div class="register_section">
-  <HeadBarLight></HeadBarLight>
+  <HeadBarLight2></HeadBarLight2>
 
   <div class="register_content">
     <p>
@@ -19,13 +19,13 @@
 </template>
 
 <script>
-import HeadBarLight from "../components/head/HeadBarLight.vue";
+import HeadBarLight2 from "../components/head/HeadBarLight2.vue";
 import server from '../../config/index';
 import axios from 'axios';
 
 export default {
   name: "Register",
-  components: { HeadBarLight },
+  components: { HeadBarLight2 },
   data(){
     return{
       account:'',
@@ -75,14 +75,17 @@ export default {
             this.pwd_rep= '';
             this.$router.push('/center');
           }
-          else if(response.data.status == 400){
-            alert('注册失败');
-            this.account='';
-            this.pwd= '';
-            this.pwd_rep= '';
+        }).catch(function(error){
+          if(error.response){
+            switch (error.response.status) {
+                  case 400:
+                    alert('注册失败');
+                    break;
+                  case 500:
+                    alert('服务器错误');
+                    break;
+            }
           }
-        },function(){
-          alert('服务器错误');
         });
       }
     }

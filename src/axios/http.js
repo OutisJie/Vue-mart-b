@@ -1,9 +1,11 @@
 import axios from 'axios'
+import store from '../vuex/store'
 // http request 拦截器
+
 axios.interceptors.request.use(
     config => {
-        if (store.state.token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
-            config.headers.Authorization = `token ${store.state.token}`;
+        if (store.state.user.tokenid) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
+            config.headers.Authorization = `token ${store.state.user.tokenid}`;
         }
         return config;
     },
@@ -20,8 +22,7 @@ axios.interceptors.response.use(
         if (error.response) {
             switch (error.response.status) {
                 case 401:
-                    // 返回 401 清除token信息并跳转到登录页面
-                    store.commit(types.LOGOUT);
+                    store.user.tokenId = '';
                     router.replace({
                         path: '/login',
                         query: {redirect: router.currentRoute.fullPath}

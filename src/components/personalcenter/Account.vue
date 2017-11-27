@@ -3,7 +3,7 @@
       <el-card class="header_info">
         <div><img src="../../assets/coder.png" class="header_image" style="margin-left:0px;" ></div>
         <div style="padding:0.5rem 1.5rem; font-size: 20px">
-          <span>OutisJie</span>
+          <span>{{this.$store.state.user.username}}</span>
           <el-button type="primary" class="header_button">升级为团队</el-button>
         </div>
       </el-card>

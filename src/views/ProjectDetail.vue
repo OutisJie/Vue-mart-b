@@ -2,7 +2,8 @@
 <template>
   <div>
     <div class="project_detail">
-      <HeadBarLight style="z-index:1"></HeadBarLight>
+      <head-bar-light style="z-index: 1" v-show="isLogin"></head-bar-light>
+      <head-bar-light2 style="z-index: 1" v-show="!isLogin"></head-bar-light2>
       <div class="single_requirement">
         <RequirementInfo></RequirementInfo>
         <div style="height: 80px"></div>
@@ -17,11 +18,34 @@
 
 <script>
 import HeadBarLight from "../components/head/HeadBarLight";
+import HeadBarLight2 from "../components/head/HeadBarLight2.vue"
 import RequirementInfo from "../components/RequirementInfo";
 
 export default {
   name: "ProjectDetail",
-  components: { HeadBarLight, RequirementInfo }
+  components: {
+    HeadBarLight,
+    HeadBarLight2,
+    RequirementInfo
+  },
+  data(){
+    return{
+      isLogin:false
+    }
+  },
+  created() {
+    this.checkToken();
+  },
+  methods:{
+    checkToken:function () {
+      if(this.$store.state.user.tokenid === ''){
+        this.isLogin = false;
+      }
+      else
+        this.isLogin = true;
+    }
+  }
+
 };
 
 </script>

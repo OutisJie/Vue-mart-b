@@ -12,7 +12,7 @@
       <div style="margin-left: 30px; padding-top: 15px;">
         <el-row :gutter="0" type="flex" justify="left" align="middle">
           <el-col :span="2" class="summary_content">
-            <span style="background-color: #8796A8; color: #FFFFFF;">{{projectId}}</span>
+            <span style="background-color: #8796A8; color: #FFFFFF;">No.{{projectId}}</span>
           </el-col>
           <el-col :span="5" class="summary_content">需要项目经理：{{form.need_manager}}</el-col>
         </el-row>
@@ -123,7 +123,7 @@ export default {
         phone_number: ''
       }],
       url: server.url + '/api/requirement/',
-      projectId: 0
+      projectId: ''
     }
   },
   created() {
@@ -146,20 +146,23 @@ export default {
 
           this.tableData = response.data.result.developer;
         }
-        else if(response.data.status == 400){
-          alert('获取需求内容失败');
+      }).catch(function(error){
+        if(error.response){
+          switch (error.response.status) {
+                case 400:
+                  alert('获取需求内容失败');
+                  break;
+                case 401:
+                  alert('查询权限不足');
+                  break;
+                case 404:
+                  alert('目标需求不存在');
+                  break;
+                case 500:
+                  alert('服务器错误');
+                  break;
+          }
         }
-        else if(response.data.status == 401){
-          alert('查询权限不足');
-        }
-        else if(response.data.status == 404){
-          alert('目标需求不存在');
-        }
-        else if(response.data.status == 500){
-          alert('服务器错误');
-        }
-      },function(){
-        alert('服务器错误');
       });
     },
     participateProject() {
@@ -167,17 +170,23 @@ export default {
         if(response.data.status == 200){
           alert('报名成功');
         }
-        else if(response.data.status == 400){
-          alert('报名失败：不能报名自己建立的需求');
+      }).catch(function(error){
+        if(error.response){
+          switch (error.response.status) {
+                case 400:
+                  alert('报名失败：不能报名自己建立的需求');
+                  break;
+                case 401:
+                  alert('报名失败：你已在该项目中');
+                  break;
+                case 404:
+                  alert('报名失败：目标项目不存在');
+                  break;
+                case 500:
+                  alert('服务器错误');
+                  break;
+          }
         }
-        else if(response.data.status == 401){
-          alert('报名失败：你已在该项目中');
-        }
-        else if(response.data.status == 404){
-          alert('报名失败：目标项目不存在');
-        }
-      },function(){
-        alert('服务器错误');
       });
     }
   }
