@@ -28,8 +28,20 @@ const mutations = {
   setToken(state, token){
     state.user.tokenid = token;
   },
+  setRealname(state,realname){
+    state.user.realname = realname;
+  },
+  setMobile(state,mobile){
+    state.user.mobile = mobile;
+  },
+  setEmail(state,email){
+    state.user.email = email;
+  },
   setUsername(state,account){
     state.user.username = account;
+  },
+  reset(){
+    state.tokenid = '';
   }
 }
 

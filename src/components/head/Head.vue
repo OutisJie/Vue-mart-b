@@ -3,7 +3,7 @@
   <div class="head_home">
     <router-link to='/'>基于人工智能的软件外包服务平台</router-link>
     <router-link to="/projects">项目</router-link>
-    <a>估算</a>
+    <router-link to="/ver">估算</router-link>
     <a>帮助</a>
     <div class="head_center">
       <a><router-link to="/register">注册</router-link></a>
@@ -56,6 +56,7 @@ export default {
   z-index: 3;
   color: #ffffff;
   padding-top: 30px;
+  padding-bottom:50px;
 }
 
 .head_home>a {
@@ -70,5 +71,6 @@ export default {
   margin-right: 10px;
   color: inherit;
 }
+
 </style>
 

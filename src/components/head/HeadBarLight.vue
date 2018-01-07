@@ -2,32 +2,36 @@
 
 <template>
 <div class="headerLight" >
-  <div class="sitetitle" style="padding-top:18px; margin-left: 10px; float:left;">
-    <router-link to="/" style="color: black">基于人工智能的软件外包服务平台</router-link>
+  <div class="sitetitle" style="padding-top:30px; margin-left: 30px; float:left; padding-bottom:30px;">
+    <router-link to="/" style="color: black;">基于人工智能的软件外包服务平台</router-link>
+    <router-link to="/projects" style="color: black; padding-left:30px;">项目</router-link>
+    <router-link to="/ver" style="color: black; padding-left:30px;">估算</router-link>
+    <a style="color: black; padding-left:30px;">帮助</a>
   </div>
 
-  <el-menu class="el-menu" theme="light" mode="horizontal" style="padding-top:0px; margin-left:300px">
-    <el-menu-item index="1"><router-link to="/projects">项目</router-link></el-menu-item>
-    <el-menu-item index="2">估价</el-menu-item>
-    <el-menu-item index="3">帮助</el-menu-item>
-    <el-dropdown class="el-dropdown">
+    <el-dropdown class="head_menu">
       <span class="el-dropdown-link">
-        <div>
-          <span>{{username}}</span>
-          <img src="../../assets/coder.png" class="header_image" style="margin-left:0px;height: 30px;width: 30px">
-          <i class="el-icon-caret-bottom el-icon--right" style="padding-top:8px"></i>
-        </div>
+        <el-row :gutter="20" type="flex" align="middle" style="margin-top:5px;float:right">
+          
+          <el-col :span="12"><span class="user_name">你好,{{this.username}}</span></el-col>
+          <el-col :span="6">
+            <img src="../../assets/coder.png" class="header_image" style="margin-left:0px;height: 40px; width: 40px">
+          </el-col>
+          <el-col :span="2">
+            <i class="el-icon-caret-bottom el-icon--right" style="padding-top:8px"></i>
+          </el-col>
+        </el-row>
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item><router-link to="/center" style="color: black">个人中心</router-link></el-dropdown-item>
         <el-dropdown-item><router-link to="/center" style="color: black">我的项目</router-link></el-dropdown-item>
         <el-dropdown-item><router-link to="/center" style="color: black">我的报价单</router-link></el-dropdown-item>
         <el-dropdown-item>代码托管</el-dropdown-item>
-        <el-dropdown-item>退出</el-dropdown-item>
+        <el-dropdown-item divided><router-link to="/blank" style="color: black">退出</router-link></el-dropdown-item>
       </el-dropdown-menu>
 
     </el-dropdown>
-  </el-menu>
+  
 </div>
 
 
@@ -39,7 +43,7 @@ export default {
   name: "HeadBarLight",
   computed:{
     username(){
-      return this.$store.state.username
+      return this.$store.state.user.username
     }
   },
 };
@@ -52,14 +56,25 @@ export default {
   width: 100%;
   color: #323a45;
   border-bottom: 1px solid #ddd;
-  height: 60px;
   background: #EEF1F5;
-}
-.el-menu{
-  margin-left: 50px;
+  z-index: 1;
 }
 
-.el-dropdown{
+.user_name{
+  float:right;
+}
+
+.headbar{
+  background-color: #EEF1F5;
+  padding-top:50px;
+}
+
+.headbar>el-menu-item{
+  background-color: #323a45;
+  active-text-color: #000000;
+}
+
+.head_menu{
   float:right;
   margin-right: 30px;
   padding-top: 15px;

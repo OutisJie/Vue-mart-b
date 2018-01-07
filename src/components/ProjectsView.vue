@@ -5,26 +5,31 @@
         <div style="height: 50px;"></div>
         <el-card :body-style="{ padding: '0px' }" class="project_view">
           <el-row :gutter="0" type="flex" justify="center" style="background: #FFFFFF; height:150px;">
-            <img class="project_pic" src='../assets/head_pic.jpg'></img>
+            <img v-if="project.requirementType=='Web 网站'" class="project_pic" src='../assets/Web.jpg'></img>
+            <img v-if="project.requirementType=='APP 开发'" class="project_pic" src='../assets/App.jpg'></img>
+            <img v-if="project.requirementType=='微信平台开发'" class="project_pic" src='../assets/WeChat.jpg'></img>
           </el-row>
           <el-row :gutter="0" type="flex" justify="center" style="background: #FFFFFF; height:50px;">
-            <el-col class="project_name">{{project.requirement_name}}</el-col>
+            <el-col class="project_name">No.{{project.id}}    {{project.requirementName}}</el-col>
           </el-row>
-          <el-row :gutter="0" type="flex" justify="center" style="background: #FFFFFF; height:70px;">
-            <el-col class="project_type">{{project.requirement_type}}</el-col>
-            <el-col class="project_state">state</el-col>
+          <el-row :gutter="0" type="flex" justify="center" style="background: #FFFFFF; height:48px;">
+            <el-col class="project_type"><span class="static_text">类型：</span>{{project.requirementType}}</el-col>
+            <el-col class="project_state">
+              <span v-if="project.requirementState==0" style="border: 1px solid #61c279;color: #61c279;border-radius: 2px;padding: 0.36rem;">招募中</span>
+              <span v-if="project.requirementState==1" style="border: 1px solid #f68435;color: #f68435;border-radius: 2px;padding: 0.36rem;">招募中</span>
+              <span v-if="project.requirementState==2" style="border: 1px solid #8796a8;color: #8796a8;border-radius: 2px;padding: 0.36rem;">招募中</span>
+            </el-col>
           </el-row>
-          <el-row :gutter="0" type="flex" justify="center" style="background: #FFFFFF; height:50px;">
-            <el-col class="project_role">role</el-col>
-            <el-col class="project_count">number</el-col>
+          <el-row :gutter="0" type="flex" justify="center" style="background: #FFFFFF; height:40px;">
+            <el-col class="project_role">人员需求：开发</el-col>
           </el-row>
           <el-row :gutter="0" type="flex" justify="center" style="background: #FFFFFF; height:30px; border-radius:0px 0px 5px 5px;">
-            <el-col class="project_start">{{project.start_time}}</el-col>
-            <el-col class="project_end">{{project.end_time}}</el-col>
+            <el-col class="project_time"><span class="static_text">开始时间：</span>{{new Date(project.startTime).toLocaleString().replace(/\D{2}\d{1,2}:\d{1,2}:\d{1,2}/,'')}}</el-col>
+            <el-col class="project_time"><span class="static_text">结束时间：</span>{{new Date(project.endTime).toLocaleString().replace(/\D{2}\d{1,2}:\d{1,2}:\d{1,2}/,'')}}</el-col>
           </el-row>
           <el-row>
-            <el-button type="primary" style="float: right;margin-right:1rem;margin-bottom: 0.5rem;" >
-              <router-link to="/projectdetail">详情</router-link>
+            <el-button type="primary" style="float: right;margin-right:1rem;margin-top: 0.5rem;margin-bottom: 0.5rem;" @click="setProjectid(project.id)">
+              详情
             </el-button>
           </el-row>
         </el-card>
@@ -32,7 +37,7 @@
     </el-row>
     <div class="block">
       <el-pagination class="el_pagination" @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                     :current-page="currentPage" :page-sizes="[5, 10, 15, 20]" :page-size="pageSize"
+                     :current-page="currentPage" :page-sizes="[6, 12, 18, 24]" :page-size="pageSize"
                      layout="total, sizes, prev, pager, next, jumper" :total="totolCount">
       </el-pagination>
     </div>
@@ -40,72 +45,70 @@
 </template>
 
 <script>
-import ProjectView from "./ProjectView"
 import server from '../../config/index';
-import axios from 'axios';
+import axios from '../axios/http';
 
 export default {
   name: "ProjectsView",
-  components: { ProjectView },
+  components: {  },
   created(){
-    //this.getProject();
-    this.loadData(this.currentPage, this.pageSize);
-    this.totolCount = this.projects.length;
+    this.getProjects();
   },
   data() {
     return{
-      projects:[
-        {id: 1, requirement_name:"1111", requirement_type:"android", start_time:"2017.1.1", end_time:"2019.1.1", },
-        {id: 2, requirement_name:"222", requirement_type:"web", start_time:"2017.1.1", end_time:"2019.1.1", },
-        {id: 3, requirement_name:"w333", requirement_type:"web", start_time:"2017.1.1", end_time:"2019.1.1", },
-        {id: 4, requirement_name:"444", requirement_type:"web", start_time:"2017.1.1", end_time:"2019.1.1", },
-        {id: 5, requirement_name:"555发", requirement_type:"android", start_time:"2017.1.1", end_time:"2019.1.1", },
-        {id: 6, requirement_name:"666", requirement_type:"web", start_time:"2017.1.1", end_time:"2019.1.1", },
-        {id: 7, requirement_name:"7777", requirement_type:"web", start_time:"2017.1.1", end_time:"2019.1.1", },
-        {id: 8, requirement_name:"8888", requirement_type:"web", start_time:"2017.1.1", end_time:"2019.1.1", },
-        {id: 9, requirement_name:"99999", requirement_type:"android", start_time:"2017.1.1", end_time:"2019.1.1", },
-        {id: 10, requirement_name:"23232", requirement_type:"web", start_time:"2017.1.1", end_time:"2019.1.1", },
-        {id: 11, requirement_name:"4232", requirement_type:"web", start_time:"2017.1.1", end_time:"2019.1.1", },
-        {id: 12, requirement_name:"web开发", requirement_type:"web", start_time:"2017.1.1", end_time:"2019.1.1", },
-        {id: 13, requirement_name:"安卓开发", requirement_type:"android", start_time:"2017.1.1", end_time:"2019.1.1", },
-        {id: 14, requirement_name:"yyyyy", requirement_type:"web", start_time:"2017.1.1", end_time:"2019.1.1", },
-        {id: 15, requirement_name:"xxxxx", requirement_type:"web", start_time:"2017.1.1", end_time:"2019.1.1", },
-        {id: 16, requirement_name:"web开发", requirement_type:"web", start_time:"2017.1.1", end_time:"2019.1.1", },
-      ],
+      projects:[],
       items:[],
       url: server.url + '/api/requirements',
 
       currentPage:1,
-      pageSize:5,
-      totolCount:100,
+      pageSize:6,
+      totolCount:0,
       count:0
     }
   },
   methods: {
+    setProjectid(id){
+      this.$store.commit('setProjectId', id.toString());
+      this.$router.push( '/projectDetail' );
+    },
     getProjects() {
       axios.get(this.url, {}).then(response => {
+        if(response.status == 200){}
+        else
+          throw response;
         if(response.data.status == 200){
           this.projects = response.data.result;
+          this.totolCount = response.data.result.length;
+          this.loadData(this.currentPage, this.pageSize, this.totolCount);
         }
       },function(){
         alert('服务器错误');
       });
     },
-    loadData:function (currentPage,pageSize) {
+    loadData:function (currentPage,pageSize,totolCount) {
       this.items = [];
-      for(this.count = 0;this.count<pageSize;this.count++){
-        if(pageSize * (currentPage - 1) + this.count < this.totolCount) {
-          this.items.push(this.projects[pageSize * (currentPage - 1) + this.count]);
+      var count = 0;
+      if(pageSize < totolCount) {
+        for (count = 0; count < pageSize; count++) {
+          if (pageSize * (currentPage - 1) + count < totolCount) {
+            this.items.push(this.projects[pageSize * (currentPage - 1) + count]);
+          }
+        }
+      }else if(pageSize >= totolCount){
+        for (count = 0; count < totolCount; count++) {
+          if (pageSize * (currentPage - 1) + count < totolCount) {
+            this.items.push(this.projects[pageSize * (currentPage - 1) + count]);
+          }
         }
       }
     },
     handleSizeChange(val) {
       this.pageSize = val;
-      this.loadData(this.currentPage, this.pageSize);
+      this.loadData(this.currentPage, this.pageSize, this.totolCount);
     },
     handleCurrentChange(val) {
       this.currentPage = val;
-      this.loadData(this.currentPage, this.pageSize);
+      this.loadData(this.currentPage, this.pageSize, this.totolCount);
     }
   }
 };
@@ -135,42 +138,45 @@ export default {
 }
 
 .project_name{
-
-  color: #474b48;
-}
-
-.project_value{
-
-  color: #474b48;
-  border-bottom:1px solid #c7c7c7;
+  color: #273444;
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 50px;
+  width: fit-content;
 }
 
 .project_state{
-
-  color: #474b48;
-  border-bottom:1px solid #c7c7c7;
+  line-height: 48px;
+  color: #273444;
+  font-size: 1.0rem;
+  text-align:center;
+  font-weight:400;
 }
 
 .project_role{
-
-  color: #c7c7c7;
-}
-
-.project_count{
-
-  color: #c7c7c7;
+  line-height: 40px;
+  color: #727f8f;
+  font-size: 0.8rem;
+  text-align:center;
 }
 
 .project_type{
+  line-height: 48px;
   background: #EEF1F5;
   border-radius:0px 0px 0px 5px;
   color: #474b48;
+  text-align:center;
 }
 
 .project_time{
-  background: #EEF1F5;
   border-radius:0px 0px 5px 0px;
   color: #474b48;
+  font-size: 0.8rem;
+  text-align:center;
+  line-height: 30px;
 }
 
+.static_text{
+  color: #727f8f;
+}
 </style>

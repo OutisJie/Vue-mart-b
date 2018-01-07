@@ -8,27 +8,34 @@
       <el-table stripe :data="tableData" style="width: 100%" >
         <el-table-column type="selection" width="40">
         </el-table-column>
-        <el-table-column prop="projectId" class="projectId" label="项目ID" width="100">
+        <el-table-column prop="project_id" class="projectId" label="项目ID" width="100">
         </el-table-column>
-        <el-table-column prop="projectName" label="项目名称" width="150">
+        <el-table-column prop="project_name" label="项目名称" width="150">
         </el-table-column>
-        <el-table-column prop="projectType" label="项目类型" width="150" show-overflow-tooltip>
+        <el-table-column prop="project_type" label="项目类型" width="150" show-overflow-tooltip>
         </el-table-column>
-        <el-table-column prop="projectState" label="项目状态">
+        <el-table-column prop="project_state" label="项目状态">
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="80">
+        <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
             <el-button @click="" type="text" size="small" disabled><i class="el-icon-edit"></i></el-button>
             <el-button @click="" type="text" size="small" disabled><i class="el-icon-delete"></i></el-button>
           </template>
         </el-table-column>
       </el-table>
+
+      <div class="block">
+        <el-pagination class="el_pagination_participate" @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                       :current-page="currentPage" :page-sizes="[15, 30, 45, 60]" :page-size="pageSize"
+                       layout="total, sizes, prev, pager, next, jumper" :total="totolCount">
+        </el-pagination>
+      </div>
     </div>
 </template>
 
 <script>
 import server from '../../../config/index';
-import axios from 'axios';
+import axios from '../../axios/http';
 
   export default {
     created() {
@@ -36,20 +43,35 @@ import axios from 'axios';
     },
     data() {
       return {
-        tableData: [{
-          projectId: '1',
-          projectName: 'TestProject',
-          projectType: 'iOS',
-          projectState: '招募中'
-        }],
+        currentPage:1,
+        pageSize:15,
+        totolCount:0,
+        tableData: [],
+        items:[],
         url: server.url + '/api/project'
       }
     },
     methods:{
       getProject:function () {
         axios.get(this.url, {}).then(response => {
+          if(response.status == 200){}
+          else
+            throw response;
           if(response.data.status == 200){
-            this.tableData = response.data.result;
+            this.items = response.data.result;
+            this.items.forEach(function (item,index) {
+              if(item.project_state == 1){
+                item.project_state = "招募中";
+              }
+              else if(item.project_state == 2){
+                item.project_state = "开发中";
+              }
+              else if(item.project_state == 3){
+                item.project_state = "已完成";
+              }
+            });
+            this.totolCount = response.data.result.length;
+            this.loadData(this.currentPage,this.pageSize,this.totolCount);
           }
         }).catch(function(error){
           if(error.response){
@@ -66,6 +88,31 @@ import axios from 'axios';
             }
           }
         });
+      },
+      loadData:function (currentPage,pageSize,totolCount) {
+        this.tableData = [];
+        var count = 0;
+        if(pageSize < totolCount) {
+          for (count = 0; count < pageSize; count++) {
+            if (pageSize * (currentPage - 1) + count < totolCount) {
+              this.tableData.push(this.items[pageSize * (currentPage - 1) + count]);
+            }
+          }
+        }else if(pageSize >= totolCount){
+          for (count = 0; count < totolCount; count++) {
+            if (pageSize * (currentPage - 1) + count < totolCount) {
+              this.tableData.push(this.items[pageSize * (currentPage - 1) + count]);
+            }
+          }
+        }
+      },
+      handleSizeChange(val) {
+        this.pageSize = val;
+        this.loadData(this.currentPage, this.pageSize, this.totolCount);
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.loadData(this.currentPage, this.pageSize, this.totolCount);
       }
     }
   }
@@ -85,4 +132,9 @@ import axios from 'axios';
   font-size: 22px;
   color: #1f2f3d;
 }
+  .el_pagination_participate{
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
 </style>

@@ -38,11 +38,10 @@ export default {
   },
   methods:{
     checkToken:function () {
-      if(this.$store.state.user.tokenid === ''){
-        this.isLogin = false;
-      }
-      else
+      if(sessionStorage.tokenid || this.$store.state.user.tokenid !== '')
         this.isLogin = true;
+      else
+          this.isLogin = false;
     }
   }
 

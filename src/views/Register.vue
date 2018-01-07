@@ -11,8 +11,8 @@
     <el-input  placeholder="请输入密码" type="password" v-model="pwd"></el-input>
     <el-input  placeholder="请再次输入密码" type="password" v-model="pwd_rep"></el-input>
     <el-input  placeholder="请输入邮箱" type="email" v-model="email"></el-input>
-    <el-checkbox style="margin-left: 5px; padding-top: 5px; float: left" @click="changeChecked">我已同意相关协议</el-checkbox>
-  <el-button type="primary" @click="regist">提交</el-button>
+    <el-checkbox style="margin-left: 5px; padding-top: 5px; float: left" v-model="checked">我已同意相关协议</el-checkbox>
+  <el-button class="login_button" type="primary" @click="regist">提交</el-button>
   </div>
 </div>
 
@@ -21,7 +21,7 @@
 <script>
 import HeadBarLight2 from "../components/head/HeadBarLight2.vue";
 import server from '../../config/index';
-import axios from 'axios';
+import axios from '../axios/http';
 
 export default {
   name: "Register",
@@ -48,34 +48,53 @@ export default {
     },
     regist:function () {
       if(this.pwd != this.pwd_rep){
-        alert('请确认两次输入的密码相同');
+        this.$message({
+          message: '请确认两次输入的密码相同',
+          type: 'warning'
+        });
         this.pwd_rep= '';
         this.pwd= '';
       }
       else if(this.account == ""){
-        alert('请输入用户名');
+        this.$message({
+          message: '请输入用户名',
+          type: 'warning'
+        });
       }
       else if(this.pwd == ""){
-        alert('请输入密码');
+        this.$message({
+          message: '请输入密码',
+          type: 'warning'
+        });
       }
       else if(this.pwd_rep == ""){
-        alert('请再次输入密码');
+        this.$message({
+          message: '请再次输入密码',
+          type: 'warning'
+        });
       }
       else if(this.checked == false){
-        alert('请阅读相关协议并勾选同意以继续');
+        this.$message({
+          message: '请阅读相关协议并勾选同意以继续',
+          type: 'warning'
+        });
       }
       else{
-        axios.post(this.url, {"username": this.account, "email": this.email, "password": this.pwd}).then(response => {
-
+        axios.post(this.url, {"username": this.account, "email": this.email, "password": this.pwd}).then(function (response){
+          if(response.status == 200){}
+          else
+            throw response;
           if(response.data.status == 201){
-            alert('注册成功');
-            //this.$store.commit('isLogin', this.account, response.data.token);
+            this.$message({
+              message: '注册成功',
+              type: 'success'
+            });
             this.account='';
             this.pwd= '';
             this.pwd_rep= '';
             this.$router.push('/center');
           }
-        }).catch(function(error){
+        }.bind(this)).catch(function(error){
           if(error.response){
             switch (error.response.status) {
                   case 400:
@@ -107,7 +126,6 @@ export default {
 }
 
 .register_content > .el-button {
-  width: 100%;
   margin: 8px 5px;
 }
 
@@ -116,17 +134,6 @@ export default {
   top: 0px;
   width: 100%;
   color: #323a45;
-}
-
-
-
-.el-input {
-  margin:5px;
-}
-
-.el-button{
-  width:100%;
-  margin: 8px 5px;
 }
 
 .no_account{

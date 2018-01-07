@@ -22,7 +22,7 @@
       <!--</el-carousel>-->
 
     <div class="projects_select" >
-      <el-row :gutter="24" type="flex" justify="center" style="margin-top: 15px;">
+      <el-row :gutter="24" type="flex" justify="center" style="margin-top: 18px;">
         <el-col :span="3" itemscope>
           <el-dropdown style="padding-top: 0px">
             <span class="el-dropdown-link">
@@ -33,43 +33,35 @@
               <el-dropdown-item>所有类型</el-dropdown-item>
               <el-dropdown-item>Web 网站</el-dropdown-item>
               <el-dropdown-item>APP 开发</el-dropdown-item>
-              <el-dropdown-item>微信公众号</el-dropdown-item>
-              <el-dropdown-item>H5程序</el-dropdown-item>
-              <el-dropdown-item>小程序</el-dropdown-item>
-              <el-dropdown-item>其他</el-dropdown-item>
+              <el-dropdown-item>微信平台开发</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
 
         <el-col :span="1">|</el-col>
 
-        <el-col :span="2">
+        <el-col :span="3">
           <el-dropdown style="padding-top: 0px">
             <span class="el-dropdown-link">
               所有进度 <i class="el-icon-arrow-down"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>所有进度</el-dropdown-item>
-              <el-dropdown-item>招募中</el-dropdown-item>
+              <el-dropdown-item>发布中</el-dropdown-item>
               <el-dropdown-item>开发中</el-dropdown-item>
               <el-dropdown-item>已结束</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
 
-        <el-col :span="2">
+        <el-col :span="3">
           <el-dropdown style="padding-top: 0px">
             <span class="el-dropdown-link">
               所有角色 <i class="el-icon-arrow-down"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>所有角色</el-dropdown-item>
-              <el-dropdown-item>前端开发</el-dropdown-item>
-              <el-dropdown-item>后端开发</el-dropdown-item>
-              <el-dropdown-item>全栈开发</el-dropdown-item>
-              <el-dropdown-item>iOS 开发</el-dropdown-item>
-              <el-dropdown-item>Android 开发</el-dropdown-item>
-              <el-dropdown-item>测试</el-dropdown-item>
+              <el-dropdown-item>开发</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
@@ -109,11 +101,10 @@ export default {
   },
   methods:{
     checkToken:function () {
-      if(this.$store.state.user.tokenid === ''){
-        this.isLogin = false;
-      }
-      else
+      if(sessionStorage.tokenid || this.$store.state.user.tokenid !== '')
         this.isLogin = true;
+      else
+        this.isLogin = false;
     }
   }
 };
@@ -207,16 +198,6 @@ img_background {
     border-bottom: 1px solid #DDD;
     height: 50px;
     color: #657182;
-}
-
-.el-carousel__item {
-    background-image: url('../assets/head_pic.jpg');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    z-index: -1;
-}
-.picshow .el-carousel__container {
-    height: 400px;
 }
 
 .el-carousel__item .button_group {

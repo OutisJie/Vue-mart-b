@@ -1,7 +1,7 @@
 <!-- 个人中心 -->
 <template>
     <div id="" class="person_center">
-      <HeadBarLight style="z-index:1"></HeadBarLight>
+      <HeadBarLight style="z-index: 10;"></HeadBarLight>
       <div class="main_content">
         <div class="main_theme">
             <el-breadcrumb separator="/" class="breadcrumb_size">
@@ -9,7 +9,7 @@
               <el-breadcrumb-item :to="{ path: '/center' }">个人中心</el-breadcrumb-item>
             </el-breadcrumb>
               <div class="user_menu">
-                  <el-menu mode="vertical" default-active="1" class="el-menu-vertical-demo" style="margin-left:20px">
+                  <el-menu class="side_bar" mode="vertical" default-active="1" style="margin-left:20px">
                     <el-menu-item-group  title="账户信息">
                       <el-menu-item index="1" @click="changeView1" ><i class="el-icon-information"></i>账户信息</el-menu-item>
                     </el-menu-item-group>
@@ -20,8 +20,14 @@
                     </el-menu-item-group>
                   </el-menu>
               </div>
-              <div class="detail"><Account v-bind:is="currentView"></Account></div>
+            <div class="detail"><Account v-bind:is="currentView"></Account></div>
         </div>
+        <div style="height: 50px;"></div>
+      </div>
+
+      <!-- footer -->
+      <div class="footer">
+          同济大学 XLab
       </div>
     </div>
 </template>
@@ -73,7 +79,7 @@ export default {
     },
     changeView4:function () {
       this.currentView = MyNeeds;
-    }
+    }  
 
   }
 };
@@ -95,7 +101,8 @@ export default {
      background:#EFF2F7;
   }
   .main_theme{
-    max-width: 980px;
+    max-width: 50%;
+    min-width: 1000px;
     margin: 0 auto;
   }
   .breadcrumb_size{
@@ -106,10 +113,13 @@ export default {
     width:220px;
     float:left;
   }
-  .el-menu-vertical-demo{
+  
+  .side_bar{
     border-color:#000000;
     border:2px;
     background:#D3DCE6;
+    margin-left: 30px;
+    padding-top: 20px;
   }
   .detail {
     margin-left:230px;
@@ -120,4 +130,10 @@ export default {
     overflow: hidden;
   }
 
+  .footer {
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: 40px;
+    color: #8a8a8a;
+  }
 </style>

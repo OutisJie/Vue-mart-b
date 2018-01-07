@@ -3,7 +3,7 @@
       <el-row class="content-title">我的需求</el-row>
       <hr>
       <el-row class="add_requirement">
-        <el-button type="text" @click="dialogFormVisible = true">+新建需求</el-button>
+        <el-button type="text" @click="dialogFormVisible = true, projectId=''">+新建需求</el-button>
         <el-dialog title="新增需求" :visible.sync="dialogFormVisible">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px"
                    class="demo-ruleForm" style="margin-right: 30px">
@@ -12,10 +12,9 @@
             </el-form-item>
             <el-form-item label="项目类型" prop = "type">
               <el-select v-model="ruleForm.type" placeholder="请选择具体类型">
-                <el-option label="Web项目" value="Web项目"></el-option>
-                <el-option label="IOS应用" value="IOS应用"></el-option>
-                <el-option label="Android应用" value="Android应用"></el-option>
-                <el-option label="微信小程序" value="微信小程序"></el-option>
+                <el-option label="Web 网站" value="Web 网站"></el-option>
+                <el-option label="APP 开发" value="APP 开发"></el-option>
+                <el-option label="微信平台开发" value="微信平台开发"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="起止时间" required>
@@ -49,45 +48,49 @@
 
       <div style="height: 20px;"></div>
 
-      <el-table stripe :data="tableData" style="width: 100%" >
+      <el-table stripe :data="tableData" style="width: 100%" @raw-click="check(tableData.requirement_id)">
         <el-table-column type="selection" width="40">
         </el-table-column>
-        <el-table-column prop="requirementId" class="projectId" label="需求ID" width="100">
+        <el-table-column prop="requirement_id" class="projectId" label="需求ID" width="100">
         </el-table-column>
-        <el-table-column prop="requirementName" label="需求名称" width="150">
+        <el-table-column prop="requirement_name" label="需求名称" width="150">
         </el-table-column>
-        <el-table-column prop="requirementType" label="需求类型" width="150">
+        <el-table-column prop="requirement_type" label="需求类型" width="150">
         </el-table-column>
-        <el-table-column prop="requirementState" label="需求状态">
+        <el-table-column prop="requirement_state" label="需求状态">
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="80">
+        <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
             <el-button @click="editRequirement(scope.row)" type="text" size="small"><i class="el-icon-edit"></i></el-button>
             <el-button @click="deleteRequirement(scope.row)" type="text" size="small"><i class="el-icon-delete"></i></el-button>
           </template>
         </el-table-column>
       </el-table>
+
+      <div class="block">
+        <el-pagination class="el_pagination_myNeeds" @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                       :current-page="currentPage" :page-sizes="[15, 30, 45, 60]" :page-size="pageSize"
+                       layout="total, sizes, prev, pager, next, jumper" :total="totolCount">
+        </el-pagination>
+      </div>
     </div>
 </template>
 
 <script>
 import server from '../../../config/index';
-import axios from 'axios';
+import axios from '../../axios/http';
 
   export default {
     created() {
-      //this.projectId = this.$store.projectId;
       this.getRequirement();
-      //this.getProject();
     },
     data: function () {
       return {
-        tableData: [{
-          requirementId: '1',
-          requirementName: 'TestProject',
-          requirementType: 'iOS',
-          requirementState: '招募中'
-        }],
+        currentPage: 1,
+        pageSize: 15,
+        totolCount: 0,
+        items:[],
+        tableData: [],
         ruleForm: {
           name: '',
           type: '',
@@ -95,6 +98,7 @@ import axios from 'axios';
           date2: '',
           need_manager: false,
           description: '',
+          state:0,
           //file: null
         },
         rules: {
@@ -116,14 +120,32 @@ import axios from 'axios';
         },
         dialogFormVisible: false,
         projectId: '',
+        newProjectId:0,
         url: server.url + '/api/requirement'
       }
     },
     methods:{
+      //获取需求列表
       getRequirement:function () {
         axios.get(this.url, {}).then(response => {
+          if(response.status == 200){}
+          else
+            throw response;
           if(response.data.status == 200){
-            this.tableData = response.data.result;
+            this.items = response.data.result;
+            this.items.forEach(function (item,index) {
+              if(item.requirement_state == 1) {
+                item.requirement_state = "招募中";
+              }
+              else if(item.requirement_state == 2) {
+                item.requirement_state = "开发中";
+              }
+              else if(item.requirement_state == 3) {
+                item.requirement_state = "已完成";
+              }
+            });
+            this.totolCount = response.data.result.length;
+            this.loadData(this.currentPage,this.pageSize,this.totolCount);
           }
         }).catch(function(error){
           switch (error.response.status) {
@@ -139,13 +161,20 @@ import axios from 'axios';
             }
         });
       },
+      //删除需求
       deleteRequirement(row) {
-        axios.delete(this.url + row.requirementId, {}).then(response => {
+        axios.delete(this.url +'/'+ row.requirement_id).then(function(response) {
+          if(response.status == 200){}
+          else
+            throw response;
           if(response.data.status == 200){
-            alert('删除需求成功');
-            getRequirement();
+            this.$message({
+              message: '删除需求成功',
+              type: 'success'
+            });
+            this.getRequirement();
           }
-        }).catch(function(error){
+        }.bind(this)).catch(function(error){
           switch (error.response.status) {
                 case 400:
                   alert('删除需求失败');
@@ -163,16 +192,20 @@ import axios from 'axios';
         });
       },
       editRequirement(row) {
-        this.projectId = row.requirementId;
+        this.projectId = row.requirement_id.toString();
+        this.$store.commit('setProjectId',row.requirement_id.toString());
         this.dialogFormVisible = true;
-        //this.getProject();
-        //this.$store.commit('setProjectId',row.requirementId);
+        this.getProject();
         //to edit
       },
+      //提交表格
       submitForm(formName) {
         this.$refs[formName].validate((valid) =>{
           if(valid){
-            if(this.projectId == ""){ this.onSubmit();}
+            if(this.projectId == ""){
+              this.createProject();
+
+            }
             else if(this.projectId != ""){ this.onUpdate();}
           } else {
             console.log('error submit!!');
@@ -180,55 +213,86 @@ import axios from 'axios';
           }
         });
       },
+      //重置表格
       resetForm(formName) {
         this.$refs[formName].resetFields();
         this.dialogFormVisible = false;
       },
-//      getProject() {
-//        axios.get(this.url + this.projectId.toString(), {}).then(response => {
-//          if(response.data.status == 200){
-//            this.ruleForm.name = response.data.result.requirement_name;
-//            this.ruleForm.type = response.data.result.requirement_type;
-//
-//            this.ruleForm.date1 = response.data.result.start_time;
-//            this.ruleForm.date2 = response.data.result.end_time;
-//
-//            this.ruleForm.need_manager = response.data.result.need_manager;
-//            this.ruleForm.description = response.data.result.requirement_detail;
-//          }
-//        }).catch(function(error){
-//          if(error.response){
-//            switch (error.response.status) {
-//              case 400:
-//                alert('获取需求内容失败');
-//                break;
-//              case 401:
-//                alert('查询权限不足');
-//                break;
-//              case 404:
-//                alert('目标需求不存在');
-//                break;
-//              case 500:
-//                alert('服务器错误');
-//                break;
-//            }
-//          }
-//        });
-//      },
-      onSubmit(){
-        axios.post(this.url, {
-          "requirement_name": this.ruleForm.name,
-          "requirement_type": this.ruleForm.type,
-          "start_time": this.ruleForm.date1,
-          "end_time": this.ruleForm.date2,
-          "need_manager": this.ruleForm.need_manager,
-          "requirement_detail": this.ruleForm.description,
-        }).then(response => {
-          if(response.data.status == 201){
-            alert('发布需求成功');
-            this.resetForm('ruleForm');
+      //获取单个需求信息
+      getProject() {
+        axios.get(server.url + '/api/requirement/' + this.projectId.toString(), {}).then(response => {
+          if(response.status == 200){}
+          else
+            throw response;
+          if(response.data.status == 200){
+            this.ruleForm.name  = response.data.result.requirement.requirementName;
+            this.ruleForm.type = response.data.result.requirement.requirementType;
+
+            this.ruleForm.date1 = new Date(response.data.result.requirement.startTime);
+            this.ruleForm.date2 = new Date(response.data.result.requirement.endTime);
+
+            this.ruleForm.need_manager = response.data.result.requirement.needManager == 1? true: false;
+            this.ruleForm.description = response.data.result.requirement.requirementDetail;
+            this.ruleForm.state = response.data.result.requirement.requirementState;
           }
         }).catch(function(error){
+          if(error.response){
+            switch (error.response.status) {
+              case 400:
+                alert('获取需求内容失败');
+                break;
+              case 401:
+                alert('查询权限不足');
+                break;
+              case 404:
+                alert('目标需求不存在');
+                break;
+              case 500:
+                alert('服务器错误');
+                break;
+              default:
+                alert(error);
+            }
+          }
+        });
+      },
+      //新建需求
+      onSubmit(){
+        axios({
+          url: this.url,
+          method: 'POST',
+          data: {
+            project_id: this.newProjectId,
+            requirement_name: this.ruleForm.name,
+            requirement_type: this.ruleForm.type,
+            start_time: this.format(new Date(this.ruleForm.date1)),
+            end_time: this.format(new Date(this.ruleForm.date2)),
+            need_manager:Number(this.ruleForm.need_manager),
+            requirement_detail: this.ruleForm.description
+          },
+          transformRequest: [function (data) {
+            // Do whatever you want to transform the data
+            let ret = ''
+            for (let it in data) {
+              ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+            }
+            return ret
+          }],
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(function (response) {
+          if(response.data.status == 201){}
+          else
+            throw response;
+          if(response.data.status == 201){
+             this.$message({
+              message: '发布需求成功',
+              type: 'success'
+            });
+            this.getRequirement();
+            this.resetForm('ruleForm');
+          }
+        }.bind(this))
+          .catch(function(error){
           if(error.response){
             switch (error.response.status) {
               case 400:
@@ -244,19 +308,43 @@ import axios from 'axios';
           }
         });
       },
+      //更新需求
       onUpdate() {
-        axios.post(this.url + projectId.toString(), {
-          "requirement_name": this.ruleForm.name,
-          "requirement_type": this.ruleForm.type,
-          "start_time": this.ruleForm.date1,
-          "end_time": this.ruleForm.date2,
-          "need_manager": this.ruleForm.need_manager,
-          "requirement_detail": this.ruleForm.description,
-        }).then(response => {
+        axios({
+          url: server.url + '/api/updateRequirement/' + this.projectId.toString(),
+          method: 'POST',
+          data: {
+            requirement_name: this.ruleForm.name,
+            requirement_type: this.ruleForm.type,
+            start_time: this.format(new Date(this.ruleForm.date1)),
+            end_time: this.format(new Date(this.ruleForm.date2)),
+            need_manager:Number(this.ruleForm.need_manager),
+            requirement_detail: this.ruleForm.description,
+            requirement_state: this.ruleForm.state
+          },
+          transformRequest: [function (data) {
+            // Do whatever you want to transform the data
+            let ret = ''
+            for (let it in data) {
+              ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+            }
+            return ret
+          }],
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(function (response) {
+          if(response.status == 200){}
+          else
+            throw response;
           if (response.data.status == 200) {
-            alert('更新需求成功');
+            this.$message({
+              message: '更新需求成功',
+              type: 'success'
+            });
+            this.getRequirement();
+            this.resetForm('ruleForm')
           }
-        }).catch(function (error) {
+        }.bind(this))
+          .catch(function (error) {
           if(error.response){
             switch (error.response.status) {
               case 400:
@@ -274,6 +362,99 @@ import axios from 'axios';
             }
           }
         });
+      },
+      //新建项目
+      createProject(){
+        axios({
+          url: server.url + '/api/project/add',
+          method: 'POST',
+          data: {
+            project_name: this.ruleForm.name,
+            project_type: this.ruleForm.type,
+            cost:0,
+            delivery_cycle:5,
+            warranty_cycle:10,
+            address:'上海',
+            description:this.ruleForm.description,
+          },
+          transformRequest: [function (data) {
+            // Do whatever you want to transform the data
+            let ret = ''
+            for (let it in data) {
+              ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+            }
+            return ret
+          }],
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(function (response) {
+          if(response.data.status == 200){}
+          else
+            throw response;
+          if(response.data.status == 200){
+            this.$message({
+              message: '发布需求成功',
+              type: 'success'
+            });
+            this.newProjectId = response.data.result;
+            this.onSubmit();
+            this.resetForm('ruleForm');
+          }
+        }.bind(this))
+          .catch(function(error){
+            if(error.response){
+              switch (error.response.status) {
+                case 400:
+                  alert('发布需求失败');
+                  break;
+                case 401:
+                  alert('权限不足');
+                  break;
+                case 500:
+                  alert('服务器错误');
+                  break;
+              }
+            }
+          });
+      },
+      //分页
+      loadData:function (currentPage,pageSize,totolCount) {
+        this.tableData = [];
+        var count = 0;
+        if(pageSize < totolCount) {
+          for (count = 0; count < pageSize; count++) {
+            if (pageSize * (currentPage - 1) + count < totolCount) {
+              this.tableData.push(this.items[pageSize * (currentPage - 1) + count]);
+            }
+          }
+        }else if(pageSize >= totolCount){
+          for (count = 0; count < totolCount; count++) {
+            if (pageSize * (currentPage - 1) + count < totolCount) {
+              this.tableData.push(this.items[pageSize * (currentPage - 1) + count]);
+            }
+          }
+        }
+      },
+      handleSizeChange(val) {
+        this.pageSize = val;
+        this.loadData(this.currentPage, this.pageSize, this.totolCount);
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.loadData(this.currentPage, this.pageSize, this.totolCount);
+      },
+      //日期格式转换
+      format(fmt){
+        var year = fmt.getFullYear();
+        var month = fmt.getMonth() + 1 < 10 ? "0" + (fmt.getMonth() + 1) : fmt.getMonth() + 1;
+        var day = fmt.getDate() < 10 ? "0" + fmt.getDate() : fmt.getDate();
+        var dateStr = year + "-" + month + "-" + day;
+        return dateStr;
+      },
+
+      //查看详情页面
+      check(id){
+        this.$store.commit('setProjectId', id.toString());
+        this.$router.push( '/projectDetail' );
       }
     }
   }
@@ -297,5 +478,10 @@ import axios from 'axios';
   float: right;
   margin-right: 20px;
 }
+  .el_pagination_myNeeds{
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
 </style>
 
