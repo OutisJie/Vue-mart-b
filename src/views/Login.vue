@@ -27,6 +27,7 @@
   import HeadBarLight2 from "../components/head/HeadBarLight2.vue";
   import server from '../../config/index';
   import axios from '../axios/http';
+  import swal from 'sweetalert'
 
   export default {
     name: "Login",
@@ -84,14 +85,14 @@
             if (error) {
               switch (error.data.status) {
                 case "401":
-                  alert('密码错误');
+                  swal("Warning", "密码错误!", "warning");
                   break;
                 case "404":
-                  alert('用户名不存在');
+                  swal("Warning", "用户名不存在!", "warning");
                   break;
               }
               if (error.status == 500) {
-                alert('服务器错误');
+                swal("Error", "服务器错误", "error");
               }
             }
           });

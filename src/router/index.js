@@ -7,6 +7,7 @@ import Register from '@/views/Register'
 import Center from '@/views/Center'
 import Projects from '@/views/Projects'
 import ProjectDetail from '@/views/ProjectDetail'
+import Workers from '@/views/Workers'
 import Blank from '@/views/Blank'
 import store from '../vuex/store'
 
@@ -47,7 +48,7 @@ const router = new Router({
     }, {
         path: '/center',
         name: 'Center',
-        meta: { 
+        meta: {
             requireAuth: true
         },
         component: Center
@@ -58,10 +59,14 @@ const router = new Router({
     }, {
         path: '/projectDetail',
         name: 'ProjectDetail',
-        meta: { 
+        meta: {
             requireProjectId: true
         },
         component: ProjectDetail
+    },{
+        path:'/workers',
+        name:"Workers",
+        component: Workers
     }, {
         path: '/blank',
         name: 'Blank',
@@ -69,70 +74,70 @@ const router = new Router({
     },{
         path: '/stepone/:rId',
         name: 'StepOne',
-        meta: { 
+        meta: {
             requireAuth: true
         },
         component: StepOne
     },{
         path: '/steptwo/:rId',
         name: 'StepTwo',
-        meta: { 
+        meta: {
             requireAuth: true
         },
         component: StepTwo
     },{
         path: '/ver',
         name: 'VER',
-        meta: { 
+        meta: {
             requireAuth: true
         },
         component: VER
     },{
         path: '/mver',
         name: 'MVER',
-        meta: { 
+        meta: {
             requireAuth: true
         },
         component: MVER
     },{
         path: '/stepthree/:rId',
         name: 'StepThree',
-        meta: { 
+        meta: {
             requireAuth: true
         },
         component:StepThree
     },{
         path: '/stepfour',
         name: 'StepFour',
-        meta: { 
+        meta: {
             requireAuth: true
         },
         component:StepFour
     },{
         path: '/managersteptwo/:rId',
         name: 'ManagerStepTwo',
-        meta: { 
+        meta: {
             requireAuth: true
         },
         component:ManagerStepTwo
     },{
         path: '/managerstepthree/:rId',
         name: 'ManagerStepThree',
-        meta: { 
+        meta: {
             requireAuth: true
         },
         component:ManagerStepThree
     },{
         path: '/managerIFPUGreport/:rId',
         name: 'ManagerIFPUGReport',
-        meta: { 
+        meta: {
             requireAuth: true
         },
         component:ManagerIFPUGReport
     },{
         path: '/functiondiv/:rId',
         name: 'FunctionDiv',
-        meta: { 
+        meta: {
             requireAuth: true
         },
         component:FunctionDiv
@@ -144,7 +149,7 @@ router.beforeEach((to, from, next) => {
     if (to.matched.some(res => res.meta.requireAuth)) {// 判断是否需要登录权限
         if(store.state.user.tokenid){// 判断是否登录
             next()
-        } 
+        }
         else if(sessionStorage.tokenid){
             store.state.user.tokenid = sessionStorage.tokenid;
             store.state.user.username = sessionStorage.username;
@@ -159,7 +164,7 @@ router.beforeEach((to, from, next) => {
             query: {redirect: to.fullPath}
             })
         }
-    } 
+    }
     else if(to.matched.some(res => res.meta.requireProjectId)) {
         if(store.state.projectId){
             next()

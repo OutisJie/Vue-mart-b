@@ -20,7 +20,7 @@
                     </el-menu-item-group>
                   </el-menu>
               </div>
-            <div class="detail"><Account v-bind:is="currentView"></Account></div>
+            <div class="detail"><MyAccount v-bind:is="currentView"></MyAccount></div>
         </div>
         <div style="height: 50px;"></div>
       </div>
@@ -35,9 +35,9 @@
 <script>
 import HeadBarLight from "../components/head/HeadBarLight.vue"
 import HeadBarLight2 from "../components/head/HeadBarLight2.vue"
-import Account from "../components/personalcenter/Account.vue"
-import Experience from "../components/personalcenter/Experience.vue"
-import Participate from "../components/personalcenter/ParticipateProject.vue"
+import MyAccount from "../components/personalcenter/MyAccount.vue"
+import MyExperience from "../components/personalcenter/MyExperience.vue"
+import MyParticipate from "../components/personalcenter/MyParticipate.vue"
 import MyNeeds from "../components/personalcenter/MyNeeds.vue"
 
 export default {
@@ -45,17 +45,17 @@ export default {
   components: {
     HeadBarLight,
     HeadBarLight2,
-    Account,
-    Experience,
-    Participate,
+    MyAccount,
+    MyExperience,
+    MyParticipate,
     MyNeeds
   },
   data() {
     return {
       isCollapse: true,
-      Account:"Account",
-      Experience:"Experience",
-      currentView:"Account"
+      MyAccount:"MyAccount",
+      MyExperience:"MyExperience",
+      currentView:"MyAccount"
     };
   },
   methods: {
@@ -69,17 +69,17 @@ export default {
       this.$router.push( {path:'../components/InfoForm'});
     },
     changeView1:function() {
-      this.currentView = Account;
+      this.currentView = MyAccount;
     },
     changeView2:function () {
-      this.currentView = Experience;
+      this.currentView = MyExperience;
     },
     changeView3:function () {
-      this.currentView = Participate;
+      this.currentView = MyExperience;
     },
     changeView4:function () {
       this.currentView = MyNeeds;
-    }  
+    }
 
   }
 };
@@ -113,7 +113,7 @@ export default {
     width:220px;
     float:left;
   }
-  
+
   .side_bar{
     border-color:#000000;
     border:2px;
