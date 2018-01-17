@@ -172,7 +172,7 @@
             this.totolCount = response.data.result.length;
             this.loadData(this.currentPage, this.pageSize, this.totolCount);
           }
-        }, function () {
+        }).catch (function (error) {
           swal("Error", "服务器错误", "error");
         });
       },

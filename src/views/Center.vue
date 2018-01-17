@@ -75,7 +75,7 @@ export default {
       this.currentView = MyExperience;
     },
     changeView3:function () {
-      this.currentView = MyExperience;
+      this.currentView = MyParticipate;
     },
     changeView4:function () {
       this.currentView = MyNeeds;

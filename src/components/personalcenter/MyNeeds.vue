@@ -434,7 +434,8 @@
             throw response;
           if (response.data.status == 200) {
             this.$message({
-              message: '新建项目成功',
+              message: '新建项目' +
+              '成功',
               type: 'success'
             });
             this.newProjectId = response.data.result;
