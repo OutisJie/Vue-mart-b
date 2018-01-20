@@ -11,7 +11,7 @@ const state = {
     mobile: '',
     email: ''
   },
-  projectId: ''
+//  projectId: ''
 }
 
 const mutations = {
@@ -22,9 +22,9 @@ const mutations = {
     state.user.mobile = user_input.mobile;
     state.user.email = user_input.email;
   },
-  setProjectId (state, projectId_input) {
-    state.projectId = projectId_input;
-  },
+  // setProjectId (state, projectId_input) {
+  //   state.projectId = projectId_input;
+  // },
   setToken(state, token){
     state.user.tokenid = token;
   },

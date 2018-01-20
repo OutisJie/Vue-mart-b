@@ -12,7 +12,7 @@
           </div>
           <div class="person-info">
             <div class="name">管理员--编辑调整因子</div>
-            <div class="info">yourNAME<br></div>
+            <div class="info">{{this.$store.state.user.username}}<br></div>
           </div>
         </div>
       </div>
@@ -74,7 +74,7 @@
   }
   .header1 {
     width: 80%;
-    margin-top:40px;
+    margin-top:84px;
     margin-left:10% ;
     display: flex;
     flex-direction: row;

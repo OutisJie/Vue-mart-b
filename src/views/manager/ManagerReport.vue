@@ -12,7 +12,7 @@
             </div>
             <div class="person-info">
               <div class="name">管理员--IFPUG估算报告</div>
-              <div class="info">yourNAME<br>查看报告</div>
+              <div class="info">{{this.$store.state.user.username}}<br>查看报告</div>
             </div>
           </div>
         </div>
@@ -21,7 +21,7 @@
       <Body_IFPUGReport class="pdf-dom" id="pdfDom"></Body_IFPUGReport>
       <div>
         <el-row></el-row>
-        <el-row style="text-align: center ;min-width: 100%">
+        <el-row style="text-align: center ;min-width: 100%;padding: 20px">
           <el-button type="primary" v-on:click="toReport" >返回</el-button>
         </el-row>
       </div>
@@ -84,7 +84,7 @@
   }
   .header1 {
     width: 80%;
-    margin-top:10px;
+    margin-top:84px;
     margin-left:10% ;
     display: flex;
     flex-direction: row;

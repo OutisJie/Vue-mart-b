@@ -12,17 +12,16 @@
             <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509041832135&di=abc5c99b8048b0c600049e68cdb64602&imgtype=0&src=http%3A%2F%2Fimglf1.ph.126.net%2FnMbQAfw2LAJG4ahCYE_XJA%3D%3D%2F3886606478520925399.jpg">
           </div>
           <div class="person-info">
-            <div class="name">用户创建估算--调整因子</div>
-            <div class="info">yourNAME<br></div>
+            <div class="name">管理员估算--计算未调整功能点</div>
+            <div class="info">{{this.$store.state.user.username}}<br></div>
           </div>
         </div>
       </div>
     </div>
 
     <div class="functiondiv_content">
-      <div id="directory">
 
-
+      <div id="mydirectory">
         <div class="tree_btn">
           <el-button size="small" id="btn1" type="primary " @click="expand_all()">展开
           </el-button>
@@ -34,23 +33,51 @@
         <div id="div_tree" class="tree"></div>
       </div>
 
-      <div id="rightform" class="content" :model="dynamicForm" :ref="dynamicForm">
 
-        <div class="form-input">
-          <div class="form-input-item1">
-            <p size="mini" v-model="ilfStr"><B>内部逻辑文件： </B>{{ilfStr}}</p>
-          </div>
+      <div id="default-right" style="margin-left: 20px;display: block" class="mycontent" v-if="defaultBtn">
 
-          <div class="form-input-item2">
-            <p size="mini" v-model="eifStr"><B>外部接口文件： </B>{{eifStr}}</p>
-          </div>
+      <div class='typora-export'>
+        <div id='write' class='is-mac show-fences-line-number' style="width: 100%">
+          <h1>使用说明
+          </h1>
+          <h3>1.选择功能</h3>
+          <p>双击左侧的任一功能</p>
+          <h3>2.填写事务功能</h3>
+          <p>根据用户提供等信息，填写EI、EO、EQ等相关信息</p>
+            <h3>2.填写数据功能</h3>
+            <p>根据用户提供等信息，填写ILF、EIF等相关信息</p>
+
+            <br>
+
+
         </div>
+      </div>
+
+      <div class="style-bottom-btn" style="width:100%;" >
+
+        <el-button class="bottom-btn1" v-on:click="toStepOne">上一步</el-button>
+        <el-button class="bottom-btn3" type="primary" v-on:click="defaultToStepThree">下一步</el-button>
+
+      </div>
+      </div>
+
+      <div id="rightform" class="mycontent" :model="dynamicForm" :ref="dynamicForm">
+
+        <!--<div class="form-input">-->
+          <!--<div class="form-input-item1">-->
+            <!--<p size="mini" v-model="ilfStr"><B>内部逻辑文件： </B>{{ilfStr}}</p>-->
+          <!--</div>-->
+
+          <!--<div class="form-input-item2">-->
+            <!--<p size="mini" v-model="eifStr"><B>外部接口文件： </B>{{eifStr}}</p>-->
+          <!--</div>-->
+        <!--</div>-->
 
 
         <div class="step-box">
 
           <div class="step-set-list">
-            <el-collapse class="step-set" v-for="(step, indexout) in dynamicForm.steps" :key="step.key"
+            <el-collapse  class="step-set" v-for="(step, indexout) in dynamicForm.steps" :key="step.key"
                          :prop="'steps.'+indexout+'.value'">
 
 
@@ -145,7 +172,7 @@
         </div>
 
 
-        <div style="margin-top: 50px ;font-size: 13px">
+        <div style="margin-top: 50px ;font-size: 13px;width: 100%;min-width:500px">
 
 
           <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -162,7 +189,7 @@
 
                 <v-table v-if="tab"
                   is-horizontal-resize
-                  style="width:660px"
+                  style="width:100%"
                   :columns="columns1"
                   :table-data="tableData1"
                   row-hover-color="#eee"
@@ -178,7 +205,7 @@
 
                 <v-table v-else
                   is-horizontal-resize
-                  style="width: 660px;"
+                   style="width:100%"
                   :columns="columns2"
                   :table-data="tableData2"
                   row-hover-color="#eee"
@@ -210,6 +237,7 @@
 
         </div>
       </div>
+
 
     </div>
   </div>
@@ -276,13 +304,13 @@
       return {
         treeMsg: {},
         activeName: 'first',
-
+          isModify:false,
         tab:true,
-
+          defaultBtn:true,
 
         columns1: [
           {
-            field: 'name', title: '事务名称', width: 60, titleAlign: 'center', columnAlign: 'center', isEdit: true,
+            field: 'name', title: '事务名称', width: 65, titleAlign: 'center', columnAlign: 'center', isEdit: true,
             isResize: true
           },
           {
@@ -306,15 +334,15 @@
             isResize: true
           },
           {
-            field: 'complex', title: '复杂度', width: 60, titleAlign: 'center', columnAlign: 'center', isEdit: false,
+            field: 'complex', title: '复杂度', width: 50, titleAlign: 'center', columnAlign: 'center', isEdit: false,
             isResize: true
           },
           {
-            field: 'ufp', title: 'UFP', width: 60, titleAlign: 'center', columnAlign: 'center', isEdit: false,
+            field: 'ufp', title: 'UFP', width: 40, titleAlign: 'center', columnAlign: 'center', isEdit: false,
             isResize: true
           },
 
-          {field: 'custome-adv', title: '操作',width: 60, titleAlign: 'center',columnAlign:'center',componentName:'table-operation',isResize:true}
+          {field: 'custome-adv', title: '',width: 50, titleAlign: 'center',columnAlign:'center',componentName:'table-operation',isResize:true}
 
 
         ],
@@ -322,11 +350,11 @@
 
         columns2: [
           {
-            field: 'name', title: '逻辑文件名称', width: 90, titleAlign: 'center', columnAlign: 'center', isEdit: true,
+            field: 'name', title: '文件名称', width: 65, titleAlign: 'center', columnAlign: 'center', isEdit: true,
             isResize: true
           },
           {
-            field: 'fileType', title: '逻辑文件类型', width: 90, titleAlign: 'center', columnAlign: 'center', isEdit: true,
+            field: 'fileType', title: '文件类型', width: 60, titleAlign: 'center', columnAlign: 'center', isEdit: true,
             isResize: true
           },
           {
@@ -346,14 +374,14 @@
             isResize: true
           },
           {
-            field: 'complex', title: '复杂度', width: 60, titleAlign: 'center', columnAlign: 'center', isEdit: false,
+            field: 'complex', title: '复杂度', width: 50, titleAlign: 'center', columnAlign: 'center', isEdit: false,
             isResize: true
           },
           {
-            field: 'ufp', title: 'UFP', width: 60, titleAlign: 'center', columnAlign: 'center', isEdit: false,
+            field: 'ufp', title: 'UFP', width: 40, titleAlign: 'center', columnAlign: 'center', isEdit: false,
             isResize: true
           },
-          {field: 'custome-adv', title: '操作',width: 60, titleAlign: 'center',columnAlign:'center',componentName:'table-operation',isResize:true}
+          {field: 'custome-adv', title: '',width: 50, titleAlign: 'center',columnAlign:'center',componentName:'table-operation',isResize:true}
 
 
 
@@ -442,7 +470,7 @@
         else
             this.isLogin = false;
       },
-    
+
 
 
 
@@ -667,54 +695,14 @@
       }
       ,
         toStepThree() {
+            this.saveTable();
+            this.$router.push({name: 'ManagerStepTwo', params : {rId : this.$route.params.rId}});
+        },
+
+        defaultToStepThree() {
 
             this.$router.push({name: 'ManagerStepTwo', params : {rId : this.$route.params.rId}});
-        }
-        ,
-
-//      toStepThree() {
-////////////仅测试用//////
-////        this.$router.push({path: '/editreport'});
-//
-////        var stepArray=[];
-////        for(var i=0;i<this.steps.length;i++){
-////          var temp=this.steps[i];
-////          stepArray.push({
-////            "stepName" : temp.name ,
-////            "eifDataSets" : {
-////              "eifFileName" : temp.eifs.name,
-////              "eifDETSets" : temp.eifs.dataFields,
-////            },
-////            "ilfDataSets" : {
-////              "ilfFileName" : temp.ilfs.name,
-////              "ilfDETSets" : [{
-////                "ilfDETs" : '
-////              }]
-////            }
-////          })
-////
-////        }
-////
-//        var msg = {
-//          "tId": this.cur.id,
-//          "transactionName": this.cur.name,
-//          "nameOfILF": this.ilfStr,
-//          "nameOfEIF": this.eifStr,
-//          "steps": this.dynamicForm.steps,
-//        }
-////                console.log(msg)
-//        this.$http.post(this.url + '/updateTransaction/' + this.$route.params.rId, msg).then(res => {
-//          //alert("success")
-//        }, res => {
-//          //alert("fail0")
-//        })
-//
-//
-////        this.$router.push({path: '/stepone'});
-//
-//
-//      }
-//      ,
+        },
 
 
 
@@ -756,9 +744,11 @@
 //                console.log(msg)
         this.$http.post(this.url + '/updateResult/' + this.$route.params.rId, msg).then(res => {
           this.$message({
-            type: 'info',
+            type: 'success' +
+            '',
             message: '保存成功'
           });
+
 
 
           this.tableData1.length = 0;
@@ -770,11 +760,11 @@
               "name": res.body.estimationTransactionDatas[i].name,
               "transactionType": res.body.estimationTransactionDatas[i].transactionType,
               "logicalFile": res.body.estimationTransactionDatas[i].logicalFile,
-              "DET": res.body.estimationTransactionDatas[i].det,
+              "DET": res.body.estimationTransactionDatas[i].DET,
               "fileNum": res.body.estimationTransactionDatas[i].fileNum,
-              "detNum": res.body.estimationTransactionDatas[i].detnum,
+              "detNum": res.body.estimationTransactionDatas[i].DETNum,
               "complex": res.body.estimationTransactionDatas[i].complexity,
-              "ufp": res.body.estimationTransactionDatas[i].ufp
+              "ufp": res.body.estimationTransactionDatas[i].UFP
             })
           }
 
@@ -782,12 +772,12 @@
             this.tableData2.push({
               "name": res.body.estimationFileDatas[i].name,
               "fileType": res.body.estimationFileDatas[i].fileType,
-              "RET": res.body.estimationFileDatas[i].ret,
-              "retNum": res.body.estimationFileDatas[i].retnum,
-              "DET": res.body.estimationFileDatas[i].det,
-              "detNum": res.body.estimationFileDatas[i].detnum,
+              "RET": res.body.estimationFileDatas[i].RET,
+              "retNum": res.body.estimationFileDatas[i].RETNum,
+              "DET": res.body.estimationFileDatas[i].DET,
+              "detNum": res.body.estimationFileDatas[i].DETNum,
               "complex": res.body.estimationFileDatas[i].complexity,
-              "ufp": res.body.estimationFileDatas[i].ufp
+              "ufp": res.body.estimationFileDatas[i].UFP
             })
           }
 
@@ -1223,9 +1213,9 @@
                     "eTDs" :vue.tableData1
                   }
 //                console.log(msg)
-                  vue.$http.post(this.url + '/updateResult/' + vue.$route.params.rId, msg).then(res => {
+                  vue.$http.post(vue.url + '/updateResult/' + vue.$route.params.rId, msg).then(res => {
                     vue.$message({
-                      type: 'info',
+                      type: 'success',
                       message: '保存成功'
                     });
 
@@ -1240,11 +1230,11 @@
                         "name": res.body.estimationTransactionDatas[i].name,
                         "transactionType": res.body.estimationTransactionDatas[i].transactionType,
                         "logicalFile": res.body.estimationTransactionDatas[i].logicalFile,
-                        "DET": res.body.estimationTransactionDatas[i].det,
+                        "DET": res.body.estimationTransactionDatas[i].DET,
                         "fileNum": res.body.estimationTransactionDatas[i].fileNum,
-                        "detNum": res.body.estimationTransactionDatas[i].detnum,
+                        "detNum": res.body.estimationTransactionDatas[i].DETNum,
                         "complex" : res.body.estimationTransactionDatas[i].complexity,
-                        "ufp" : res.body.estimationTransactionDatas[i].ufp
+                        "ufp" : res.body.estimationTransactionDatas[i].UFP
                       })
                     }
 
@@ -1252,12 +1242,12 @@
                       vue.tableData2.push({
                         "name": res.body.estimationFileDatas[i].name,
                         "fileType": res.body.estimationFileDatas[i].fileType,
-                        "RET": res.body.estimationFileDatas[i].ret,
-                        "retNum": res.body.estimationFileDatas[i].retnum,
-                        "DET": res.body.estimationFileDatas[i].det,
-                        "detNum": res.body.estimationFileDatas[i].detnum,
+                        "RET": res.body.estimationFileDatas[i].RET,
+                        "retNum": res.body.estimationFileDatas[i].RETNum,
+                        "DET": res.body.estimationFileDatas[i].DET,
+                        "detNum": res.body.estimationFileDatas[i].DETNum,
                         "complex" : res.body.estimationFileDatas[i].complexity,
-                        "ufp" : res.body.estimationFileDatas[i].ufp
+                        "ufp" : res.body.estimationFileDatas[i].UFP
                       })
                     }
 
@@ -1269,7 +1259,7 @@
                       "tId": vue.cur.id
                     }
 
-                    vue.$http.post(this.url + '/getTransaction/' + vue.$route.params.rId, msg).then(res => {
+                    vue.$http.post(vue.url + '/getTransaction/' + vue.$route.params.rId, msg).then(res => {
                       //alert("success")
                       vue.dynamicForm.steps.length = 0;
                       vue.ilfStr = res.body.nameOfILF;
@@ -1288,11 +1278,11 @@
                           "name": res.body.estimationTransactionDatas[i].name,
                           "transactionType": res.body.estimationTransactionDatas[i].transactionType,
                           "logicalFile": res.body.estimationTransactionDatas[i].logicalFile,
-                          "DET": res.body.estimationTransactionDatas[i].det,
+                          "DET": res.body.estimationTransactionDatas[i].DET,
                           "fileNum": res.body.estimationTransactionDatas[i].fileNum,
-                          "detNum": res.body.estimationTransactionDatas[i].detnum,
+                          "detNum": res.body.estimationTransactionDatas[i].DETNum,
                           "complex" : res.body.estimationTransactionDatas[i].complexity,
-                          "ufp" : res.body.estimationTransactionDatas[i].ufp
+                          "ufp" : res.body.estimationTransactionDatas[i].UFP
                         })
                       }
 
@@ -1300,12 +1290,12 @@
                         vue.tableData2.push({
                           "name": res.body.estimationFileDatas[i].name,
                           "fileType": res.body.estimationFileDatas[i].fileType,
-                          "RET": res.body.estimationFileDatas[i].ret,
-                          "retNum": res.body.estimationFileDatas[i].retnum,
-                          "DET": res.body.estimationFileDatas[i].det,
-                          "detNum": res.body.estimationFileDatas[i].detnum,
+                          "RET": res.body.estimationFileDatas[i].RET,
+                          "retNum": res.body.estimationFileDatas[i].RETNum,
+                          "DET": res.body.estimationFileDatas[i].DET,
+                          "detNum": res.body.estimationFileDatas[i].DETNum,
                           "complex" : res.body.estimationFileDatas[i].complexity,
-                          "ufp" : res.body.estimationFileDatas[i].ufp
+                          "ufp" : res.body.estimationFileDatas[i].UFP
                         })
                       }
 
@@ -1326,9 +1316,9 @@
                             "name": res.body.steps[i].ilfDataSets[j].innerlogicalFileName,
                             "dataFields": []
                           });
-                          for (var k = 0; k < res.body.steps[i].ilfDataSets[j].det.length; k++) {
+                          for (var k = 0; k < res.body.steps[i].ilfDataSets[j].DET.length; k++) {
                             vue.dynamicForm.steps[i].ilfs[j].dataFields.push({
-                              "value": res.body.steps[i].ilfDataSets[j].det[k]
+                              "value": res.body.steps[i].ilfDataSets[j].DET[k]
                             });
                           }
                         }
@@ -1338,9 +1328,9 @@
                             "name": res.body.steps[i].eifDataSets[j].externalInterfaceFileName,
                             "dataFields": []
                           });
-                          for (var k = 0; k < res.body.steps[i].eifDataSets[j].det.length; k++) {
+                          for (var k = 0; k < res.body.steps[i].eifDataSets[j].DET.length; k++) {
                             vue.dynamicForm.steps[i].eifs[j].dataFields.push({
-                              "value": res.body.steps[i].eifDataSets[j].det[k]
+                              "value": res.body.steps[i].eifDataSets[j].DET[k]
                             });
                           }
                         }
@@ -1376,7 +1366,7 @@
                       "tId": vue.cur.id
                     }
 
-                    vue.$http.post(this.url + '/getTransaction/' + vue.$route.params.rId, msg).then(res => {
+                    vue.$http.post(vue.url + '/getTransaction/' + vue.$route.params.rId, msg).then(res => {
                       //alert("success")
                       vue.dynamicForm.steps.length = 0;
                       vue.ilfStr = res.body.nameOfILF;
@@ -1396,9 +1386,9 @@
                           "name": res.body.estimationTransactionDatas[i].name,
                           "transactionType": res.body.estimationTransactionDatas[i].transactionType,
                           "logicalFile": res.body.estimationTransactionDatas[i].logicalFile,
-                          "DET": res.body.estimationTransactionDatas[i].det,
+                          "DET": res.body.estimationTransactionDatas[i].DET,
                           "fileNum": res.body.estimationTransactionDatas[i].fileNum,
-                          "detNum": res.body.estimationTransactionDatas[i].detnum,
+                          "detNum": res.body.estimationTransactionDatas[i].DETnum,
                           "complex" : res.body.estimationTransactionDatas[i].complexity,
                           "ufp" : res.body.estimationTransactionDatas[i].ufp
                         })
@@ -1434,9 +1424,9 @@
                             "name": res.body.steps[i].ilfDataSets[j].innerlogicalFileName,
                             "dataFields": []
                           });
-                          for (var k = 0; k < res.body.steps[i].ilfDataSets[j].det.length; k++) {
+                          for (var k = 0; k < res.body.steps[i].ilfDataSets[j].DET.length; k++) {
                             vue.dynamicForm.steps[i].ilfs[j].dataFields.push({
-                              "value": res.body.steps[i].ilfDataSets[j].det[k]
+                              "value": res.body.steps[i].ilfDataSets[j].DET[k]
                             });
                           }
                         }
@@ -1446,9 +1436,9 @@
                             "name": res.body.steps[i].eifDataSets[j].externalInterfaceFileName,
                             "dataFields": []
                           });
-                          for (var k = 0; k < res.body.steps[i].eifDataSets[j].det.length; k++) {
+                          for (var k = 0; k < res.body.steps[i].eifDataSets[j].DET.length; k++) {
                             vue.dynamicForm.steps[i].eifs[j].dataFields.push({
-                              "value": res.body.steps[i].eifDataSets[j].det[k]
+                              "value": res.body.steps[i].eifDataSets[j].DET[k]
                             });
                           }
                         }
@@ -1491,6 +1481,8 @@
             }
 
             else {
+
+                vue.defaultBtn=false;
               vue.cur.id = p_node.id;
               vue.rightnode = p_node;
               vue.cur.name = p_node.text;
@@ -1500,9 +1492,10 @@
                 "tId": vue.cur.id
               }
 
-              vue.$http.post(this.url + '/getTransaction/' + vue.$route.params.rId, msg).then(res => {
+              vue.$http.post(vue.url + '/getTransaction/' + vue.$route.params.rId, msg).then(res => {
                 //alert("success")
-                vue.dynamicForm.steps.length = 0;
+                  console.log(res.body);
+                  vue.dynamicForm.steps.length = 0;
                 vue.ilfStr = res.body.nameOfILF;
                 vue.eifStr = res.body.nameOfEIF;
 
@@ -1519,11 +1512,11 @@
                       "name": res.body.estimationTransactionDatas[i].name,
                       "transactionType": res.body.estimationTransactionDatas[i].transactionType,
                       "logicalFile": res.body.estimationTransactionDatas[i].logicalFile,
-                      "DET": res.body.estimationTransactionDatas[i].det,
+                      "DET": res.body.estimationTransactionDatas[i].DET,
                       "fileNum": res.body.estimationTransactionDatas[i].fileNum,
-                      "detNum": res.body.estimationTransactionDatas[i].detnum,
+                      "detNum": res.body.estimationTransactionDatas[i].DETNum,
                       "complex" : res.body.estimationTransactionDatas[i].complexity,
-                      "ufp" : res.body.estimationTransactionDatas[i].ufp
+                      "ufp" : res.body.estimationTransactionDatas[i].UFP
                     })
                   }
 
@@ -1531,12 +1524,12 @@
                     vue.tableData2.push({
                       "name": res.body.estimationFileDatas[i].name,
                       "fileType": res.body.estimationFileDatas[i].fileType,
-                      "RET": res.body.estimationFileDatas[i].ret,
-                      "retNum": res.body.estimationFileDatas[i].retnum,
-                      "DET": res.body.estimationFileDatas[i].det,
-                      "detNum": res.body.estimationFileDatas[i].detnum,
+                      "RET": res.body.estimationFileDatas[i].RET,
+                      "retNum": res.body.estimationFileDatas[i].RETNum,
+                      "DET": res.body.estimationFileDatas[i].DET,
+                      "detNum": res.body.estimationFileDatas[i].DETNum,
                       "complex" : res.body.estimationFileDatas[i].complexity,
-                      "ufp" : res.body.estimationFileDatas[i].ufp
+                      "ufp" : res.body.estimationFileDatas[i].UFP
                     })
                   }
 
@@ -1557,9 +1550,9 @@
                       "name": res.body.steps[i].ilfDataSets[j].innerlogicalFileName,
                       "dataFields": []
                     });
-                    for (var k = 0; k < res.body.steps[i].ilfDataSets[j].det.length; k++) {
+                    for (var k = 0; k < res.body.steps[i].ilfDataSets[j].DET.length; k++) {
                       vue.dynamicForm.steps[i].ilfs[j].dataFields.push({
-                        "value": res.body.steps[i].ilfDataSets[j].det[k]
+                        "value": res.body.steps[i].ilfDataSets[j].DET[k]
                       });
                     }
                   }
@@ -1569,9 +1562,9 @@
                       "name": res.body.steps[i].eifDataSets[j].externalInterfaceFileName,
                       "dataFields": []
                     });
-                    for (var k = 0; k < res.body.steps[i].eifDataSets[j].det.length; k++) {
+                    for (var k = 0; k < res.body.steps[i].eifDataSets[j].DET.length; k++) {
                       vue.dynamicForm.steps[i].eifs[j].dataFields.push({
-                        "value": res.body.steps[i].eifDataSets[j].det[k]
+                        "value": res.body.steps[i].eifDataSets[j].DET[k]
                       });
                     }
                   }
@@ -1847,24 +1840,28 @@
 
   #rightform {
     visibility: hidden;
+    margin-left:1% ;
   }
 
   .functiondiv_content {
     /*text-align: center;*/
-    margin-top: 100px;
+    /*margin-top: 100px;*/
+    background-color: white;
     /*width: 30%;*/
-    margin-left: 50px;
+    /*margin-left: 50px;*/
     /*margin-right: auto;*/
-    min-width: 980px;
+    /*min-width: 800px;*/
+    width: 80%;
     /*max-width: 280px;;*/
     display: -webkit-flex;
     display: flex;
     display: inline-flex;
     display: -webkit-inline-flex;
     flex-direction: row;
+    /*min-width: 1007px;*/
     flex-wrap: wrap;
-    align-items: flex-start;
-    align-content: flex-start;
+    /*align-items: flex-start;*/
+    /*align-content: flex-start;*/
   }
 
   .functiondiv_content > .el-input {
@@ -1922,7 +1919,7 @@
   }
 
   img.exp_col {
-    position: absolute;
+    /*position: absolute;*/
     margin-top: 4px;
     margin-left: -20px;
     vertical-align: sub;
@@ -1992,11 +1989,32 @@
 
   }
 
+  #directory {
+    min-width: 190px;
+    min-height: 400px;
+    order: 1;
+    flex-grow: 3;
+    padding: -5px;
+    width: 5%;
+    display: -webkit-flex;
+    display: flex;
+    display: inline-flex;
+    display: -webkit-inline-flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    overflow: hidden;
+    align-content: flex-start;
+
+  }
+
   #div_tree {
     margin-top: 20px;
     font: 13px Verdana, sans-serif;
     display: inline-block;
-    width: 280px;
+    /*width: 100%;*/
+    max-width: 180px;
+    min-height: 400px;
 
     /*background-color: #8DD7B5*/
   }
@@ -2016,11 +2034,14 @@
     /*padding: 5px 0;*/
   }
 
-  #directory {
-    /*width: 200px;*/
+  #mydirectory {
+    /*min-width: 15%;*/
+    /*width: 20%;*/
+    max-width: 180px;
     /*height: 300px;*/
     order: 1;
     flex-grow: 3;
+    min-width: 20%;
 
     display: -webkit-flex;
     display: flex;
@@ -2030,6 +2051,8 @@
     flex-wrap: wrap;
     align-items: flex-start;
     align-content: flex-start;
+
+    overflow-y:auto; overflow-x:auto;
 
   }
 
@@ -2047,8 +2070,10 @@
     display: -webkit-inline-flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
     align-items: flex-start;
     align-content: flex-start;
+    width: 80%;
 
   }
 
@@ -2056,7 +2081,7 @@
     margin-top: 20px;
     box-shadow: none;
     padding: 10px;
-    min-width: 600px;
+    /*min-width: 600px;*/
 
   }
 
@@ -2120,7 +2145,7 @@
   }
 
   .step-set {
-    min-width:620px;
+    /*min-width:420px;*/
     /*min-height: 60px;*/
 
     order: 2;
@@ -2137,7 +2162,7 @@
     flex-wrap: wrap;
     /*align-items: center;*/
     align-content: flex-start;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
 
   }
 
@@ -2219,7 +2244,7 @@
     flex-wrap: wrap;
     align-items: flex-start;
     align-content: flex-start;
-    max-width: 580px;
+    max-width: 570px;
     /*justify-content: space-between;*/
   }
 
@@ -2234,11 +2259,11 @@
     align-items: center;
     align-content: center;
     justify-content: space-between;
-    min-width: 571px;
+    /*min-width: 371px;*/
   }
 
   .step-input {
-    width: 520px;
+    /*min-width: 220px;*/
     /*margin-right: 5px;*/
     margin: 5px;
   }
@@ -2275,7 +2300,7 @@
   }
   .header1 {
     width: 80%;
-    margin-top:40px;
+    margin-top:84px;
     margin-left:10% ;
     display: flex;
     flex-direction: row;
@@ -2319,6 +2344,523 @@
     font-size: 15px;
     line-height: 24px;}
 
+
+   .functiondiv_content >>> .mymenu {
+     width: 190px;
+     position: absolute;
+     background: #F1F1F1;
+     -webkit-user-select: none; /* Chrome/Safari */
+     -moz-user-select: none; /* Firefox */
+     -ms-user-select: none; /* IE10+ */
+     cursor: default;
+     box-shadow: 4px 4px 5px #BDBDBD;
+     list-style-type: none;
+
+   }
+
+
+  .functiondiv_content >>> .mymenu a {
+    color: #3f3f3f;
+  }
+
+
+  .functiondiv_content >>> .mymenu {
+    margin: 0;
+    padding: 0;
+    font: 12px Verdana, sans-serif;
+  }
+
+  .functiondiv_content >>>.mymenu a {
+    text-decoration: none;
+    display: inline-block;
+    padding: 6px;
+    margin-left: 3px;
+  }
+
+  .functiondiv_content >>>.mymenu span {
+    position: absolute;
+    /*background-color: #aeaeae;*/
+    width: 100%;
+    height: 100%;
+  }
+
+  .functiondiv_content >>>.mymenu div {
+    position: absolute;
+    right: 4px;
+    top: 0px;
+    padding: 6px;
+  }
+
+  .functiondiv_content >>>.mymenu .mymenu_img {
+    vertical-align: middle;
+    margin-left: 8px;
+  }
+
+
+  .functiondiv_content >>>.mymenu li {
+    position: relative;
+    background: #efefef;
+  }
+
+  .functiondiv_content >>>.mymenu li:hover {
+    background: #bfbfbf;
+    cursor: pointer;
+  }
+
+
+
+
+  .footer {
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: 40px;
+    color: #8a8a8a;
+  }
+  .header1 {
+    width: 80%;
+    margin-top: 80px;
+    margin-left: 10%;
+    display: flex;
+    flex-direction: row;
+    background: rgba(53, 94, 122, 0.7);
+  }
+
+  .header1 .page-header1 {
+    border-radius: 4px 4px 0 0;
+    margin: 0 auto;
+    width: 80%;
+    max-width: 948px;
+    display: block;
+  }
+
+  .header1 .page-header1 .header1-container {
+    background: rgba(245, 245, 245, 1);
+    margin-top: 32px;
+    height: 120px;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .header1 .page-header1 .header1-container .avatar {
+    display: inline-block;
+  }
+
+  .header1 .page-header1 .header1-container .avatar img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .header1 .page-header1 .header1-container .person-info {
+    width: 784px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header1 .page-header1 .header1-container .person-info .name {
+    max-width: 460px;
+    padding: 12px;
+    font-size: 25px;
+  }
+
+  .header1 .page-header1 .header1-container .person-info .info {
+    padding: 8px 0 0 24px;
+    color: grey;
+    font-size: 15px;
+    line-height: 24px;
+  }
+
+
+  .functiondiv_content {
+    margin-left: 10%;
+    width: 80%;
+
+    padding: 40px;
+    /*min-width: 500px;*/
+
+    display: -webkit-flex;
+    display: flex;
+    display: inline-flex;
+    display: -webkit-inline-flex;
+    /*justify-content: center;*/
+    justify-content: space-around;
+
+  }
+
+  .functiondiv_content .el-input {
+    margin: 5px;
+  }
+
+  .functiondiv_content  .el-button {
+    /*width: 100%;*/
+    /*margin: 8px 5px;*/
+  }
+
+  .no_account {
+    float: right;
+    cursor: pointer;
+    font-size: 13px;
+
+  }
+
+  .no_account a {
+    color: #323a45;
+  }
+
+  /*aimara.css*/
+
+  .tree >>> ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    padding-left: 7px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    cursor: default;
+  }
+
+
+  .tree >>> li {
+    margin: 0;
+    padding: 0 12px;
+    line-height: 22px;
+    width: 180px;
+
+    /*background: url(node.png) no-repeat;*/
+  }
+
+
+  /*a.node {*/
+  /*padding: 2px;*/
+  /*}*/
+
+  /*span.node  a {*/
+  /*padding-left: 3px;*/
+  /*}*/
+
+  .tree >>> .node {
+    padding-left: 4px;
+    padding-right: 3px;
+
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+
+  .tree >>> span:hover {
+    /*margin-left: -1px;*/
+    padding-right: 4px;
+    padding-left: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    background-color: #efefef;
+    border-radius: 2px;
+  }
+
+  .tree >>> .node_selected {
+    /*margin-left: -2px;*/
+    padding-right: 3px;
+    padding-left: 7px;
+
+    padding-top: 3px;
+    padding-bottom: 3px;
+    background-color: #dedede;
+    border-radius: 2px;
+  }
+
+
+
+
+  /*example.css*/
+
+  body {
+    font-family: 'Helvetica Neue', Helvetica, 'Segoe UI', Arial, freesans;
+
+  }
+
+  #div_tree {
+    margin-top: 20px;
+    font: 13px Verdana, sans-serif;
+    display: inline-block;
+    /*width: 150px;*/
+    overflow-y:auto;
+    overflow-y:auto;
+    overflow: hidden;
+    overflow-x:auto;
+    /*padding: 10px;*/
+    min-height: 500px;
+
+  }
+
+  .el-row {
+    margin-bottom: 20px;
+    /*width: 250px;*/
+
+  }
+
+  .grid-content {
+    /*border-radius: 4px;*/
+    /*min-height: 26px;*/
+  }
+
+  .row-bg {
+    /*padding: 5px 0;*/
+  }
+
+
+  .mycontent {
+
+    order: 2;
+    flex-grow: 5;
+    width: 65%;
+
+    /*margin: 10px;*/
+    /*display: block;*/
+    /*max-width: 650px;*/
+    margin-left: 1%;
+    display: -webkit-flex;
+    display: flex;
+    display: inline-flex;
+    display: -webkit-inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+
+  }
+
+  .my-drop-menu {
+    margin-top: 20px;
+    box-shadow: none;
+    padding: 10px;
+    /*min-width: 600px;*/
+
+  }
+
+  .tree_btn {
+    display: -webkit-flex;
+    display: flex;
+    display: inline-flex;
+    display: -webkit-inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    align-content: flex-start;
+    width:100%;
+    max-width: 70px;
+  }
+
+  .tree >>> a {
+    color: #3f3f3f;
+  }
+
+  .form-input {
+
+    width: 100%;
+    display: -webkit-flex;
+    display: flex;
+    display: inline-flex;
+    display: -webkit-inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+    justify-content: center;
+  }
+
+  .el-collapse-item__header {
+    height: 48px;
+  }
+
+  .functiondiv_content >>>.form-input-item1 {
+    order: 1;
+    display: -webkit-flex;
+    display: flex;
+    display: inline-flex;
+    display: -webkit-inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    align-content: flex-start;
+    justify-content: center;
+    margin: 0px 15px 0px 15px;
+  }
+  .functiondiv_content >>>.form-input-item2 {
+    order: 2;
+    display: -webkit-flex;
+    display: flex;
+    display: inline-flex;
+    display: -webkit-inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    align-content: flex-start;
+    justify-content: center;
+    margin: 0px 15px 0px 15px;
+
+  }
+
+
+  .step-box {
+    width: 100%;
+  }
+
+  .step-box-plus {
+
+    order: 1;
+    width:100%;
+    margin-bottom: 10px;
+    /*margin-right: 5px;*/
+  }
+
+  .step-set {
+
+    width: 100%;
+    order: 2;
+    /*margin: 5px;*/
+
+  }
+
+  .step-set-list {
+    width: 100%;
+    display: -webkit-flex;
+    display: flex;
+    display: inline-flex;
+    display: -webkit-inline-flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    align-content: flex-start;
+    justify-content: space-between;
+
+  }
+
+
+  .style-bottom-btn {
+    display: -webkit-flex;
+    display: flex;
+    display: inline-flex;
+    position: relative;
+    /*display: -webkit-inline-flex;*/
+    /*flex-direction: row;*/
+    /*flex-wrap: wrap;*/
+    align-items: center;
+    align-content: flex-start;
+    justify-content: center;
+    width: 100%;
+    margin: 30px;
+    /*margin-top: 300px;*/
+  }
+
+  /*.bottom-btn1 {*/
+  /*margin: 5px;*/
+  /*order: 1;*/
+  /*}*/
+
+  .bottom-btn1 {
+    margin: 5px;
+  }
+
+  .bottom-btn3 {
+    margin: 5px;
+  }
+
+  . file-type {
+    display: -webkit-flex;
+    display: flex;
+    display: inline-flex;
+    display: -webkit-inline-flex;
+    flex-direction: row-reverse;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    align-content: flex-start;
+
+  }
+
+  .step-box-plus-1 {
+
+    order: 1;
+    padding-top: 5px;
+    /*margin-right: 2px;*/
+  }
+
+  .step-set-list-1 {
+    order: 2;
+    display: -webkit-flex;
+    display: flex;
+    display: inline-flex;
+    display: -webkit-inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 10px;
+    /*align-content: flex-start;*/
+    /*justify-content: space-between;*/
+  }
+
+  .el-form-item {
+    margin-bottom: 5px;
+  }
+
+  .out-in :first-child{
+
+    margin-top: 0px;
+  }
+
+
+
+  .out-in {
+    display: -webkit-flex;
+    display: flex;
+    display: inline-flex;
+    display: -webkit-inline-flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 25px 25px 0px 25px;
+    /*background-color: #efefef;*/
+    /*align-items: center;*/
+    /*align-content: center;*/
+    /*justify-content: space-between;*/
+  }
+
+
+  h1 {
+    padding-bottom: .3em;
+    font-size: 2.25em;
+    line-height: 1.2;
+    border-bottom: 1px solid #eee;
+  }
+  h2 {
+    padding-bottom: .3em;
+    font-size: 1.75em;
+    line-height: 1.225;
+    border-bottom: 1px solid #eee;
+  }
+  h3 {
+    font-size: 1.5em;
+    line-height: 1.43;
+  }
+  h4 {
+    font-size: 1.25em;
+  }
+  h5 {
+    font-size: 1em;
+  }
+  h6 {
+    font-size: 1em;
+    color: #777;
+  }
+
+  .undefined {
+    left: 10px;
+  }
+
+
+.functiondiv_section{
+  min-width: 960px;
+}
 
 </style>
 

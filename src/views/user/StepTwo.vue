@@ -1,7 +1,7 @@
 <!-- 登陆文件 -->
 <template>
 <div>
-    <div class="steptwo_section" style="background: #EEF1F5;">
+    <div class="steptwo_section" style="min-width:1016px;background: #EEF1F5;">
         <HeadBarLight v-show="isLogin"></HeadBarLight>
         <HeadBarLight2 v-show="!isLogin"></HeadBarLight2>
         <div class="header1">
@@ -11,13 +11,13 @@
                         <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509041832135&di=abc5c99b8048b0c600049e68cdb64602&imgtype=0&src=http%3A%2F%2Fimglf1.ph.126.net%2FnMbQAfw2LAJG4ahCYE_XJA%3D%3D%2F3886606478520925399.jpg">
                     </div>
                     <div class="person-info">
-                        <div class="name">用户创建估算--调整因子</div>
+                        <div class="name">用户创建估算--功能分解</div>
                         <div class="info">{{this.$store.state.user.username}}<br></div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="steptwo_content" style="background: #FFFFFF;">
+        <div class="steptwo_content" id="steptwo_content" style="background: #FFFFFF;">
             <div id="directory">
 
 
@@ -33,46 +33,40 @@
             </div>
 
             <div id="rightformstyle" class="mycontent" :model="dynamicForm" :ref="dynamicForm" v-if="rightcontent">
-                <el-form class="form-input" :inline="true" align="center">
-                    <el-form-item class="form-input-item1" label="内部逻辑文件">
-                        <el-input v-model="ilfStr"></el-input>
-                    </el-form-item>
-
-                    <el-form-item class="form-input-item2" label="外部接口文件">
-                        <el-input v-model="eifStr"></el-input>
-                    </el-form-item>
-                </el-form>
 
 
                 <div class="step-box">
 
-                    <el-button class="step-box-plus" @click.prevent="addStep()" type="primary "><i
+
+                    <div class="step-box-plus" >
+                        <el-button  @click.prevent="addStep()"  type="primary "><i
                             class="el-icon-plus"></i>
-                    </el-button>
+                         </el-button>
+                    </div>
 
                     <div class="step-set-list">
                         <el-collapse class="step-set" v-for="(step, indexout) in dynamicForm.steps" :key="step.key"
-                                     :prop="'steps.'+indexout+'.value'">
+                                     :prop="'steps.'+indexout+'.value'" v-model="activeNames" >
 
 
                             <el-collapse-item>
                                 <template slot="title">
                                     <div class="input-box">
-                                        <el-input placeholder="请输入内容" v-model="step.name" class="step-input">
+                                        <el-input v-on:keyup.space.native="lockStep" v-on:keydown.space.native="lockStep" size="small" placeholder="请输入内容" v-model="step.name"  class="step-input">
                                             <template slot="prepend">Step{{indexout}}:</template>
                                         </el-input>
-                                        <el-button @click.prevent="removeStep(step)"><i
-                                                class="el-icon-minus"></i>
-                                        </el-button>
                                     </div>
 
+                                    <el-button size="small" style="margin: -2px 5px 5px 8px" @click.prevent="removeStep(step)"><i
+                                            class="el-icon-minus"></i>
+                                    </el-button>
                                 </template>
 
 
                                 <div class="out-in">
                                     <el-form ref="dynamicForm" style="order: 1;" class="demo-dynamic file-type"
                                              :label-position="labelPosition">
-                                        <el-button class="step-box-plus-1" size="small"
+                                        <el-button class="step-box-plus-1" size="medium"
                                                    @click.prevent="addIlf(indexout)" type="primary "><i
                                                 class="el-icon-plus "></i>
                                         </el-button>
@@ -86,31 +80,46 @@
                                                     <el-option disabled value="">请选择</el-option>
                                                     <el-option v-for="ilfSet in ilfSets" :key="ilfSet.value"
                                                                :label="ilfSet.value"
-                                                               :value="ilfSet.value"></el-option>
+                                                               :value="ilfSet.value" ></el-option>
 
                                                 </el-select>
                                             </el-form-item>
 
-                                            <el-form-item style="order: 2" label="数据字段">
+                                            <el-form-item class="form-item-style"  label="数据字段">
+                                                <!--<div style="width: 400px;display: inline;vertical-align: top;">-->
+                                                <div class="form-content-style">
                                                 <el-button size="mini" type="primary "
                                                            @click.prevent="addDataField(indexout,indexmid)"><i
                                                         class="el-icon-plus"></i></el-button>
+
+                                            <set-det type="ilf" :dataFields="ilf.dataFields" :ilf="ilf.name"  :tableData1="tableData1" :indexout="indexout" :indexmid="indexmid" :dynamicForm="dynamicForm"></set-det>
+                                                <!--</div>-->
+                                                </div>
                                             </el-form-item>
 
+                                            <!--<div style="order: 3" class="data-input"-->
+                                                 <!--v-for="(dataField, indexin) in ilf.dataFields"-->
+                                                 <!--:key="dataField.key"-->
+                                                 <!--:prop="'dataFields.' + indexin + '.value'">-->
 
-                                            <div style="order: 3" class="data-input"
-                                                 v-for="(dataField, indexin) in ilf.dataFields"
-                                                 :key="dataField.key"
-                                                 :prop="'dataFields.' + indexin + '.value'">
-                                                <el-input size="mini" v-model="dataField.value"
-                                                ></el-input>
-                                                <el-button style="margin: 3px" size="mini"
-                                                           @click="removeDataField(indexout,indexmid,dataField)">
-                                                    <i
-                                                            class="el-icon-minus"></i></el-button>
-                                            </div>
+                                                <!--<el-select size="mini" v-model="dataField.value">-->
+                                                    <!--<el-option disabled value="">请选择</el-option>-->
+                                                    <!--<el-option v-for="ilfDet in ilfDets" :key="ilfDet.det"-->
+                                                               <!--:label="ilfDet.det"-->
+                                                               <!--:value="ilfDet.det"></el-option>-->
 
-                                            <el-button style="order:4" size="small"
+                                                <!--</el-select>-->
+
+
+
+
+                                                <!--<el-button style="margin: 3px" size="mini"-->
+                                                           <!--@click="removeDataField(indexout,indexmid,dataField)">-->
+                                                    <!--<i-->
+                                                            <!--class="el-icon-minus"></i></el-button>-->
+                                            <!--</div>-->
+
+                                            <el-button style="order:4;margin-bottom: 5px;margin-right: 10px" size="medium"
                                                        @click="removeIlf(indexout,ilf)"><i
                                                     class="el-icon-minus"></i>
                                             </el-button>
@@ -122,8 +131,8 @@
 
                                     <el-form ref="dynamicForm" style="order: 2" class="demo-dynamic file-type"
                                              :label-position="labelPosition">
-                                        <el-button class="step-box-plus-1" size="small"
-                                                   @click.prevent="addEif(indexout)" type="primary "><i
+                                        <el-button class="step-box-plus-1" size="medium"
+                                                   @click.prevent="addEif(indexout)" type="success"><i
                                                 class="el-icon-plus "></i>
                                         </el-button>
 
@@ -141,26 +150,32 @@
                                                 </el-select>
                                             </el-form-item>
 
-                                            <el-form-item style="order: 2" label="数据字段">
-                                                <el-button size="mini" type="primary "
+                                            <el-form-item class="form-item-style"  label="数据字段">
+                                                <el-button size="mini" type="success"
                                                            @click.prevent="addEIFDataField(indexout,indexmid)"><i
                                                         class="el-icon-plus"></i></el-button>
+                                                <set-det type="eif" :dataFields="eif.dataFields" :dynamicForm="dynamicForm" :ilf="eif.name" :tableData1="tableData2" :indexout="indexout" :indexmid="indexmid"></set-det>
+
                                             </el-form-item>
 
+                                            <!--<div style="order: 3" class="data-input"-->
+                                                 <!--v-for="(dataField, indexin) in eif.dataFields"-->
+                                                 <!--:key="dataField.key"-->
+                                                 <!--:prop="'dataFields.' + indexin + '.value'">-->
+                                                <!--<el-select size="mini" v-model="dataField.value">-->
+                                                    <!--<el-option disabled value="">请选择</el-option>-->
+                                                    <!--<el-option v-for="eifDet in eifDets" :key="eifDet.det"-->
+                                                               <!--:label="eifDet.det"-->
+                                                               <!--:value="eifDet.det"></el-option>-->
 
-                                            <div style="order: 3" class="data-input"
-                                                 v-for="(dataField, indexin) in eif.dataFields"
-                                                 :key="dataField.key"
-                                                 :prop="'dataFields.' + indexin + '.value'">
-                                                <el-input size="mini" v-model="dataField.value"
-                                                ></el-input>
-                                                <el-button style="margin: 3px" size="mini"
-                                                           @click="removeEIFDataField(indexout,indexmid,dataField)">
-                                                    <i
-                                                            class="el-icon-minus"></i></el-button>
-                                            </div>
+                                                <!--</el-select>-->
+                                                <!--<el-button style="margin: 3px" size="mini"-->
+                                                           <!--@click="removeEIFDataField(indexout,indexmid,dataField)">-->
+                                                    <!--<i-->
+                                                            <!--class="el-icon-minus"></i></el-button>-->
+                                            <!--</div>-->
 
-                                            <el-button style="order:4" size="small"
+                                            <el-button style="order:4;margin-bottom: 5px;margin-right: 10px" size="medium"
                                                        @click="removeEif(indexout,eif)"><i
                                                     class="el-icon-minus"></i>
                                             </el-button>
@@ -177,11 +192,74 @@
                         </el-collapse>
                     </div>
                 </div>
-                <div class="style-bottom-btn">
-                    <el-button class="bottom-btn1" v-on:click="toStepOne">上一步</el-button>
-                    <el-button class="bottom-btn2" type="primary" v-on:click="saveForm">保存</el-button>
-                    <el-button class="bottom-btn3" type="primary" v-on:click="toStepThree">下一步</el-button>
+
+
+                <div style="margin-top: 50px ;font-size: 13px;width: 100%;min-width:500px">
+
+
+                    <el-tabs v-model="activeName" @tab-click="handleClick">
+                        <el-tab-pane label="内部逻辑文件"  name="first"></el-tab-pane>
+                        <el-tab-pane  label="外部接口文件"  name="second"></el-tab-pane>
+
+                    </el-tabs>
+
+                    <div style="width: 100%;margin-bottom: 10px">
+
+
+
+                    </div>
+
+                    <v-table v-if="tab"
+                             is-horizontal-resize
+                             style="width:100%"
+                             :columns="columns1"
+                             :table-data="tableData1"
+                             row-hover-color="#eee"
+                             row-click-color="#edf7ff"
+                             :cell-edit-done="cellEditDone1"
+                             @on-custom-comp="customCompFunc1"
+
+                    ></v-table>
+
+
+
+
+
+                    <v-table v-else
+                             is-horizontal-resize
+                             style="width:100%"
+                             :columns="columns2"
+                             :table-data="tableData2"
+                             row-hover-color="#eee"
+                             row-click-color="#edf7ff"
+                             :cell-edit-done="cellEditDone2"
+                             @on-custom-comp="customCompFunc2"
+                    ></v-table>
+
+
+                    <div style="margin-top: 20px">
+                        <el-button type="primary " size="small"
+                                   @click.prevent="addRow">
+                            <i class="el-icon-plus"></i>
+                        </el-button>
+
+
+                    </div>
+
+
+
+                    <div class="style-bottom-btn">
+
+                        <el-button class="bottom-btn1" v-on:click="toStepOne">上一步</el-button>
+                        <el-button class="bottom-btn2" type="primary" v-on:click="saveTable">保存</el-button>
+                        <el-button class="bottom-btn3" type="primary" v-on:click="toStepThree">下一步</el-button>
+
+                    </div>
+                    <div style="height: 50px;"></div>
+
                 </div>
+
+
             </div>
 
             <div id="default-right" style="margin-left: 20px" class="mycontent" v-else>
@@ -193,39 +271,39 @@
                         <br>
                         <h3>1.查看右键菜单</h3>
                         <p>在左侧的 <strong>新建文件夹</strong> 上右键，查看右键菜单</p>
-                        <img src="../../assets/right_menu.png"/>
+                        <img style="width: 20%" src="../../assets/right_menu.png"/>
                         <br>
                         <h3>2.构建架构模块</h3>
                         <p>像新建一个文件系统的文件夹一样，依据软件的特性，建立软件的基本项目构架。在右键菜单中选择 <strong>新建子模块</strong> 或者
                             <strong>新建同级模块</strong></p>
-                        <img src="../../assets/functionpoint.png"/>
+                        <img style="width: 100%" src="../../assets/constructure.gif"/>
                         <br>
                         <h3>3.划分功能</h3>
-                        <p>像把文件划分进文件夹中一样，将软件的所有 <a style="color: #4183C4;"  href='#functionpoint'>功能点</a> 划分进上一步建立的构架中。在右键菜单中选择
+                        <p>像把文件划分进文件夹中一样，将软件的所有 <a style="color: #4183C4;"  href='http://10.60.38.173:8989/shikun/mart/wikis/function-decomposition#功能点'>功能点</a> 划分进上一步建立的构架中。在右键菜单中选择
                             <strong>新建子功能</strong> 或者 <strong>新建同级功能</strong></p>
-                        <img src="../../assets/constructure.png"/>
+                        <img style="width: 35%" src="../../assets/functiontree.gif"/>
 
                         <br>
                         <h3>4.添加内部逻辑文件和外部接口文件</h3>
-                        <p>双击左侧的任一功能点，在右边第一行填写本功能点所用到的（也可以在下面步骤分解时填写）所有 <a style="color: #4183C4;"  href=''>内部逻辑文件</a> 和 <a style="color: #4183C4;" href=''>外部接口文件</a>
+                        <p>双击左侧的任一功能点，在右边第一行填写本功能点所用到的（也可以在下面步骤分解时填写）所有 <a style="color: #4183C4;"  href='http://10.60.38.173:8989/shikun/mart/wikis/function-decomposition#内部逻辑文件ilf'>内部逻辑文件</a> 和 <a style="color: #4183C4;" href='http://10.60.38.173:8989/shikun/mart/wikis/function-decomposition#外部接口文件eif'>外部接口文件</a>
                             ，文件名之间用空格隔开</p>
-                        <img src="../../assets/add_file.png"/>
+                        <img style="width: 90%" src="../../assets/datafile.gif"/>
 
                         <br>
                         <h3>5.分解步骤</h3>
                         <p>把当前功能点所用到的 <strong>步骤</strong> 进行分解，点击左侧 + 添加步骤，并在步骤框内填写步骤名称</p>
-                        <img src="../../assets/add_step.png"/>
+                        <img style="width: 80%" src="../../assets/add_step.png"/>
 
                         <br>
                         <h3>6.填写步骤所用文件</h3>
-                        <p>点击步骤框任意位置，在下拉框中填写该步骤用到的 <a style="color: #4183C4;" href=''>内部逻辑文件</a> 和 <a style="color: #4183C4;" href=''>外部接口文件</a> ，点击 + 增加内部逻辑文件 或者外部接口文件 。
+                        <p>点击步骤框任意位置，在下拉框中填写该步骤用到的 <a style="color: #4183C4;" href='http://10.60.38.173:8989/shikun/mart/wikis/function-decomposition#内部逻辑文件ilf'>内部逻辑文件</a> 和 <a style="color: #4183C4;" href='http://10.60.38.173:8989/shikun/mart/wikis/function-decomposition#外部接口文件eif'>外部接口文件</a> ，点击 + 增加内部逻辑文件 或者外部接口文件 。
                             在这里可以选择上面第四步中添加的内部逻辑文件和外部接口文件当中的文件。</p>
-                        <img src="../../assets/add_used_file.png"/>
+                        <img style="width: 80%" src="../../assets/add_used_file.gif"/>
 
                         <br>
                         <h3>7.填写文件所用数据字段</h3>
-                        <p>对上面选择的每一个<a style="color: #4183C4;" href=''>内部逻辑文件</a>或 <a style="color: #4183C4;" href=''>外部接口文件</a> 填写此文件所用到的 <a style="color: #4183C4;" href=''>数据字段</a></p>
-                        <img src="../../assets/add_det.png"/>
+                        <p>对上面选择的每一个<a style="color: #4183C4;" href='http://10.60.38.173:8989/shikun/mart/wikis/function-decomposition#内部逻辑文件ilf'>内部逻辑文件</a>或 <a style="color: #4183C4;" href='http://10.60.38.173:8989/shikun/mart/wikis/function-decomposition#外部接口文件eif'>外部接口文件</a> 填写此文件所用到的 <a style="color: #4183C4;" href='http://10.60.38.173:8989/shikun/mart/wikis/function-decomposition#数据字段'>数据字段</a></p>
+                        <img style="width: 80%" src="../../assets/add_det.gif"/>
                         <br>
 
                         <h3>8.保存</h3>
@@ -252,6 +330,7 @@
 
 <script>
     import server from '../../../config/index';
+    import setDet from '../../components/estimation/setDet'
     import HeadBarLight from "../../components/head/HeadBarLight.vue";
     import HeadBarLight2 from "../../components/head/HeadBarLight2.vue";
     //  import '../../../config/Aimara'
@@ -259,18 +338,67 @@
     export default {
         name: "StepTwo",
         components: {
+            setDet,
             HeadBarLight,
             HeadBarLight2
         },
         data: function () {
             return {
+                // activeName
                 treeMsg: {},
+                activeName: 'first',
+                tab:true,
 
+                columns1: [
+                    {
+                        field: 'name', title: '文件名', width: 40, titleAlign: 'center', columnAlign: 'center', isEdit: true,
+                        isResize: true
+                    },
+                    {
+                        field: 'DET', title: 'DET', width: 300, titleAlign: 'center', columnAlign: 'center', isEdit: true,
+                        isResize: true
+                    },
+                    {field: 'custome-adv', title: '',width: 40, titleAlign: 'center',columnAlign:'center',componentName:'table-operation',isResize:true}
+
+
+                ],
+
+
+                columns2: [
+                    {
+                        field: 'name', title: '文件名', width: 40, titleAlign: 'center', columnAlign: 'center', isEdit: true,
+                        isResize: true
+                    },
+                    {
+                        field: 'DET', title: 'DET', width: 300, titleAlign: 'center', columnAlign: 'center', isEdit: true,
+                        isResize: true
+                    },
+
+                    {field: 'custome-adv', title: '',width: 40, titleAlign: 'center',columnAlign:'center',componentName:'table-operation',isResize:true}
+
+
+
+
+                ],
+
+                tableData1: [{
+                    name: '',
+                    DET: '',
+                }],
+
+
+
+                tableData2: [{
+                    name: '',
+                    DET: '',
+                }],
+                activeNames:[],
                 labelPosition: 'right',
                 tree: {},
                 v_tree: {},
                 node: {},
                 rightnode: {},
+                ilfDets:[[[]]],
                 length: length,
                 step_num: 1,
                 cur: {
@@ -282,6 +410,8 @@
                 ilfStr: '',
                 eifStr: '',
                 cutNode: {},
+
+                isModify:false,
 
                 dynamicForm: {
                     steps: [{
@@ -307,7 +437,20 @@
         },
 
         mounted() {
-            this.initTree()
+            this.initTree();
+            this.ilfDets[0][0]=[''];
+        },
+
+        watch:{
+            dynamicForm:{
+
+                handler:function (newDynamicForm) {
+                this.isModify=true;},
+                deep:true
+
+            },
+
+
         },
 
 //    watch: {
@@ -326,8 +469,13 @@
 
             // 计算属性的 getter
             ilfSets: function () {
-                var set = this.ilfStr.trim().split(' ')
-                var jsonArray = []
+                var set = [];
+                console.log(this.tableData1);
+                for(var i=0;i<this.tableData1.length;i++){
+                    set[i]=this.tableData1[i].name;
+                }
+                var jsonArray = [];
+
 
                 for (var i = 0; i < set.length; i++) {
                     jsonArray.push({'value': set[i]});
@@ -335,24 +483,227 @@
                 }
                 return jsonArray;
             },
+            // ilfDets: function(){
+            //     var detSet= [];
+            //     var k = 0;
+            //     for(var i=0;i<this.tableData1.length;i++) {
+            //         var len = this.tableData1[i].DET.trim().split(' ').length;
+            //         for(var j = 0; j < len; j++) {
+            //             detSet[k] = this.tableData1[i].DET.trim().split(' ')[j];
+            //             k = k + 1;
+            //         }
+            //     }
+            //     detSet=this.unique(detSet);
+            //     var jsonArray = [];
+            //     for (var i = 0; i < detSet.length; i++) {
+            //         jsonArray.push({'det':detSet[i]});
+            //         //     console.log(jsonArray);
+            //     }
+            //     return jsonArray;
+            // }
+            // ,
 
             eifSets: function () {
-                var set = this.eifStr.trim().split(' ')
-                var jsonArray = []
+                var set = [];
+                console.log(this.tableData1);
+                for(var i=0;i<this.tableData2.length;i++){
+                    set[i]=this.tableData2[i].name;
+                }
+
+                set=this.unique(set);
+
+                var jsonArray = [];
+
 
                 for (var i = 0; i < set.length; i++) {
                     jsonArray.push({'value': set[i]});
-//               console.log(jsonArray);
+                    //     console.log(jsonArray);
+                }
+                return jsonArray;
+            },
+            eifDets: function(){
+                var detSet= [];
+                var k = 0;
+                for(var i=0;i<this.tableData2.length;i++) {
+                    var len = this.tableData2[i].DET.trim().split(' ').length;
+                    for(var j = 0; j < len; j++) {
+                        detSet[k] = this.tableData2[i].DET.trim().split(' ')[j];
+                        k = k + 1;
+                    }
+                }
+                var jsonArray = [];
+                for (var i = 0; i < detSet.length; i++) {
+                    jsonArray.push({'det':detSet[i]});
+                    //     console.log(jsonArray);
                 }
                 return jsonArray;
             }
-
 
         },
         created() {
           this.checkToken();
         },
         methods:{
+
+
+            unique(arr)
+            {
+                var result = [], hash = {};
+                for (var i = 0, elem; (elem = arr[i]) != null; i++) {
+                    if(elem===''){
+                        continue;
+                    }
+                    if (!hash[elem]) {
+                        result.push(elem);
+                        hash[elem] = true;
+                    }
+
+                }
+                return result;
+            },
+
+            addRow(){
+                if(this.activeName ==='first'){
+                    this.tableData1.push({
+                        name: '',
+                        transactionType: '',
+                        logicalFile: '',
+                        DET: '',
+                        fileNum: 0,
+                        detNum: 0,
+                        complex: '',
+                        ufp: '',
+                    });
+
+
+                }
+                else {
+
+                    this.tableData2.push({
+                        name: '',
+                        fileType: '',
+                        RET: '',
+                        DET: '',
+                        retNum: 0,
+                        detNum: 0,
+                        complex: '',
+                        ufp: '',
+                    });
+
+                }
+
+            },
+
+            checkToken:function () {
+                if(sessionStorage.tokenid || this.$store.state.user.tokenid !== '')
+                    this.isLogin = true;
+                else
+                    this.isLogin = false;
+            },
+
+            customCompFunc1(params){
+
+                console.log(params);
+
+                if (params.type === 'delete'){ // do delete operation
+
+                    this.$delete(this.tableData1,params.index);
+
+                }else if (params.type === 'edit'){ // do edit operation
+
+                    alert(`行号：${params.index} 姓名：${params.rowData['name']}`)
+                }
+
+            },
+
+            customCompFunc2(params){
+
+                console.log(params);
+
+                if (params.type === 'delete'){ // do delete operation
+
+                    this.$delete(this.tableData2,params.index);
+
+                }else if (params.type === 'edit'){ // do edit operation
+
+                    alert(`行号：${params.index} 姓名：${params.rowData['name']}`)
+                }
+
+            },
+
+            saveTable() {
+
+                // if(this.checkTable()) {
+
+
+                var msg = {
+                    "tId": this.cur.id,
+                    "transactionName": this.cur.name,
+                    "steps": this.dynamicForm.steps,
+                    "ILFTable" : this.tableData1,
+                    "EIFTable" : this.tableData2
+                }
+//                console.log(msg)
+                this.$http.post(this.url + '/updateTransaction/' + this.$route.params.rId, msg).then(res => {
+                    this.isModify=false;
+                    this.$message({
+                        type: 'success',
+                        message: '保存成功'
+                    });
+                    }, res => {
+                    this.$message({
+                        type: 'info',
+                        message: '保存失败'
+                    });
+                })
+
+                // }
+
+
+
+            }
+            ,
+
+            show (ev){
+
+                // ev.preventDefault();
+            },
+            lockStep(ev){
+                ev.cancelBubble = true;
+            },
+
+
+            // 单元格编辑回调
+            cellEditDone1(newValue, oldValue, rowIndex, rowData, field) {
+
+                if(field==='DET'){
+                    this.tableData1[rowIndex][field]=this.unique(newValue.trim().split(' ')).join(' ');
+                }
+                else {
+                    this.tableData1[rowIndex][field] = newValue;
+
+                }
+
+            },
+
+
+            cellEditDone2(newValue, oldValue, rowIndex, rowData, field) {
+
+                if(field==='DET'){
+                    this.tableData2[rowIndex][field]=this.unique(newValue.trim().split(' ')).join(' ');
+                }
+                else {
+                    this.tableData2[rowIndex][field] = newValue;
+
+                }
+            },
+
+            handleClick(tab, event) {
+                if(this.activeName==='first')
+                    this.tab=true;
+                else
+                    this.tab=false;
+            },
             checkToken:function () {
                 if(sessionStorage.tokenid || this.$store.state.user.tokenid !== '')
                     this.isLogin = true;
@@ -399,9 +750,9 @@
                 var msg = {
                     "tId": this.cur.id,
                     "transactionName": this.cur.name,
-                    "nameOfILF": this.ilfStr,
-                    "nameOfEIF": this.eifStr,
                     "steps": this.dynamicForm.steps,
+                    "ILFTable" : this.tableData1,
+                    "EIFTable" : this.tableData2
                 }
 //                console.log(msg)
                 this.$http.post(this.url + '/updateTransaction/' + this.$route.params.rId, msg).then(res => {
@@ -442,22 +793,27 @@
                 var msg = {
                     "tId": this.cur.id,
                     "transactionName": this.cur.name,
-                    "nameOfILF": this.ilfStr,
-                    "nameOfEIF": this.eifStr,
+                    // "nameOfILF": this.ilfStr,
+                    // "nameOfEIF": this.eifStr,
                     "steps": this.dynamicForm.steps,
+                    "ILFTable" : this.tableData1,
+                    "EIFTable" : this.tableData2
                 }
-                console.log(msg)
-                this.$http.post(this.url + '/updateTransaction/' + this.$route.params.rId, msg).then(res => {
-                    this.$message({
-                        type: 'info',
-                        message: '保存成功'
-                    });
-                }, res => {
-                    this.$message({
-                        type: 'info',
-                        message: '保存失败'
-                    });
-                })
+                // console.log(msg)
+                if(this.isModify===true) {
+                    this.$http.post(this.url + '/updateTransaction/' + this.$route.params.rId, msg).then(res => {
+                        this.$message({
+                            type: 'success',
+                            message: '保存成功'
+                        });
+                        this.isModify = false;
+                    }, res => {
+                        this.$message({
+                            type: 'info',
+                            message: '保存失败'
+                        });
+                    })
+                }
             },
 
             removeStep(item) {
@@ -471,11 +827,11 @@
                     name: '',
                     ilfs: [{
                         name: '',
-                        dataFields: [''],
+                        dataFields: [{value: ''}],
                     }],
                     eifs: [{
                         name: '',
-                        dataFields: [''],
+                        dataFields: [{value:''}],
                     }],
                     key: Date.now()
                 });
@@ -488,12 +844,12 @@
                 });
             },
 
-            removeDataField(index_out, index_mid, item) {
-                var index = this.dynamicForm.steps[index_out].ilfs[index_mid].dataFields.indexOf(item)
-                if (index !== -1) {
-                    this.dynamicForm.steps[index_out].ilfs[index_mid].dataFields.splice(index, 1)
-                }
-            },
+            // removeDataField(index_out, index_mid, item) {
+            //     var index = this.dynamicForm.steps[index_out].ilfs[index_mid].dataFields.indexOf(item)
+            //     if (index !== -1) {
+            //         this.dynamicForm.steps[index_out].ilfs[index_mid].dataFields.splice(index, 1)
+            //     }
+            // },
 
             addEIFDataField(indexout, indexmid) {
                 this.dynamicForm.steps[indexout].eifs[indexmid].dataFields.push({
@@ -502,12 +858,12 @@
                 });
             },
 
-            removeEIFDataField(index_out, index_mid, item) {
-                var index = this.dynamicForm.steps[index_out].eifs[index_mid].dataFields.indexOf(item)
-                if (index !== -1) {
-                    this.dynamicForm.steps[index_out].eifs[index_mid].dataFields.splice(index, 1)
-                }
-            },
+            // removeEIFDataField(index_out, index_mid, item) {
+            //     var index = this.dynamicForm.steps[index_out].eifs[index_mid].dataFields.indexOf(item)
+            //     if (index !== -1) {
+            //         this.dynamicForm.steps[index_out].eifs[index_mid].dataFields.splice(index, 1)
+            //     }
+            // },
 
 
             removeIlf(index_out, item) {
@@ -586,6 +942,7 @@
             //Create a HTML element specified by parameter 'p_type'
             createSimpleElement(p_type, p_id, p_class) {
                 var element = document.createElement(p_type);
+
                 if (p_id != undefined)
                     element.id = p_id;
                 if (p_class != undefined)
@@ -703,7 +1060,7 @@
                                         p_parentNode.elementLi.getElementsByTagName("ul")[0].style.display = 'block';
                                         var v_img = p_parentNode.elementLi.getElementsByTagName("i")[0];
                                         v_img.style.visibility = "visible";
-                                        v_img.className = 'menu_img el-icon-caret-bottom';
+                                        v_img.className = 'mymenu_img el-icon-caret-bottom';
                                         v_img.id = 'toggle_off';
                                     }
                                     else {
@@ -722,7 +1079,7 @@
                                         p_parentNode.elementLi.getElementsByTagName("ul")[0].style.display = 'none';
                                         var v_img = p_parentNode.elementLi.getElementsByTagName("i")[0];
                                         v_img.style.visibility = "visible";
-                                        v_img.className = 'menu_img el-icon-caret-right';
+                                        v_img.className = 'mymenu_img el-icon-caret-right';
                                         v_img.id = 'toggle_on';
                                     }
                                 }
@@ -836,7 +1193,7 @@
 
                         if (v_icon != undefined)
                             v_span.appendChild(v_icon);
-/////////////////////////////////////////
+
                         var v_a = vue.createSimpleElement('a', null, null);
                         v_a.innerHTML = p_node.text;
                         v_span.appendChild(v_a);
@@ -960,42 +1317,48 @@
                         }
                         else if (vue.cur.id !== null) {
                             ///////////////////////////////////////
-                            vue.$confirm('是否保存当前内容?', '提示', {
-                                confirmButtonText: '确定',
-                                cancelButtonText: '取消',
-                                type: 'warning'
-                            }).then(() => {
+                            if(vue.isModify===true) {
+                                vue.$confirm('是否保存当前内容?', '提示', {
+                                    confirmButtonText: '确定',
+                                    cancelButtonText: '取消',
+                                    type: 'warning'
+                                }).then(() => {
 
-                                var msg = {
-                                    "tId": vue.cur.id,
-                                    "transactionName": vue.cur.name,
-                                    "nameOfILF": vue.ilfStr,
-                                    "nameOfEIF": vue.eifStr,
-                                    "steps": vue.dynamicForm.steps,
-                                }
-//                console.log(msg)
-                                vue.$http.post(this.url + '/updateTransaction/' + vue.$route.params.rId, msg).then(res => {
-                                    //alert("success999")
 
-                                    vue.cur.id = p_node.id;
-                                    vue.rightnode = p_node;
-                                    vue.cur.name = p_node.text;
-
-                                    // document.getElementById('rightformstyle').style.visibility = 'visible';
-                                    vue.rightcontent = true;
                                     var msg = {
-                                        "tId": vue.cur.id
+                                        "tId": vue.cur.id,
+                                        "transactionName": vue.cur.name,
+                                        // "nameOfILF": vue.ilfStr,
+                                        // "nameOfEIF": vue.eifStr,
+                                        "steps": vue.dynamicForm.steps,
+                                        "ILFTable" : vue.tableData1,
+                                        "EIFTable" : vue.tableData2
                                     }
+               console.log(msg)
+                                    vue.$http.post(vue.url + '/updateTransaction/' + vue.$route.params.rId, msg).then(res => {
+                                        //alert("success999")
 
-                                    vue.$http.post(this.url + '/getTransaction/' + vue.$route.params.rId, msg).then(res => {
-                                        //alert("success")
+                                        vue.cur.id = p_node.id;
+                                        vue.rightnode = p_node;
+                                        vue.cur.name = p_node.text;
+
+                                        // document.getElementById('rightformstyle').style.visibility = 'visible';
+                                        vue.rightcontent = true;
+                                        var msg = {
+                                            "tId": vue.cur.id
+                                        }
+                                        vue.isModify = false;
 
 
-                                        vue.dynamicForm.steps.length = 0;
+                                        vue.$http.post(vue.url + '/getTransaction/' + vue.$route.params.rId, msg).then(res => {
+                                            //alert("success")
+
+
+                                            vue.dynamicForm.steps.length = 0;
 
 //                    console.log(res.body)
-                                        vue.ilfStr = res.body.nameOfILF;
-                                        vue.eifStr = res.body.nameOfEIF;
+//                                             vue.ilfStr = res.body.nameOfILF;
+//                                             vue.eifStr = res.body.nameOfEIF;
 //                    vue.dynamicForm.steps=res.body.steps;
 
 //                    dynamicForm: {
@@ -1023,116 +1386,176 @@
 //                        value: ''
 //                      }]
 //                    }
-                                        if (res.body.steps.length === 0) {
-                                            vue.addStep();
-                                        }
-                                        for (var i = 0; i < res.body.steps.length; i++) {
-                                            vue.dynamicForm.steps.push({
-                                                "name": res.body.steps[i].stepName,
-                                                "ilfs": [],
-                                                "eifs": []
-                                            });
-                                            for (var j = 0; j < res.body.steps[i].ilfDataSets.length; j++) {
-                                                vue.dynamicForm.steps[i].ilfs.push({
-                                                    "name": res.body.steps[i].ilfDataSets[j].innerlogicalFileName,
-                                                    "dataFields": []
+                                            if (res.body.steps.length === 0) {
+                                                vue.addStep();
+                                            }
+                                            for (var i = 0; i < res.body.steps.length; i++) {
+                                                vue.dynamicForm.steps.push({
+                                                    "name": res.body.steps[i].stepName,
+                                                    "ilfs": [],
+                                                    "eifs": []
                                                 });
-                                                for (var k = 0; k < res.body.steps[i].ilfDataSets[j].det.length; k++) {
-                                                    vue.dynamicForm.steps[i].ilfs[j].dataFields.push({
-                                                        "value": res.body.steps[i].ilfDataSets[j].det[k]
+                                                for (var j = 0; j < res.body.steps[i].ilfDataSets.length; j++) {
+                                                    vue.dynamicForm.steps[i].ilfs.push({
+                                                        "name": res.body.steps[i].ilfDataSets[j].innerlogicalFileName,
+                                                        "dataFields": []
                                                     });
+                                                    for (var k = 0; k < res.body.steps[i].ilfDataSets[j].DET.length; k++) {
+                                                        vue.dynamicForm.steps[i].ilfs[j].dataFields.push({
+                                                            "value": res.body.steps[i].ilfDataSets[j].DET[k]
+                                                        });
+                                                    }
                                                 }
+
+                                                for (var j = 0; j < res.body.steps[i].eifDataSets.length; j++) {
+                                                    vue.dynamicForm.steps[i].eifs.push({
+                                                        "name": res.body.steps[i].eifDataSets[j].externalInterfaceFileName,
+                                                        "dataFields": []
+                                                    });
+                                                    for (var k = 0; k < res.body.steps[i].eifDataSets[j].DET.length; k++) {
+                                                        vue.dynamicForm.steps[i].eifs[j].dataFields.push({
+                                                            "value": res.body.steps[i].eifDataSets[j].DET[k]
+                                                        });
+                                                    }
+                                                }
+
                                             }
 
-                                            for (var j = 0; j < res.body.steps[i].eifDataSets.length; j++) {
-                                                vue.dynamicForm.steps[i].eifs.push({
-                                                    "name": res.body.steps[i].eifDataSets[j].externalInterfaceFileName,
-                                                    "dataFields": []
-                                                });
-                                                for (var k = 0; k < res.body.steps[i].eifDataSets[j].det.length; k++) {
-                                                    vue.dynamicForm.steps[i].eifs[j].dataFields.push({
-                                                        "value": res.body.steps[i].eifDataSets[j].det[k]
-                                                    });
-                                                }
-                                            }
 
-                                        }
-
+                                        }, res => {
+                                            //alert("fail000")
+                                        })
 
                                     }, res => {
-                                        //alert("fail000")
-                                    })
+                                        //alert("fail999")
 
-                                }, res => {
-                                    //alert("fail999")
-
-                                    vue.cur.id = p_node.id;
-                                    vue.rightnode = p_node;
-                                    vue.cur.name = p_node.text;
+                                        vue.cur.id = p_node.id;
+                                        vue.rightnode = p_node;
+                                        vue.cur.name = p_node.text;
 
 
-                                    var msg = {
-                                        "tId": vue.cur.id
-                                    }
+                                        var msg = {
+                                            "tId": vue.cur.id
+                                        }
 
-                                    vue.$http.post(this.url + '/getTransaction/' + vue.$route.params.rId, msg).then(res => {
-                                        //alert("success")
+                                        vue.$http.post(vue.url + '/getTransaction/' + vue.$route.params.rId, msg).then(res => {
+                                            //alert("success")
 
-                                        vue.dynamicForm.steps.length = 0;
-                                        vue.ilfStr = res.body.nameOfILF;
-                                        vue.eifStr = res.body.nameOfEIF;
+                                            vue.dynamicForm.steps.length = 0;
+                                            // vue.ilfStr = res.body.nameOfILF;
+                                            // vue.eifStr = res.body.nameOfEIF;
 //                    vue.dynamicForm.steps=res.body.steps;
 
-                                        if (res.body.steps.length === 0) {
-                                            vue.addStep();
-                                        }
-                                        for (var i = 0; i < res.body.steps.length; i++) {
-                                            vue.dynamicForm.steps.push({
-                                                "name": res.body.steps[i].stepName,
-                                                "ilfs": [],
-                                                "eifs": []
-                                            });
-                                            for (var j = 0; j < res.body.steps[i].ilfDataSets.length; j++) {
-                                                vue.dynamicForm.steps[i].ilfs.push({
-                                                    "name": res.body.steps[i].ilfDataSets[j].innerlogicalFileName,
-                                                    "dataFields": []
+                                            if (res.body.steps.length === 0) {
+                                                vue.addStep();
+                                            }
+                                            for (var i = 0; i < res.body.steps.length; i++) {
+                                                vue.dynamicForm.steps.push({
+                                                    "name": res.body.steps[i].stepName,
+                                                    "ilfs": [],
+                                                    "eifs": []
                                                 });
-                                                for (var k = 0; k < res.body.steps[i].ilfDataSets[j].det.length; k++) {
-                                                    vue.dynamicForm.steps[i].ilfs[j].dataFields.push({
-                                                        "value": res.body.steps[i].ilfDataSets[j].det[k]
+                                                for (var j = 0; j < res.body.steps[i].ilfDataSets.length; j++) {
+                                                    vue.dynamicForm.steps[i].ilfs.push({
+                                                        "name": res.body.steps[i].ilfDataSets[j].innerlogicalFileName,
+                                                        "dataFields": []
                                                     });
+                                                    for (var k = 0; k < res.body.steps[i].ilfDataSets[j].DET.length; k++) {
+                                                        vue.dynamicForm.steps[i].ilfs[j].dataFields.push({
+                                                            "value": res.body.steps[i].ilfDataSets[j].DET[k]
+                                                        });
+                                                    }
                                                 }
+
+                                                for (var j = 0; j < res.body.steps[i].eifDataSets.length; j++) {
+                                                    vue.dynamicForm.steps[i].eifs.push({
+                                                        "name": res.body.steps[i].eifDataSets[j].externalInterfaceFileName,
+                                                        "dataFields": []
+                                                    });
+                                                    for (var k = 0; k < res.body.steps[i].eifDataSets[j].DET.length; k++) {
+                                                        vue.dynamicForm.steps[i].eifs[j].dataFields.push({
+                                                            "value": res.body.steps[i].eifDataSets[j].DET[k]
+                                                        });
+                                                    }
+                                                }
+
                                             }
 
-                                            for (var j = 0; j < res.body.steps[i].eifDataSets.length; j++) {
-                                                vue.dynamicForm.steps[i].eifs.push({
-                                                    "name": res.body.steps[i].eifDataSets[j].externalInterfaceFileName,
-                                                    "dataFields": []
-                                                });
-                                                for (var k = 0; k < res.body.steps[i].eifDataSets[j].det.length; k++) {
-                                                    vue.dynamicForm.steps[i].eifs[j].dataFields.push({
-                                                        "value": res.body.steps[i].eifDataSets[j].det[k]
-                                                    });
-                                                }
-                                            }
 
-                                        }
-
-
-                                    }, res => {
-                                        //alert("fail000")
+                                        }, res => {
+                                            //alert("fail000")
+                                        })
                                     })
+
+
                                 })
+                                    .catch(() => {
+
+                                        if (vue.rightnode !== null) {
+                                            vue.tree.selectNode(vue.rightnode);
+                                        }
+                                    });
+                            }
+                            else {
+
+                                vue.cur.id = p_node.id;
+                                vue.rightnode = p_node;
+                                vue.cur.name = p_node.text;
 
 
-                            })
-                                .catch(() => {
+                                var msg = {
+                                    "tId": vue.cur.id
+                                }
 
-                                    if (vue.rightnode !== null) {
-                                        vue.tree.selectNode(vue.rightnode);
+                                vue.$http.post(vue.url + '/getTransaction/' + vue.$route.params.rId, msg).then(res => {
+                                    //alert("success")
+
+                                    vue.dynamicForm.steps.length = 0;
+                                    vue.ilfStr = res.body.nameOfILF;
+                                    vue.eifStr = res.body.nameOfEIF;
+//                    vue.dynamicForm.steps=res.body.steps;
+
+                                    if (res.body.steps.length === 0) {
+                                        vue.addStep();
                                     }
-                                });
+                                    for (var i = 0; i < res.body.steps.length; i++) {
+                                        vue.dynamicForm.steps.push({
+                                            "name": res.body.steps[i].stepName,
+                                            "ilfs": [],
+                                            "eifs": []
+                                        });
+                                        for (var j = 0; j < res.body.steps[i].ilfDataSets.length; j++) {
+                                            vue.dynamicForm.steps[i].ilfs.push({
+                                                "name": res.body.steps[i].ilfDataSets[j].innerlogicalFileName,
+                                                "dataFields": []
+                                            });
+                                            for (var k = 0; k < res.body.steps[i].ilfDataSets[j].DET.length; k++) {
+                                                vue.dynamicForm.steps[i].ilfs[j].dataFields.push({
+                                                    "value": res.body.steps[i].ilfDataSets[j].DET[k]
+                                                });
+                                            }
+                                        }
 
+                                        for (var j = 0; j < res.body.steps[i].eifDataSets.length; j++) {
+                                            vue.dynamicForm.steps[i].eifs.push({
+                                                "name": res.body.steps[i].eifDataSets[j].externalInterfaceFileName,
+                                                "dataFields": []
+                                            });
+                                            for (var k = 0; k < res.body.steps[i].eifDataSets[j].DET.length; k++) {
+                                                vue.dynamicForm.steps[i].eifs[j].dataFields.push({
+                                                    "value": res.body.steps[i].eifDataSets[j].DET[k]
+                                                });
+                                            }
+                                        }
+
+                                    }
+                                    vue.isModify=false;
+
+
+                                }, res => {
+                                    //alert("fail000")
+                                })
+                            }
 
                         }
 
@@ -1148,8 +1571,9 @@
                                 "tId": vue.cur.id
                             }
 
-                            vue.$http.post(this.url + '/getTransaction/' + vue.$route.params.rId, msg).then(res => {
+                            vue.$http.post(vue.url + '/getTransaction/' + vue.$route.params.rId, msg).then(res => {
                                 //alert("success")
+                                // console.log(res.body);
 
                                 vue.dynamicForm.steps.length = 0;
 //                console.log(vue.dynamicForm);
@@ -1170,9 +1594,9 @@
                                             "name": res.body.steps[i].ilfDataSets[j].innerlogicalFileName,
                                             "dataFields": []
                                         });
-                                        for (var k = 0; k < res.body.steps[i].ilfDataSets[j].det.length; k++) {
+                                        for (var k = 0; k < res.body.steps[i].ilfDataSets[j].DET.length; k++) {
                                             vue.dynamicForm.steps[i].ilfs[j].dataFields.push({
-                                                "value": res.body.steps[i].ilfDataSets[j].det[k]
+                                                "value": res.body.steps[i].ilfDataSets[j].DET[k]
                                             });
                                         }
                                     }
@@ -1182,14 +1606,15 @@
                                             "name": res.body.steps[i].eifDataSets[j].externalInterfaceFileName,
                                             "dataFields": []
                                         });
-                                        for (var k = 0; k < res.body.steps[i].eifDataSets[j].det.length; k++) {
+                                        for (var k = 0; k < res.body.steps[i].eifDataSets[j].DET.length; k++) {
                                             vue.dynamicForm.steps[i].eifs[j].dataFields.push({
-                                                "value": res.body.steps[i].eifDataSets[j].det[k]
+                                                "value": res.body.steps[i].eifDataSets[j].DET[k]
                                             });
                                         }
                                     }
 
                                 }
+                                vue.isModify=false;
 
 
                             }, res => {
@@ -1198,6 +1623,7 @@
 
 
                         }
+
                     },
                     ///// Selecting node
                     // p_node: Reference to the node;
@@ -1253,8 +1679,8 @@
 
                                 var v_div;
                                 if (this.contextMenuDiv == null) {
-                                    v_div = vue.createSimpleElement('ul', 'ul_cm', 'menu');
-                                    document.body.appendChild(v_div);
+                                    v_div = vue.createSimpleElement('ul', 'ul_cm', 'mymenu');
+                                    document.getElementById("steptwo_content").appendChild(v_div);
                                 }
                                 else
                                     v_div = this.contextMenuDiv;
@@ -1266,6 +1692,7 @@
 
                                 v_div.style.display = 'block';
                                 v_div.style.position = 'absolute';
+                                v_div.style.backgroundColor="#EFEFEF";
                                 v_div.style.left = v_left + 'px';
                                 v_div.style.top = v_right + 'px';
 
@@ -1279,7 +1706,7 @@
                                     };
 
                                     var v_a = vue.createSimpleElement('a', null, null);
-                                    var v_ul = vue.createSimpleElement('ul', null, 'sub-menu');
+                                    var v_ul = vue.createSimpleElement('ul', null, 'mymenu');
 
                                     v_a.appendChild(document.createTextNode(v_menu.elements[i].text));
 
@@ -1287,7 +1714,7 @@
 
                                     if (v_menu.elements[i].icon != undefined) {
                                         // var v_img = vue.createImgElement('null', v_menu.elements[i].icon.className + ' el-icon-menu');
-                                        var v_img = vue.createImgElement('null', "menu_img " + v_menu.elements[i].icon);
+                                        var v_img = vue.createImgElement('null', "mymenu_img " + v_menu.elements[i].icon);
 
                                         // var v_img = vue.createImgElement('null', v_menu.elements[i].icon.classNam);
 
@@ -1330,9 +1757,9 @@
                             };
 
                             var v_a = vue.createSimpleElement('a', null, null);
-                            var v_ul = vue.createSimpleElement('ul', null, 'sub-menu');
 
                             v_a.appendChild(document.createTextNode(p_submenu.elements[i].text));
+
 
                             v_li.appendChild(v_span);
 
@@ -1347,7 +1774,7 @@
 
                             if (p_submenu.elements[i].p_submenu != undefined) {
                                 var v_span_more = vue.createSimpleElement('div', null, null);
-                                v_span_more.appendChild(vue.createImgElement(null, 'menu_img el-icon-caret-right'));
+                                v_span_more.appendChild(vue.createImgElement(null, 'mymenu_img el-icon-caret-right'));
                                 v_li.appendChild(v_span_more);
                                 vue.v_tree.contextMenuLi(vue, p_submenu.elements[i].p_submenu, v_ul, p_node);
                             }
@@ -1470,9 +1897,9 @@
                                             "name": tempNode.text,
                                             "tree": temp
                                         }
-                                        //console.log(Msg)
+                                        // console.log()
 
-                                        vue.$http.post(this.url + '/addFile/' + vue.$route.params.rId, Msg).then(res => {
+                                        vue.$http.post(vue.url + '/addFile/' + vue.$route.params.rId, Msg).then(res => {
                                             //alert("success")
                                         }, res => {
                                             //alert("fail0")
@@ -1499,7 +1926,7 @@
                             },
                             {
                                 text: '新建子模块',
-                                icon: 'menu_img el-icon-plus',
+                                icon: 'mymenu_img el-icon-plus',
                                 action: function (vue, node) {
 
                                     if (node.type == 'file') {
@@ -1532,7 +1959,7 @@
                                         }
 //                          console.log(Msg)
 
-                                        vue.$http.post(this.url + '/addTree/' + vue.$route.params.rId, Msg).then(res => {
+                                        vue.$http.post(vue.url + '/addTree/' + vue.$route.params.rId, Msg).then(res => {
                                             //alert("success")
                                         }, res => {
                                             //alert("fail0")
@@ -1560,7 +1987,7 @@
 
                             {
                                 text: '删除子功能／子模块',
-                                icon: 'menu_img el-icon-close',
+                                icon: 'mymenu_img el-icon-delete',
                                 action: function (vue, node) {
 
 //                        vue.cur.id=null;
@@ -1587,7 +2014,7 @@
                                         var updateTree = {
                                             "tree": temp
                                         }
-                                        vue.$http.post(this.url + '/addTree/' + vue.$route.params.rId, updateTree);
+                                        vue.$http.post(vue.url + '/addTree/' + vue.$route.params.rId, updateTree);
 
                                         if (node === vue.rightnode) {
 
@@ -1623,7 +2050,7 @@
                             },
                             {
                                 text: '删除功能／模块',
-                                icon: 'menu_img el-icon-close',
+                                icon: 'mymenu_img el-icon-delete',
                                 action: function (vue, node) {
 
                                     vue.$confirm('此操作将永久删除, 是否继续?', '提示', {
@@ -1653,7 +2080,7 @@
                                         var updateTree = {
                                             "tree": temp
                                         }
-                                        vue.$http.post(this.url + '/addTree/' + vue.$route.params.rId, updateTree);
+                                        vue.$http.post(vue.url + '/addTree/' + vue.$route.params.rId, updateTree);
 
 
                                         if (vue.findNodeInSubtree(node)) {
@@ -1688,7 +2115,7 @@
                             },
                             {
                                 text: '新建同级功能',
-                                icon: 'menu_img el-icon-plus',
+                                icon: 'mymenu_img el-icon-plus',
                                 action: function (vue, node) {
 //                        if(node.type=='file'){
 //                          vue.$message({
@@ -1725,7 +2152,7 @@
                                         }
                                         console.log(Msg)
 
-                                        vue.$http.post(this.url + '/addFile/' + vue.$route.params.rId, Msg).then(res => {
+                                        vue.$http.post(vue.url + '/addFile/' + vue.$route.params.rId, Msg).then(res => {
                                             //alert("success")
                                         }, res => {
                                             //alert("fail0")
@@ -1754,7 +2181,7 @@
 
                             {
                                 text: '新建同级模块',
-                                icon: 'menu_img el-icon-plus',
+                                icon: 'mymenu_img el-icon-plus',
                                 action: function (vue, node) {
 
                                     vue.$prompt('输入名称', '提示', {
@@ -1781,7 +2208,7 @@
                                         }
                                         console.log(Msg)
 
-                                        vue.$http.post(this.url + '/addTree/' + vue.$route.params.rId, Msg).then(res => {
+                                        vue.$http.post(vue.url + '/addTree/' + vue.$route.params.rId, Msg).then(res => {
                                             //alert("success")
                                         }, res => {
                                             //alert("fail0")
@@ -1807,7 +2234,7 @@
                             },
                             {
                                 text: '剪切',
-                                icon: 'menu_img el-icon-minus',
+                                icon: 'mymenu_img el-icon-minus',
                                 action: function (vue, node) {
 
 
@@ -1862,7 +2289,7 @@
 //                        }
 //                        console.log(Msg)
 //
-//                        vue.$http.post(this.url + '/addTree/' + vue.$route.params.rId, Msg).then(res => {
+//                        vue.$http.post(vue.url + '/addTree/' + vue.$route.params.rId, Msg).then(res => {
 //                          //alert("success")
 //                        }, res => {
 //                          //alert("fail0")
@@ -1872,7 +2299,7 @@
                             },
                             {
                                 text: '粘贴',
-                                icon: 'menu_img el-icon-close',
+                                icon: 'mymenu_img el-icon-close',
                                 action: function (vue, node) {
 
                                     if (node.type == 'file') {
@@ -1905,7 +2332,7 @@
                                     }
                                     // console.log(Msg)
 
-                                    vue.$http.post(this.url + '/addTree/' + vue.$route.params.rId, Msg).then(res => {
+                                    vue.$http.post(vue.url + '/addTree/' + vue.$route.params.rId, Msg).then(res => {
                                         //alert("success")
                                         if (vue.findNodeInSubtree(node)) {
 
@@ -1938,7 +2365,7 @@
                             },
                             {
                                 text: '重命名',
-                                icon: 'menu_img el-icon-edit',
+                                icon: 'mymenu_img el-icon-edit',
                                 action: function (vue, node) {
 
                                     vue.$prompt('输入名称', '提示', {
@@ -1959,7 +2386,7 @@
                                         }
 //                            console.log(Msg)
 
-                                        vue.$http.post(this.url + '/addTree/' + vue.$route.params.rId, Msg).then(res => {
+                                        vue.$http.post(vue.url + '/addTree/' + vue.$route.params.rId, Msg).then(res => {
                                             //alert("success")
                                         }, res => {
                                             //alert("fail0")
@@ -1969,7 +2396,7 @@
                                             "tName": node.text,
                                             "tree": temp
                                         }
-                                        vue.$http.post(this.url + '/TransactionReName/' + vue.$route.params.rId, Msg).then(res => {
+                                        vue.$http.post(vue.url + '/TransactionReName/' + vue.$route.params.rId, Msg).then(res => {
                                             //alert("success")
                                         }, res => {
                                             //alert("fail0")
@@ -2052,11 +2479,25 @@
                 this.tree = this.createTre(this, 'div_tree', '', contex_menu);
 
                 var treeMsg;
-                this.$http.get(this.url + '/getTree/' + this.$route.params.rId).then(res => {
+                this.$http.get(this.url + '/getTree/' + this.$route.params.rId, {headers: {Authorization : this.$store.state.user.tokenid}}).then(res => {
 
 //          this.$set('treeMsg',treeMsg);
                     treeMsg = res.body;
-//          console.log(treeMsg)
+         // console.log(treeMsg)
+                    this.tableData1.splice(0,this.tableData1.length);
+                    this.tableData2.splice(0,this.tableData2.length);
+                    for(var i = 0; i < treeMsg.ilfTable.length; i++){
+                        this.tableData1.push({
+                            name : treeMsg.ilfTable[i].fileName,
+                            DET : treeMsg.ilfTable[i].allDET
+                        })
+                    }
+                    for(var i = 0; i < treeMsg.eifTable.length; i++){
+                        this.tableData2.push({
+                            name : treeMsg.eifTable[i].fileName,
+                            DET : treeMsg.eifTable[i].allDET
+                        })
+                    }
                     for (var i = 0; i < treeMsg.childFolders.length; i++) {
                         var node1 = this.tree.createNode(this, treeMsg.childFolders[i].name, false, ' el-icon-close', null, null, 'context1', treeMsg.childFolders[i].id, 'folder');
 
@@ -2172,7 +2613,76 @@
 
 </script>
 
+
 <style scoped>
+
+
+    .steptwo_content >>> .mymenu {
+        width: 190px;
+        position: absolute;
+        background: #F1F1F1;
+        -webkit-user-select: none; /* Chrome/Safari */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* IE10+ */
+        cursor: default;
+        box-shadow: 4px 4px 5px #BDBDBD;
+        list-style-type: none;
+        z-index:97;
+
+    }
+
+
+    .steptwo_content >>> .mymenu a {
+        color: #3f3f3f;
+    }
+
+
+    .steptwo_content >>> .mymenu {
+        margin: 0;
+        padding: 0;
+        font: 12px Verdana, sans-serif;
+    }
+
+    .steptwo_content >>>.mymenu a {
+        text-decoration: none;
+        display: inline-block;
+        padding: 6px;
+        margin-left: 3px;
+    }
+
+    .steptwo_content >>>.mymenu span {
+        position: absolute;
+        /*background-color: #aeaeae;*/
+        width: 100%;
+        height: 100%;
+    }
+
+    .steptwo_content >>>.mymenu div {
+        position: absolute;
+        right: 4px;
+        top: 0px;
+        padding: 6px;
+    }
+
+    .steptwo_content >>>.mymenu .mymenu_img {
+        vertical-align: middle;
+        margin-left: 8px;
+    }
+
+
+    .steptwo_content >>>.mymenu li {
+        position: relative;
+        background: #efefef;
+    }
+
+    .steptwo_content >>>.mymenu li:hover {
+        background: #bfbfbf;
+        cursor: pointer;
+    }
+
+
+
+
     .footer {
     text-align: center;
     margin-top: 100px;
@@ -2181,7 +2691,7 @@
     }
     .header1 {
         width: 80%;
-        margin-top: 80px;
+        margin-top: 84px;
         margin-left: 10%;
         display: flex;
         flex-direction: row;
@@ -2234,18 +2744,10 @@
         line-height: 24px;
     }
 
-    /*#rightformstyle {*/
-    /*visibility: hidden;*/
-    /*}*/
 
     .steptwo_content {
-        /*text-align: center;*/
-        margin-top: 50px;
-        /*width: 30%;*/
         margin-left: 10%;
-        /*margin-right: auto;*/
         width: 80%;
-        /*max-width: 280px;;*/
         display: -webkit-flex;
         display: flex;
         display: inline-flex;
@@ -2254,15 +2756,17 @@
         flex-wrap: wrap;
         align-items: flex-start;
         align-content: flex-start;
+        padding: 40px;
+        min-width: 500px;
     }
 
-    .steptwo_content > .el-input {
+    .steptwo_content .el-input {
         margin: 5px;
     }
 
-    .steptwo_content > .el-button {
-        width: 100%;
-        margin: 8px 5px;
+    .steptwo_content  .el-button {
+        /*width: 100%;*/
+        /*margin: 8px 5px;*/
     }
 
     .no_account {
@@ -2272,15 +2776,14 @@
 
     }
 
-    .no_account > a {
+    .no_account a {
         color: #323a45;
     }
 
     /*aimara.css*/
 
-    ul.tree, ul.tree ul {
+    .tree >>> ul {
         list-style-type: none;
-        /*background: url(vline.png) repeat-y;*/
         margin: 0;
         padding: 0;
         padding-left: 7px;
@@ -2290,184 +2793,58 @@
         cursor: default;
     }
 
-    li.last {
-        /*background: url(lastnode.png);*/
-        background-repeat: no-repeat;
-    }
 
-    ul.tree ul {
-        padding-left: 7px;
-    }
-
-    ul.tree li {
+    .tree >>> li {
         margin: 0;
         padding: 0 12px;
         line-height: 22px;
+        width: 180px;
+        /*width: auto;*/
         /*background: url(node.png) no-repeat;*/
+
+
     }
 
-    ul.tree li.last {
-        /*background: #fff url(lastnode.png) no-repeat;*/
-    }
 
-    img.exp_col {
-        position: absolute;
-        margin-top: 4px;
-        margin-left: -20px;
-        vertical-align: sub;
-    }
+    /*a.node {*/
+        /*padding: 2px;*/
+    /*}*/
 
-    img.exp_col_empty {
-        position: absolute;
-        margin-top: 4px;
-        margin-left: -20px;
-        vertical-align: sub;
-        width: 16px;
-    }
+     /*span.node  a {*/
+        /*padding-left: 3px;*/
+    /*}*/
 
-    img.icon_tree {
-        vertical-align: middle;
-        padding-left: 3px;
-        margin-top: -3px;
-    }
-
-    a.node {
-        padding: 2px;
-    }
-
-    span.node a {
-        padding-left: 3px;
-    }
-
-    span.node {
-        margin-left: -1px;
+    .tree >>> .node {
+        padding-left: 4px;
         padding-right: 3px;
 
-        padding-top: 4px;
-        padding-bottom: 4px;
+        padding-top: 3px;
+        padding-bottom: 3px;
     }
 
-    span.node:hover {
-        margin-left: -1px;
-        padding-right: 3px;
-        padding-top: 4px;
-        padding-bottom: 4px;
+    .tree >>> span:hover {
+        /*margin-left: -1px;*/
+        padding-right: 4px;
+        padding-left: 5px;
+        padding-top: 3px;
+        padding-bottom: 3px;
         background-color: #efefef;
         border-radius: 2px;
     }
 
-    span.node_selected {
-        margin-left: -2px;
+    .tree >>> .node_selected {
+        /*margin-left: -2px;*/
         padding-right: 3px;
+        padding-left: 7px;
 
-        padding-top: 4px;
-        padding-bottom: 4px;
+        padding-top: 3px;
+        padding-bottom: 3px;
         background-color: #dedede;
         border-radius: 2px;
     }
 
-    span.node_selected a {
-        padding-left: 3px;
-    }
 
-    .menu, .sub-menu {
-        margin: 0;
-        padding: 0;
-        font: 12px Verdana, sans-serif;
-    }
 
-    .menu,
-    .sub-menu {
-        list-style: none;
-        background: #000;
-    }
-
-    .sub-menu {
-        background: #F1F1F1;
-    }
-
-    .menu a {
-        text-decoration: none;
-        display: inline-block;
-        padding: 6px;
-        margin-left: 3px;
-    }
-
-    .menu span {
-        position: absolute;
-        /*background-color: #aeaeae;*/
-        width: 100%;
-        height: 100%;
-    }
-
-    .menu div {
-        position: absolute;
-        right: 4px;
-        top: 0px;
-        padding: 6px;
-    }
-
-    .menu .menu_img {
-        vertical-align: middle;
-        margin-left: 8px;
-    }
-
-    .menu img {
-        text-decoration: none;
-        display: inline-block;
-        vertical-align: sub;
-        padding-left: 6px;
-    }
-
-    .menu li {
-        position: relative;
-        background: #efefef;
-    }
-
-    .menu li:hover {
-        background: #bfbfbf;
-        cursor: pointer;
-    }
-
-    .sub-menu li:hover {
-        background: #bfbfbf;
-    }
-
-    .menu li:hover > .sub-menu {
-        display: block;
-    }
-
-    .menu {
-        width: 190px;
-        position: absolute;
-        background: #F1F1F1;
-        -webkit-user-select: none; /* Chrome/Safari */
-        -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* IE10+ */
-        cursor: default;
-        box-shadow: 4px 4px 5px #BDBDBD;
-    }
-
-    .sub-menu {
-        display: none;
-        position: absolute;
-        min-width: 190px;
-        box-shadow: 2px 2px 3px #BDBDBD;
-    }
-
-    .menu .sub-menu {
-        top: 0;
-        left: 100%;
-
-    }
-
-    .menu a {
-        color: #3f3f3f;
-    }
-
-    .undefined {
-        left: 10px;
-    }
 
     /*example.css*/
 
@@ -2480,14 +2857,20 @@
         margin-top: 20px;
         font: 13px Verdana, sans-serif;
         display: inline-block;
-        width: 280px;
+        /*width: 150px;*/
+        overflow-y:auto;
+        overflow-y:auto;
+        overflow: hidden;
+        overflow-x:auto;
+        /*padding: 10px;*/
+        min-height: 500px;
 
-        /*background-color: #8DD7B5*/
+
     }
 
     .el-row {
         margin-bottom: 20px;
-        width: 250px;
+        /*width: 250px;*/
 
     }
 
@@ -2501,10 +2884,11 @@
     }
 
     #directory {
-        /*width: 200px;*/
-        /*height: 300px;*/
+        min-width: 190px;
+        min-height: 400px;
         order: 1;
         flex-grow: 3;
+        padding: -5px;
         width: 5%;
         display: -webkit-flex;
         display: flex;
@@ -2513,18 +2897,22 @@
         flex-direction: column;
         flex-wrap: wrap;
         align-items: flex-start;
+        overflow: hidden;
         align-content: flex-start;
 
     }
 
     .mycontent {
+
         order: 2;
         flex-grow: 5;
         width: 65%;
+        min-width: 530px;
+
         /*margin: 10px;*/
         /*display: block;*/
         /*max-width: 650px;*/
-        /*margin-left: 5%;*/
+        margin-left: 1%;
         display: -webkit-flex;
         display: flex;
         display: inline-flex;
@@ -2536,11 +2924,13 @@
 
     }
 
+
+
     .my-drop-menu {
         margin-top: 20px;
         box-shadow: none;
         padding: 10px;
-        min-width: 600px;
+        /*min-width: 600px;*/
 
     }
 
@@ -2553,14 +2943,17 @@
         flex-wrap: nowrap;
         align-items: flex-start;
         align-content: flex-start;
+        width:100%;
+        max-width: 70px;
     }
 
-    .tree a {
+    .tree >>> a {
         color: #3f3f3f;
     }
 
+
     .form-input {
-        margin-bottom: 20px;
+
         width: 100%;
         display: -webkit-flex;
         display: flex;
@@ -2577,38 +2970,57 @@
         height: 48px;
     }
 
-    .form-input-item1 {
+    .steptwo_content >>>.form-input-item1 {
         order: 1;
-    }
-
-    .step-box {
         display: -webkit-flex;
         display: flex;
         display: inline-flex;
         display: -webkit-inline-flex;
-        flex-direction: row-reverse;
+        flex-direction: row;
         flex-wrap: nowrap;
-        align-items: flex-start;
+        align-items: center;
         align-content: flex-start;
-        margin-left: 10%;
+        justify-content: center;
+        margin: 0px 15px 0px 15px;
+    }
+    .steptwo_content >>>.form-input-item2 {
+        order: 2;
+        display: -webkit-flex;
+        display: flex;
+        display: inline-flex;
+        display: -webkit-inline-flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        align-content: flex-start;
+        justify-content: center;
+        margin: 0px 15px 0px 15px;
+
+    }
+
+
+    .step-box {
+        width: 100%;
     }
 
     .step-box-plus {
 
         order: 1;
-        margin-top: 10px;
-        margin-right: 5px;
+        width:100%;
+        margin-bottom: 10px;
+        /*margin-right: 5px;*/
     }
 
     .step-set {
 
-        min-width: 630px;
+        width: 100%;
         order: 2;
-        margin: 5px;
+        /*margin: 5px;*/
 
     }
 
     .step-set-list {
+        width: 100%;
         display: -webkit-flex;
         display: flex;
         display: inline-flex;
@@ -2621,9 +3033,6 @@
 
     }
 
-    .form-input-item2 {
-        order: 2;
-    }
 
     .style-bottom-btn {
         display: -webkit-flex;
@@ -2638,6 +3047,7 @@
         justify-content: center;
         width: 100%;
         margin: 30px;
+        /*margin-top: 300px;*/
     }
 
     /*.bottom-btn1 {*/
@@ -2665,10 +3075,11 @@
 
     }
 
+
     .step-box-plus-1 {
 
         order: 1;
-        /*margin-top: 5px;*/
+        padding-top: 5px;
         /*margin-right: 2px;*/
     }
 
@@ -2678,18 +3089,30 @@
         display: flex;
         display: inline-flex;
         display: -webkit-inline-flex;
-        flex-direction: row;
+        flex-direction: column;
         flex-wrap: wrap;
-        align-items: center;
-        /*align-content: flex-start;*/
+        align-items: flex-start;
+        margin-top: 25px;
+        align-content: flex-start;
+        width: 100%;
+        border-top: 1px solid #eee;
         /*justify-content: space-between;*/
     }
 
     .el-form-item {
         margin-bottom: 5px;
+
+    }
+
+    .out-in :first-child{
+
+        margin-top: 0px;
     }
 
     .demo-dynamic {
+        border: 2px solid #eee;
+        padding: 10px;
+
         display: -webkit-flex;
         display: flex;
         display: inline-flex;
@@ -2698,13 +3121,12 @@
         flex-wrap: wrap;
         align-items: flex-start;
         align-content: flex-start;
-        max-width: 590px;
-        margin-bottom: 10px;
+        /*max-width: 590px;*/
+        margin-top: 30px;
         /*justify-content: space-between;*/
     }
 
     .input-box {
-        /*padding: 5px;*/
         display: -webkit-flex;
         display: flex;
         display: inline-flex;
@@ -2714,11 +3136,15 @@
         align-items: center;
         align-content: center;
         justify-content: space-between;
-        min-width: 571px;
+        width: 60%;
+        max-width: 400px;
+        border-bottom:none;
     }
 
+
+
     .step-input {
-        width: 520px;
+        /*width: 520px;*/
         margin-right: 5px;
     }
 
@@ -2732,6 +3158,9 @@
         align-items: center;
         align-content: center;
         justify-content: space-between;
+        margin-bottom: 5px;
+        margin-right: 10px;
+
     }
 
     .out-in {
@@ -2741,6 +3170,9 @@
         display: -webkit-inline-flex;
         flex-direction: column;
         flex-wrap: wrap;
+        width: 100%;
+        padding: 25px 25px 0px 25px;
+        /*background-color: #efefef;*/
         /*align-items: center;*/
         /*align-content: center;*/
         /*justify-content: space-between;*/
@@ -2774,7 +3206,38 @@
         color: #777;
     }
 
+    .undefined {
+        left: 10px;
+    }
+
+    #write{
+        max-width: 540px;
 
 
-</style>
+    }
+
+    .form-content-style{
+        min-width: 300px;
+        display: -webkit-flex;
+        display: flex;
+        display: inline-flex;
+        display: -webkit-inline-flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        align-content: center;
+    }
+
+
+    .form-item-style{
+        display: -webkit-flex;
+        display: flex;
+        display: inline-flex;
+        display: -webkit-inline-flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: flex-start;
+
+    }
+</style >
 

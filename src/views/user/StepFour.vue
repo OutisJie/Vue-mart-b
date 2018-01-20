@@ -21,7 +21,7 @@
       <Body_IFPUGReport></Body_IFPUGReport>
       <div>
         <el-row></el-row>
-        <el-row style="text-align: center;min-width: 100%">
+        <el-row style="text-align: center;padding:20px;min-width: 100%">
           <el-button type="primary" v-on:click="toReport" >返回</el-button>
         </el-row>
       </div>
@@ -84,7 +84,7 @@
   }
   .header1 {
     width: 80%;
-    margin-top: 80px;
+    margin-top: 84px;
     margin-bottom: 20px;
     margin-left:10% ;
     display: flex;

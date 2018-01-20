@@ -3,16 +3,17 @@
 <template>
 <div class="headerLight" >
   <div class="sitetitle" style="padding-top:30px; margin-left: 30px; float:left; padding-bottom:30px;">
-    <router-link to="/" style="color: black;">基于人工智能的软件外包服务平台</router-link>
+    <router-link to="/" style="color: black;">智码</router-link>
     <router-link to="/projects" style="color: black; padding-left:30px;">项目</router-link>
     <router-link to="/ver" style="color: black; padding-left:30px;">估算</router-link>
+    <a style="color: black; padding-left:30px;" href="http://localhost:9000/#/portal" title="测试" target="_blank">代码托管</a>
     <a style="color: black; padding-left:30px;">帮助</a>
   </div>
 
     <el-dropdown class="head_menu">
       <span class="el-dropdown-link">
         <el-row :gutter="20" type="flex" align="middle" style="margin-top:5px;float:right">
-          
+
           <el-col :span="12"><span class="user_name">你好,{{this.username}}</span></el-col>
           <el-col :span="6">
             <img src="../../assets/coder.png" class="header_image" style="margin-left:0px;height: 40px; width: 40px">
@@ -27,11 +28,11 @@
         <el-dropdown-item><router-link to="/center" style="color: black">我的项目</router-link></el-dropdown-item>
         <el-dropdown-item><router-link to="/center" style="color: black">我的报价单</router-link></el-dropdown-item>
         <el-dropdown-item>代码托管</el-dropdown-item>
-        <el-dropdown-item divided><router-link to="/blank" style="color: black">退出</router-link></el-dropdown-item>
+        <el-dropdown-item divided><a @click ="logout" style="color: black">退出</a></el-dropdown-item>
       </el-dropdown-menu>
 
     </el-dropdown>
-  
+
 </div>
 
 
@@ -39,6 +40,7 @@
 </template>
 
 <script>
+
 export default {
   name: "HeadBarLight",
   computed:{
@@ -46,6 +48,13 @@ export default {
       return this.$store.state.user.username
     }
   },
+  methods:{
+    logout:function(){
+      this.$store.commit("reset");
+      sessionStorage.removeItem("tokenid");
+      this.$router.push( '/' );
+    }
+  }
 };
 </script>
 

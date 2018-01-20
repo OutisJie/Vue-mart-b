@@ -14,6 +14,15 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(Vuex)
 Vue.use(VueResource)
+Vue.http.interceptors.push(function(request, next) {
+  // modify headers
+  if(this.$store.state.user.tokenid){
+  request.headers.set('Authorization', this.$store.state.user.tokenid);
+}
+	console.log(request.headers)
+  // continue to next interceptor
+  next();
+});
 
 new Vue({
   el: '#app',
@@ -21,4 +30,5 @@ new Vue({
   router,
   template: '<App/>',
   components: { App }
-})
+});
+

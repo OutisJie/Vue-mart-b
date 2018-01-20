@@ -152,14 +152,13 @@
     },
     methods: {
       checkToken: function () {
-        if (sessionStorage.tokenid || this.$store.state.user.tokenid !== '')
+        if (sessionStorage.tokenid && this.$store.state.user.tokenid !== '')
           this.isLogin = true;
         else
           this.isLogin = false;
       },
       setProjectid(id) {
-        this.$store.commit('setProjectId', id.toString());
-        this.$router.push('/projectDetail');
+        this.$router.push({path: '/projectDetail', query: {id: id}});
       },
       getProjects() {
         axios.get(this.url, {}).then(response => {
@@ -172,7 +171,7 @@
             this.totolCount = response.data.result.length;
             this.loadData(this.currentPage, this.pageSize, this.totolCount);
           }
-        }).catch (function (error) {
+        }).catch(function (error) {
           swal("Error", "服务器错误", "error");
         });
       },

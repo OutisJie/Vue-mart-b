@@ -69,7 +69,7 @@
             </div></el-col>
             <el-col :span="5"><div class="grid-content bg-white"></div></el-col>
         </el-row>
-        <div style="height: 50px;"></div>
+
     </div>
 
 </template>
@@ -160,16 +160,23 @@
                     "state": this.form.state,
                     "remark": this.form.desc
                 }
-
-
-                this.$http.post(this.url + '/changeState/' + this.$route.params.rId, trans).then(response => {
+                console.log(trans.state);
+                if(trans.state) {
+                    this.$http.post(this.url + '/changeState/' + this.$route.params.rId, trans).then(response => {
+                        this.$message({
+                            type: 'success',
+                            message: '已提交当前信息!'
+                        });
+                    })
+                    this.$router.push({path: '/mver'});
+                    this.dialogFormVisible = false;
+                }
+                else {
                     this.$message({
-                        type: 'success',
-                        message: '已提交当前信息!'
+                        type: 'error',
+                        message: '请输入合适状态!'
                     });
-                })
-                this.$router.push({path:'/mver'});
-                this.dialogFormVisible = false;
+                }
             },
 //            getMsg(data) { //msg就是从子组件传递过来的参数msg
 //                console.log(data);
@@ -248,10 +255,11 @@
     .container {
         font-size: 13px;
         font-family: 'Microsoft YaHei';
-        width: 64%;
+        width: 80%;
         height: auto;
-        margin: auto;
-        padding: 50px 0 40px 0;
+        margin-top: 50px;
+        margin-left: 10%;
+        margin-bottom: 40px;
         display: flex;
         flex-direction: column;
         position: relative;

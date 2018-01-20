@@ -8,7 +8,6 @@ import Center from '@/views/Center'
 import Projects from '@/views/Projects'
 import ProjectDetail from '@/views/ProjectDetail'
 import Workers from '@/views/Workers'
-import Blank from '@/views/Blank'
 import store from '../vuex/store'
 
 import StepOne from '@/views/user/StepOne'
@@ -59,18 +58,14 @@ const router = new Router({
     }, {
         path: '/projectDetail',
         name: 'ProjectDetail',
-        meta: {
-            requireProjectId: true
-        },
+        // meta: {
+        //     requireProjectId: true
+        // },
         component: ProjectDetail
     },{
         path:'/workers',
         name:"Workers",
         component: Workers
-    }, {
-        path: '/blank',
-        name: 'Blank',
-        component: Blank
     },{
         path: '/stepone/:rId',
         name: 'StepOne',
@@ -179,6 +174,6 @@ router.beforeEach((to, from, next) => {
     else {
       next()
     }
-  })
+  });
 
 export default router

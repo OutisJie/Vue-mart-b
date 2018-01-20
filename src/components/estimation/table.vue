@@ -50,8 +50,8 @@
             <el-table-column align="center" label="操作" width="180">
               <template slot-scope="scope">
                 <el-button @click.native.prevent="deleteRow(scope.$index, tableData4)" type="text" size="small">移除</el-button>
-                <el-button @click.native.prevent="modify(scope.$index)" type="text" size="small">修改</el-button>
-                <el-button type="text" size="small" @click.native.prevent="goReport(scope.$index)">查看报告</el-button>
+                <el-button v-show="scope.row.state ==='待修改'" @click.native.prevent="modify(scope.$index)" type="text" size="small">修改</el-button>
+                <el-button v-show="scope.row.state==='完成'" type="text" size="small" @click.native.prevent="goReport(scope.$index)">查看报告</el-button>
               </template>
             </el-table-column>
             <el-table-column align="center" prop="remark" label="备注" width="150"></el-table-column>
@@ -64,6 +64,7 @@
 <script>
 
   import server from '../../../config/index';
+  import swal from 'sweetalert';
 
   export default {
     name:'ReportTable',
@@ -75,7 +76,7 @@
             iDiv.style.display="block";
             sDiv.style.display="none";
             dDiv.style.display="none";
-            this.search("");
+            this.search();
         },
         stateSearch(){
             var iDiv=document.getElementById("selectInput");
@@ -93,20 +94,38 @@
             iDiv.style.display="none";
             sDiv.style.display="none";
             dDiv.style.display="block";
-            this.getSTime(null);
+            this.getSTime();
         },
         getSTime(val) {
             console.log(val)
-            // if(val!=null){
-            //     this.sTime=val.getFullYear()+'-'+(val.getMonth()+1)+'-'+val.getDate();//这个sTime是在data中声明的，也就是v-model绑定的值
-            //     console.log(val.getFullYear()+'-'+(val.getMonth()+1)+'-'+val.getDate())
-            // }
-            // else{
-            //     this.sTime = "";
-            // }
-            this.sTime = val;
+            var a = /^(\d{4})-(\d{2})-(\d{2})$/;
+            if(!a.test(val)){
+                if(val!=null){
+                    if((val.getMonth()+1)<10){
+                        if(val.getDate()<10){
+                            this.sTime=val.getFullYear()+'-'+'0'+(val.getMonth()+1)+'-'+'0'+val.getDate();//这个sTime是在data中声明的，也就是v-model绑定的值
+                            //console.log(val.getFullYear()+'-'+'0'+(val.getMonth()+1)+'-'+'0'+val.getDate())
+                        }
+                        else{
+                            this.sTime=val.getFullYear()+'-'+'0'+(val.getMonth()+1)+'-'+val.getDate();//这个sTime是在data中声明的，也就是v-model绑定的值
+                           // console.log(val.getFullYear()+'-'+'0'+(val.getMonth()+1)+'-'+val.getDate())
+                        }
+                    }
+                    else{
+                        this.sTime=val.getFullYear()+'-'+(val.getMonth()+1)+'-'+val.getDate();//这个sTime是在data中声明的，也就是v-model绑定的值
+                        //console.log(val.getFullYear()+'-'+(val.getMonth()+1)+'-'+val.getDate())
+                    }
+                }
+                else{
+                    this.sTime = "";
+                }
+            }
+            else{
+                this.sTime = val;
+            }
             var v = new RegExp(this.sTime);
             this.tableData4.splice(0,this.tableData4.length);
+
             for(var j=0;j<this.allData.length;j++) {
                 if (v.test(this.allData[j].createTime)) {
                     var temp = {
@@ -140,15 +159,19 @@
       },
       goCreate:function () {
 //          console.log(global_.ID);
+        if (sessionStorage.tokenid && this.$store.state.user.tokenid !== '') {
 
           this.$http.get(this.url + '/addRequirement').then(response => {
-              console.log('get success')
-              var id = response.body
-              this.$router.push( {name:'StepOne', params : {rId : id}})
+            console.log('get success')
+            var id = response.body
+            this.$router.push({name: 'StepOne', params: {rId: id}})
           }, response => {
-              console.log('fail')
-              alert('fail')
+            console.log('fail')
+            alert('fail')
           })
+        }else {
+          swal("Error", "请先登录", "error");
+        }
       },
       deleteRow(index, rows) {
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -206,7 +229,7 @@
       },
         init(){
             console.log(this.url + '/getAllRequirements')
-            this.$http.get(this.url + '/getAllRequirements').then(res=>{
+            this.$http.get(this.url + '/getAllRequirementsByUser',{headers: {Authorization : this.$store.state.user.tokenid}}).then(res=>{
                 for(var i = 0; i < res.body.length; i++){
                     var temp = {
                         "rId" : '',
@@ -319,7 +342,23 @@
       }
     },
     mounted() {
-        this.init();
+        this.$http.get(this.url + '/identity',{headers: {Authorization : this.$store.state.user.tokenid}}).then(res=>{
+            var code = res.body.code;
+            if(code === 0){
+                this.$router.push("/mver")
+            }
+            else if(code === 200){
+                this.$router.push("/login")
+            }
+            else if(code === 500){
+                alert("服务端错误")
+            }
+
+        },res=>{
+
+        });
+
+            this.init();
     }
   }
 </script>

@@ -37,7 +37,7 @@
                 </el-col>
                 <el-col :span="12">
                   <el-button type="primary" @click="participateProject()" style="float: right; margin-right: 30px;"
-                             plain v-bind:disabled="!isLogin"  v-show="!isEnroll">参与项目
+                             plain v-bind:disabled="!isAble"  v-show="!isEnroll">参与项目
                   </el-button>
                   <el-button type="primary" @click="participateProject()" style="float: right; margin-right: 30px;"
                              plain v-bind:disabled="true" v-show="isEnroll">已参与
@@ -140,6 +140,7 @@
     data() {
       return {
         isLogin: false,
+        isAble: false,
         isEnroll: false,
         username: "",
         form: {
@@ -164,12 +165,13 @@
     },
     created() {
       this.checkToken();
-      this.projectId = this.$store.state.projectId;
+      //this.projectId = this.$store.state.projectId;
+      this.projectId = this.$route.query.id;
       this.getProject();
     },
     methods: {
       checkToken: function () {
-        if (sessionStorage.tokenid || this.$store.state.user.tokenid !== '') {
+        if (sessionStorage.tokenid && this.$store.state.user.tokenid !== '') {
           this.isLogin = true;
           this.username = this.$store.state.user.username;
         } else
@@ -186,14 +188,14 @@
             this.form.type = response.data.result.requirement.requirementType;
             if (response.data.result.requirement.requirementState == 1) {
               this.form.state = '招募中';
-              this.isLogin = this.isLogin && true;
+              this.isAble = this.isLogin && true;
             }
             else if (response.data.result.requirement.requirementState == 2) {
               this.form.state = '开发中';
-              this.isLogin = this.isLogin && false;
+              this.isAble = this.isLogin && false;
             }
             else if (response.data.result.requirement.requirementState == 3) {
-              this.isLogin = this.isLogin && false;
+              this.isAble = this.isLogin && false;
             }
             //需要转换
             this.form.date1 = new Date(response.data.result.requirement.startTime);
@@ -240,6 +242,8 @@
               message: '报名成功',
               type: 'success'
             });
+            this.getProject();
+            this.isEnroll = true;
           }
         }).catch(function (error) {
           if (error) {

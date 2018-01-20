@@ -10,7 +10,9 @@
             </el-breadcrumb>
               <div class="user_menu">
                   <el-menu class="side_bar" mode="vertical" default-active="1" style="margin-left:20px">
+                    <div v-if="!isAdmin">
                     <el-menu-item-group  title="账户信息">
+
                       <el-menu-item index="1" @click="changeView1" ><i class="el-icon-information"></i>账户信息</el-menu-item>
                     </el-menu-item-group>
                     <el-menu-item-group title="开发者信息">
@@ -18,6 +20,8 @@
                       <el-menu-item index="3" @click="changeView3"><i class="el-icon-circle-check"></i>参与项目</el-menu-item>
                       <el-menu-item index="4" @click="changeView4"><i class="el-icon-message"></i>我的需求</el-menu-item>
                     </el-menu-item-group>
+                    </div>
+                    <el-menu-item index="5" @click="changeView5" v-else><i class="el-icon-message"></i>管理员</el-menu-item>
                   </el-menu>
               </div>
             <div class="detail"><MyAccount v-bind:is="currentView"></MyAccount></div>
@@ -39,6 +43,7 @@ import MyAccount from "../components/personalcenter/MyAccount.vue"
 import MyExperience from "../components/personalcenter/MyExperience.vue"
 import MyParticipate from "../components/personalcenter/MyParticipate.vue"
 import MyNeeds from "../components/personalcenter/MyNeeds.vue"
+import AdminCenter from "../views/admin/AdminCenter.vue"
 
 export default {
   name: "Center",
@@ -48,15 +53,20 @@ export default {
     MyAccount,
     MyExperience,
     MyParticipate,
-    MyNeeds
+    MyNeeds,
+    AdminCenter
   },
   data() {
     return {
       isCollapse: true,
       MyAccount:"MyAccount",
       MyExperience:"MyExperience",
-      currentView:"MyAccount"
+      currentView:"MyAccount",
+      isAdmin: '',
     };
+  },
+  created() {
+     this.isAdmin = this.$store.state.user.username === 'admin';
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -66,7 +76,7 @@ export default {
       console.log(key, keyPath);
     },
     modify:function(){
-      this.$router.push( {path:'../components/InfoForm'});
+      this.$router.push({path:'../components/InfoForm'});
     },
     changeView1:function() {
       this.currentView = MyAccount;
@@ -79,6 +89,9 @@ export default {
     },
     changeView4:function () {
       this.currentView = MyNeeds;
+    },
+    changeView5: function() {
+      this.currentView = AdminCenter;
     }
 
   }

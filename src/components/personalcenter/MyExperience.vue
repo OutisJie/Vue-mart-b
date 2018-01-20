@@ -38,8 +38,8 @@
     <div style="height: 20px;"></div>
 
     <el-table stripe :data="tableData" style="width: 100%;">
-      <el-table-column prop="id" width="40" label="项目id">
-      </el-table-column>
+      <!--<el-table-column prop="id" width="40" label="项目id">-->
+      <!--</el-table-column>-->
       <el-table-column prop="projectName" class="projectName" label="项目名称" width="150">
       </el-table-column>
       <el-table-column prop="projectRegion" label="项目类型" width="100">

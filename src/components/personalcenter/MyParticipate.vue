@@ -8,8 +8,8 @@
       <el-table stripe :data="tableData" style="width: 100%" >
         <el-table-column type="selection" width="40">
         </el-table-column>
-        <el-table-column prop="project_id" class="projectId" label="项目ID" width="100">
-        </el-table-column>
+        <!--<el-table-column prop="project_id" class="projectId" label="项目ID" width="100">-->
+        <!--</el-table-column>-->
         <el-table-column prop="project_name" label="项目名称" width="150">
         </el-table-column>
         <el-table-column prop="project_type" label="项目类型" width="150" show-overflow-tooltip>

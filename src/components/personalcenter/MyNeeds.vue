@@ -58,8 +58,8 @@
     <el-table stripe :data="tableData" style="width: 100%" @row-dblclick="check">
       <el-table-column type="selection" width="40">
       </el-table-column>
-      <el-table-column prop="requirement_id" class="projectId" label="需求ID" width="100">
-      </el-table-column>
+      <!--<el-table-column prop="requirement_id" class="projectId" label="需求ID" width="100">-->
+      <!--</el-table-column>-->
       <el-table-column prop="requirement_name" label="需求名称" width="150">
       </el-table-column>
       <el-table-column prop="requirement_type" label="需求类型" width="150">

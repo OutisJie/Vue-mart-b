@@ -39,6 +39,7 @@
       <div class="table">
         <el-table :data="tableData4" align="center" style="width: 100%;margin: auto;max-width: 960px" height=400>
           <el-table-column align="center"  width="80" type="index" :index="indexMethod"></el-table-column>
+          <el-table-column align="center" prop="userId" label="用户名" width="100"></el-table-column>
           <el-table-column align="center" prop="proName" label="项目名称" width="100"></el-table-column>
           <el-table-column align="center" prop="proIntro" label="项目简介" width="130"></el-table-column>
           <el-table-column align="center" prop="createTime" label="创建时间" width="120"></el-table-column>
@@ -47,8 +48,8 @@
           <el-table-column align="center" label="操作" width="180">
             <template slot-scope="scope">
               <!-- <el-button type="text" size="small" @click="edit(scope.$index, scope.row)">编辑</el-button>-->
-               <el-button type="text" size="small" @click.native.prevent="goReport(scope.$index)">查看报告</el-button>
-               <el-button type="text" size="small" @click.native.prevent="goEst(scope.$index)">估算</el-button>
+               <el-button v-show="scope.row.state ==='完成'" type="text" size="small" @click.native.prevent="goReport(scope.$index)">查看报告</el-button>
+               <el-button v-show="scope.row.state ==='待审核'" type="text" size="small" @click.native.prevent="goEst(scope.$index)">估算</el-button>
              </template>
            </el-table-column>
            <el-table-column prop="remark" label="备注" width="150"></el-table-column>
@@ -110,34 +111,42 @@
           },
           getSTime(val) {
             console.log(val)
-            // if(val!=null){
-            //     this.sTime=val.getFullYear()+'-'+(val.getMonth()+1)+'-'+val.getDate();//这个sTime是在data中声明的，也就是v-model绑定的值
-            //     console.log(val.getFullYear()+'-'+(val.getMonth()+1)+'-'+val.getDate())
-            // }
-            // else{
-            //     this.sTime = "";
-            // }
-            this.sTime = val;
+              if( val instanceof Date || val === null){
+            if(val!=null){
+                var tempMonth = (val.getMonth()+1) < 10 ?  '0' + (val.getMonth()+1):(val.getMonth()+1);
+                var tempDay = val.getDate() < 10 ? '0' + val.getDate() : val.getDate();
+                this.sTime=val.getFullYear()+'-'+(tempMonth)+'-'+tempDay;//这个sTime是在data中声明的，也就是v-model绑定的值
+                console.log(val.getFullYear()+'-'+(val.getMonth()+1)+'-'+val.getDate())
+
+            }
+            else{
+                this.sTime = "";
+            }}
+            else {
+                  this.sTime = val;
+              }
             var v = new RegExp(this.sTime);
             this.tableData4.splice(0,this.tableData4.length);
             for(var j=0;j<this.allData.length;j++) {
               if (v.test(this.allData[j].createTime)) {
-                var temp = {
-                  "rId": '',
-                  "proName": '',
-                  "proIntro": '',
-                  "createTime": '',
-                  "state": '',
-                  "method": '',
-                  "remark": ''
-                }
-                temp.rId = this.allData[j].rId;
-                temp.proName = this.allData[j].proName;
-                temp.proIntro = this.allData[j].proIntro;
-                temp.createTime = this.allData[j].createTime;
-                temp.state = this.allData[j].state;
-                temp.method = this.allData[j].method;
-                temp.remark = this.allData[j].remark;
+                  var temp = {
+                      "userId" : '',
+                      "rId" : '',
+                      "proName" : '',
+                      "proIntro" : '',
+                      "createTime" : '',
+                      "state" : '',
+                      "method" : '',
+                      "remark" : ''
+                  }
+                  temp.userId = this.allData[j].userId;
+                  temp.rId = this.allData[j].rId;
+                  temp.proName=this.allData[j].proName;
+                  temp.proIntro = this.allData[j].proIntro;
+                  temp.createTime = this.allData[j].createTime;
+                  temp.state = this.allData[j].state;
+                  temp.method = this.allData[j].method;
+                  temp.remark = this.allData[j].remark;
                 this.tableData4.push(temp);
               }
             }
@@ -156,13 +165,15 @@
             },
             search(e) {
               this.tableData4.length = 0;
-              var v = new RegExp(e.target.value);
+              var v = new RegExp(e);
               for(var j=0;j<this.allData.length;j++){
                   if(v.test(this.allData[j].proName)||
                       v.test(this.allData[j].proIntro)||
                       v.test(this.allData[j].state)||
-                      v.test(this.allData[j].method)){
+                      v.test(this.allData[j].method)||
+                      v.test(this.allData[j].userId)){
                       var temp = {
+                          "userId" : '',
                           "rId" : '',
                           "proName" : '',
                           "proIntro" : '',
@@ -171,6 +182,7 @@
                           "method" : '',
                           "remark" : ''
                       }
+                      temp.userId = this.allData[j].userId;
                       temp.rId = this.allData[j].rId;
                       temp.proName=this.allData[j].proName;
                       temp.proIntro = this.allData[j].proIntro;
@@ -192,6 +204,7 @@
             for(var j=0;j<this.allData.length;j++){
               if(v.test(this.allData[j].state)){
                 var temp = {
+                    "userId" : '',
                   "rId" : '',
                   "proName" : '',
                   "proIntro" : '',
@@ -200,6 +213,7 @@
                   "method" : '',
                   "remark" : ''
                 }
+                temp.userId = this.allData[j].userId;
                 temp.rId = this.allData[j].rId;
                 temp.proName=this.allData[j].proName;
                 temp.proIntro = this.allData[j].proIntro;
@@ -282,9 +296,25 @@
         }
       },
         mounted() {
+            this.$http.get(this.url + '/identity',{headers: {Authorization : this.$store.state.user.tokenid}}).then(res=>{
+                var code = res.body.code;
+                if(code === 1){
+                    this.$router.push("/ver")
+                }
+                else if(code === 200){
+                    this.$router.push("/login")
+                }
+                else if(code === 500){
+                    alert("服务端错误")
+                }
+
+            },res=>{
+
+            });
             this.$http.get(this.url + '/getAllRequirements').then(res=>{
                     for(var i = 0; i < res.body.length; i++){
                         var temp = {
+                            "userId" : '',
                             "rId" : '',
                             "proName" : '',
                             "proIntro" : '',
@@ -293,6 +323,7 @@
                             "method" : '',
                             "remark" : ''
                         }
+                        temp.userId = res.body[i].userId;
                         temp.rId = res.body[i].id;
                         temp.proName = res.body[i].description.projectName;
                         temp.proIntro = res.body[i].description.projectDescription;

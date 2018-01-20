@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="stepone_content" style="background: #FFFFFF;">
-            <el-form v-model="form" status-icon  ref="form" :rules="rules" label-position="left" label-width="100px" :model="form">
+            <el-form class="stepone_form"  v-model="form" status-icon  ref="form" :rules="rules" label-position="left" label-width="100px" :model="form">
                 <el-form-item label="项目名称" prop="projectName">
                     <el-input v-model="form.projectName" placeholder="项目名称"></el-input>
                 </el-form-item>
@@ -35,13 +35,13 @@
                 </el-form-item>
 
                 <el-form-item label="估算方式" prop="estimationMethod">
-                    <el-select style="padding-right: 80%" v-model="form.estimationMethod" placeholder="请选择估算方式">
+                    <el-select style="padding-right:70%;min-width: 100px" v-model="form.estimationMethod" placeholder="请选择估算方式">
                         <el-option disabled value="">请选择</el-option>
                         <el-option label="IFPUG" value="IFPUG"></el-option>
                         <el-option label="COSMIC" value="COSMIC"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item style="margin-top:50px">
                     <el-button v-on:click="toReport('form')">返回</el-button>
                     <el-button type="primary" v-on:click="toStepTwo('form')" style="margin-right: 10%">下一步</el-button>
                 </el-form-item>
@@ -49,7 +49,7 @@
 
 
         </div>
-        <div style="height: 50px;"></div>
+        <!--<div style="height: 50px;"></div>-->
     </div>
     <!-- footer -->
     <div class="footer">
@@ -122,7 +122,7 @@
         },
         methods:{
             checkToken:function () {
-                if(sessionStorage.tokenid || this.$store.state.user.tokenid !== '')
+                if(sessionStorage.tokenid && this.$store.state.user.tokenid !== '')
                     this.isLogin = true;
                 else
                     this.isLogin = false;
@@ -197,7 +197,7 @@
     }
     .header1 {
         width: 80%;
-        margin-top: 80px;
+        margin-top: 84px;
         margin-left: 10%;
         display: flex;
         flex-direction: row;
@@ -252,11 +252,22 @@
 
     .stepone_content {
         text-align: center;
-        margin-top: 40px;
-        width: 64%;
-        margin-left: auto;
-        margin-right: auto;
-    . margin-bottom: 40 px;
+        /*margin-top: 40px;*/
+        width: 80%;
+        margin-left: 10%;
+        /*max-width: ;*/
+        padding-top: 80px;
+        padding-bottom: 50px;
+        /*margin-right: auto;*/
+    /*. margin-bottom: 40 px;*/
+        display: -webkit-flex;
+        display: flex;
+        display: inline-flex;
+        display: -webkit-inline-flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: center;
+        align-content: flex-start;
     }
 
     .stepone_content > .el-input {
@@ -277,6 +288,12 @@
 
     .no_account > a {
         color: #323a45;
+    }
+
+    .stepone_form{
+        min-width: 70%;
+        max-width: 90%;
+
     }
 
 </style>

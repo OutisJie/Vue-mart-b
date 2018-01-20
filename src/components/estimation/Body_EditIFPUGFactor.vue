@@ -77,7 +77,7 @@
         </el-col>
         <el-col :span="6"><div class="grid-content bg-white"></div></el-col>
       </el-row>
-      <div style="height: 50px;"></div>
+
     </div>
   </template>
 
@@ -95,6 +95,17 @@
 //    for(var i=0;i<dataNum;i++){
 //        changedDataState[i]=false;
 //    }
+
+    function isNumber(val){
+
+        var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+        if(regPos.test(val)){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
 
     export default {
         name: 'Body_EditIFPUGFactor',
@@ -174,44 +185,41 @@
                     "SCED": this.selections[3].val,
                     "productivity": this.inputs[0].val,
                     "cost": this.inputs[1].val
-                    // "developmentTypeState": changedDataState[0],
-                    // "developmentPlatformState": changedDataState[1],
-                    // "languageTypeState": changedDataState[2],
-                    // "DBMS_UsedState": changedDataState[3],
-                    // "RELYState": changedDataState[4],
-                    // "CPLXState": changedDataState[5],
-                    // "TIMEState": changedDataState[6],
-                    // "SCEDState": changedDataState[7],
-                    // "productivityState": changedDataState[8],
-                    // "costState": changedDataState[9],
                 };
-
-//                console.log("showDataState:");
-//                console.log(changedDataState);
 
                 console.log("showTransData:");
                 console.log(trans);
 
-                this.$confirm('是否提交当前信息, 进入下一步骤?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning',
-                    center: true
-                }).then(() => {
-                    this.$http.post(this.url + '/changeVAF/' + this.$route.params.rId, trans).then(response => {
-                        this.$message({
-                            type: 'success',
-                            message: '已提交当前信息!'
+
+                if(isNumber(trans.productivity)&&isNumber(trans.cost)) {
+                    this.$confirm('是否提交当前信息, 进入下一步骤?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning',
+                        center: true
+                    }).then(() => {
+                        this.$http.post(this.url + '/changeVAF/' + this.$route.params.rId, trans).then(response => {
+                            this.$message({
+                                type: 'success',
+                                message: '已提交当前信息!'
+                            });
+                            if (response.body.flag)
+                                this.$router.push({name: 'ManagerStepTwo', params: {rId: this.$route.params.rId}});
                         });
-                        if(response.body.flag)
-                        this.$router.push({name:'ManagerStepTwo', params : {rId : this.$route.params.rId}});
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消操作'
+                        });
                     });
-                }).catch(() => {
+                }
+                else {
                     this.$message({
-                        type: 'info',
-                        message: '已取消操作'
+                        type: 'error',
+                        message: '请输入数字！'
                     });
-                });
+                }
+
             },
         },
         data() {
@@ -359,10 +367,11 @@
   .container {
     font-size: 13px;
     font-family: 'Microsoft YaHei';
-    width: 64%;
+    width: 80%;
     height: auto;
-    margin: auto;
-    padding: 40px 0 40px 0;
+    margin-top: 50px;
+    margin-left: 10%;
+    margin-bottom: 40px;
     display: flex;
     flex-direction: column;
     position: relative;

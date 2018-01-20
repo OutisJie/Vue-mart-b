@@ -50,7 +50,7 @@
     },
     methods:{
       checkToken:function () {
-        if(sessionStorage.tokenid || this.$store.state.user.tokenid !== '')
+        if(sessionStorage.tokenid && this.$store.state.user.tokenid !== '')
           this.isLogin = true;
         else
         this.isLogin = false;
@@ -70,7 +70,7 @@
   }
   .header1 {
     width: 80%;
-    margin-top: 80px;
+    margin-top: 84px;
     margin-left:10% ;
     display: flex;
     flex-direction: row;

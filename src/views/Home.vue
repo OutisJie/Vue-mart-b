@@ -10,7 +10,8 @@
         <div class="picshow">
         <el-carousel :interval="5000" arrow="always" :autoplay="false">
             <el-carousel-item :key="1">
-                <img src="../assets/headPic.jpg" style="width: 100%; height: 100%">
+                <img src="../assets/projectbackground.jpg" style="width: 100%; height: 100%">
+                    <div class="brand">智码<span>基于人工智能的软件开发平台</span></div>
                     <div class="button_group">
                         <el-button><router-link to="/center">发布需求</router-link></el-button>
                         <el-button><router-link to="/projects">查看需求</router-link></el-button>
@@ -18,7 +19,7 @@
                 </img>
             </el-carousel-item>
             <el-carousel-item :key="2">
-                <img src="../assets/headPic.jpg" style="width: 100%; height: 100%">
+                <img src="../assets/projectbackground.jpg" style="width: 100%; height: 100%">
                 </img>
             </el-carousel-item>
         </el-carousel>
@@ -132,7 +133,7 @@ export default {
     },
     methods:{
       checkToken:function () {
-        if(sessionStorage.tokenid || this.$store.state.user.tokenid !== '')
+        if(sessionStorage.tokenid && this.$store.state.user.tokenid !== '')
           this.isLogin = true;
         else
             this.isLogin = false;
@@ -144,6 +145,17 @@ export default {
 
 
 <style>
+.brand {
+    font-size: 50px;
+    color:#fff;
+    position: absolute;
+    left: 43%;
+    top: 35%;
+}
+.brand > span {
+    font-size: 13px;
+    margin-left: 10px;
+}
 .home{
     overflow: hidden;
  }
@@ -167,9 +179,7 @@ export default {
     text-align:center;
 }
 
-.main_content{
-    background: #F1F2F5;
-}
+
 
 .home_flow_left{
     border-bottom: 1px solid #DDD;

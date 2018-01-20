@@ -2,6 +2,7 @@
 <template>
 
   <div class="container" style="background: #FFFFFF;">
+    <div style="width: 85%; margin: auto">
     <div>
       <el-row type="flex" class="row-bg" style="margin-bottom: 0; min-width: 100%">
         <el-col :span="22"><div class="grid-content bg-white"></div></el-col>
@@ -104,6 +105,7 @@
       </el-collapse-item>
     </el-collapse>
     <div style="height: 50px;"></div>
+    </div>
   </div>
 
 </template>
@@ -113,6 +115,7 @@
   import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
   var trans;
   var i=0;
+  var projectName='';
   export default {
     components: {ElButton},
     name:'Body_IFPUGReport',
@@ -120,6 +123,7 @@
       this.$http.get(this.url + '/getReport/' + this.$route.params.rId).then(response=>{
         console.log(response.body)
         trans=response.body.newVAF;
+        projectName=response.body.description.projectName;
 
         // 调整因子表格数据
 //        this.tableData3.length=0;
@@ -156,27 +160,27 @@
 //        this.tableData4.length=0;
         this.tableData4[0].UFP=response.body.UFP;
         this.tableData4[0].AFP=response.body.AFP.toFixed(2);
-        this.tableData4[0].projectCost=response.body.workCost.toFixed(2);
-        this.tableData4[0].projectDuration=response.body.workTime.toFixed(2);
+        this.tableData4[0].projectCost=response.body.workCost.toFixed(2)+"元";
+        this.tableData4[0].projectDuration=response.body.workTime.toFixed(2)+"天";
 
 
-        var temp = response.body.transactions;
-        for(var i=0;i<temp.length;i++){
           //数据功能表格数据
           this.tableData1.length=0;
-          var dataTemp = temp[i].estimationFileDatas;
+          var dataTemp = response.body.estimationFileDatas;
           for(var j = 0; j < dataTemp.length;j++){
-            this.tableData1.push({
-              name : dataTemp[j].name,
-              type : dataTemp[j].fileType,
-              RET : dataTemp[j].RET,
-              RETNum : dataTemp[j].RETNum,
-              DET : dataTemp[j].DET,
-              DETNum : dataTemp[j].DETNum,
-              complexity : dataTemp[j].complexity,
-              UFP : dataTemp[j].UFP,
-            })
+              this.tableData1.push({
+                  name : dataTemp[j].name,
+                  type : dataTemp[j].fileType,
+                  RET : dataTemp[j].RET,
+                  RETNum : dataTemp[j].RETNum,
+                  DET : dataTemp[j].DET,
+                  DETNum : dataTemp[j].DETNum,
+                  complexity : dataTemp[j].complexity,
+                  UFP : dataTemp[j].UFP,
+              })
           }
+        var temp = response.body.transactions;
+        for(var i=0;i<temp.length;i++){
 
           //事务功能表格数据
           this.tableData2.length=0;
@@ -233,7 +237,7 @@
           const list4 = this.tableData4;
           const data4 = this.formatJson(filterVal4, list4);
 
-          export_json_to_excel(tHeader, data,tHeader2, data2, tHeader3, data3,tHeader4, data4,'IFPUG报告'); //对应下载文件的名字
+          export_json_to_excel(tHeader, data,tHeader2, data2, tHeader3, data3,tHeader4, data4,projectName); //对应下载文件的名字
         })
       },
       formatJson(filterVal, jsonData) {
@@ -305,9 +309,8 @@
     font-family: 'Microsoft YaHei';
     width: 80%;
     height: auto;
-    margin: auto;
-    margin-top: 10px;
-    padding: 0px 0 40px 0;
+    margin-top: 50px;
+    margin-left: 10%;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -345,7 +348,7 @@
     padding: 10px 0;
     background-color: #FFFFFF;
   }
-  .el-table .showchange{
+  .container >>> .showchange{
     color: cornflowerblue;
   }
   .ps{

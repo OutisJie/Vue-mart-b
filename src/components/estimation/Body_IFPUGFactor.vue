@@ -1,17 +1,17 @@
 <!--用户输入IFPUG调整因子-->
   <template>
-    <div class="container" style="background: #FFFFFF;">
+    <div class="mycontainer" style="background: #FFFFFF;">
 
       <!--开发类型、开发平台、开发语言、是否使用数据库-->
       <div v-for="radio in radios" :key="radio.name">
-        <el-row :gutter="20">
+        <el-row :gutter="20" style="margin-left: 0;margin-right: 0;margin-top: 40px;margin-bottom: 0px">
           <el-col :span="3"><div class="grid-content bg-white">
           </div></el-col>
           <el-col :span="5"><div class="grid-content bg-white">
             <span>{{radio.name}}</span>
           </div></el-col>
           <el-col :span="16"><div class="grid-content bg-white">
-            <el-radio-group v-model="radio.val" v-for="t in radio.vals" :key="t.value">
+            <el-radio-group v-model="radio.val" v-for="t in radio.vals" :key="t.value" style="margin-right:10px">
               <el-radio :label=t.value></el-radio>
             </el-radio-group>
           </div></el-col>
@@ -20,7 +20,7 @@
 
       <!--软件可靠性要求、产品复杂度、执行时间约束、要求的开发进度-->
       <div v-for="selection in selections" :key="selection.name">
-        <el-row :gutter="20">
+        <el-row :gutter="20" style="margin-left: 0;margin-right: 0;margin-top: 40px;margin-bottom: 0px">
           <el-col :span="3"><div class="grid-content bg-white">
           </div></el-col>
           <el-col :span="5"><div class="grid-content bg-white">
@@ -41,7 +41,7 @@
 
       <!--生产率、人力成本-->
       <div v-for="item in inputs" :key="item.name">
-        <el-row :gutter="20">
+        <el-row :gutter="20" style="margin-left: 0;margin-right: 0;margin-top: 40px;margin-bottom: 0px">
           <el-col :span="3"><div class="grid-content bg-white">
           </div></el-col>
           <el-col :span="5"><div class="grid-content bg-white">
@@ -55,8 +55,10 @@
       </div>
 
       <div class="grid-content bg-white" style="margin: auto">
+        <el-row :gutter="20" style="margin-left: 0;margin-right: 0;margin-top: 40px;margin-bottom: 0px">
         <el-button type="primary" @click="toStepTwo" >返回</el-button>
         <el-button type="primary" @click="toVer">提交</el-button>
+        </el-row>
       </div>
       <div style="height: 50px;"></div>
     </div>
@@ -65,8 +67,44 @@
 
 <script>
     import server from '../../../config/index';
+
+    function isNumber(val){
+
+        var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+        if(regPos.test(val)){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
     export default {
         name: 'Body_IFPUGFactor',
+        mounted(){
+            this.$http.get(this.url + '/getRequirement/'+this.$route.params.rId).then(res=>{
+                console.log(res.body.newVAF);
+                if(res.body.newVAF!==null) {
+                    this.radios[0].val = res.body.newVAF.developmentType;
+                    this.radios[1].val = res.body.newVAF.developmentPlatform;
+                    this.radios[2].val = res.body.newVAF.languageType;
+                    this.radios[3].val = res.body.newVAF.dbms_Used;
+                    this.selections[0].val = res.body.newVAF.rely;
+                    this.selections[1].val = res.body.newVAF.cplx;
+                    this.selections[2].val = res.body.newVAF.time;
+                    this.selections[3].val = res.body.newVAF.sced;
+                    this.inputs[0].val = res.body.newVAF.productivity;
+                    this.inputs[1].val = res.body.newVAF.cost;
+                }
+//                //记录数据库传过来的数据
+//                this.aveOriginalData();
+//                console.log("showOriginalData");
+//                console.log(originalData);
+
+            },res=>{
+                console.log('fail');
+            })
+        },
         methods: {
             toStepTwo() {
                 this.$confirm('返回前页将不会保存当前内容, 是否继续?', '提示', {
@@ -111,26 +149,36 @@
                     // "costState": false,
                 };
                 console.log(trans);
-                this.$confirm('是否提交当前信息?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning',
-                    center: true
-                }).then(() => {
-                    console.log(this.url + '/addVAF/' + this.$route.params.rId)
-                    this.$http.post(this.url + '/addVAF/' + this.$route.params.rId, trans).then(response => {
+
+                if(isNumber(trans.productivity)&&isNumber(trans.cost)){
+                    this.$confirm('是否提交当前信息?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning',
+                        center: true
+                    }).then(() => {
+                        console.log(this.url + '/addVAF/' + this.$route.params.rId)
+                        this.$http.post(this.url + '/addVAF/' + this.$route.params.rId, trans).then(response => {
+                            this.$message({
+                                type: 'success',
+                                message: '已提交当前信息!'
+                            });
+                            this.$router.push( {path:'/ver'});
+                        })
+                    }).catch(() => {
                         this.$message({
-                            type: 'success',
-                            message: '已提交当前信息!'
+                            type: 'info',
+                            message: '已取消操作'
                         });
-                        this.$router.push( {path:'/ver'});
-                    })
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消操作'
                     });
-                });
+                }
+                else {
+                    this.$message({
+                        type: 'error',
+                        message: '请输入数字！'
+                    });
+                }
+
             },
         },
         data() {
@@ -233,28 +281,28 @@
 
 
 <style scoped>
-  .container {
+  .mycontainer {
     font-size: 13px;
     font-family: 'Microsoft YaHei';
-    width: 64%;
+    width: 80%;
     height: auto;
-    margin: auto;
-    padding: 50px 0 40px 0;
+    margin-top: 50px;
+    margin-left: 10%;
     display: flex;
     flex-direction: column;
     position: relative;
   }
-  .container.filter{
+  .mycontainer.filter{
     width: 100%;
     border: solid rgba(71, 72, 69, 0.4) 1px;
     margin: auto;
   }
-  .container .filter .quick-search {
+  .mycontainer .filter .quick-search {
     width: 200px;
     border: solid rgba(71, 72, 69, 0.4) 1px; }
-  .container .filter .quick-search input {
+  .mycontainer .filter .quick-search input {
     color: #474845; }
-  .container .filter .quick-search input::placeholder {
+  .mycontainer .filter .quick-search input::placeholder {
     color: rgba(71, 72, 69, 0.4); }
 
   .el-row {
