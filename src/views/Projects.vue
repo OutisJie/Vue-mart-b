@@ -75,11 +75,11 @@
             <el-row :gutter="0" type="flex" justify="center" style="background: #FFFFFF; height:48px;">
               <el-col class="project_type"><span class="static_text">类型：</span>{{project.requirementType}}</el-col>
               <el-col class="project_state">
-                  <span v-if="project.requirementState==1"
+                  <span v-if="project.requirementState==0"
                         style="border: 1px solid #61c279;color: #61c279;border-radius: 2px;padding: 0.36rem;">招募中</span>
-                <span v-if="project.requirementState==2"
+                <span v-if="project.requirementState==1"
                       style="border: 1px solid #f68435;color: #f68435;border-radius: 2px;padding: 0.36rem;">开发中</span>
-                <span v-if="project.requirementState==3"
+                <span v-if="project.requirementState==2"
                       style="border: 1px solid #8796a8;color: #8796a8;border-radius: 2px;padding: 0.36rem;">已完成</span>
               </el-col>
             </el-row>

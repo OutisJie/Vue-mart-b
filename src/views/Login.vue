@@ -83,15 +83,11 @@
             }
           }).catch(function (error) {
             if (error) {
-              switch (error.data.status) {
-                case "401":
-                  swal("Warning", "密码错误!", "warning");
-                  break;
-                case "404":
-                  swal("Warning", "用户名不存在!", "warning");
-                  break;
-              }
-              if (error.status == 500) {
+              if(error.data.result == "unauthorized"){
+                swal("Warning", "密码错误!", "warning");
+              }else if(error.data.result == "用户名不存在"){
+                swal("Warning", "用户名不存在!", "warning");
+              }else if (error.status == 500) {
                 swal("Error", "服务器错误", "error");
               }
             }

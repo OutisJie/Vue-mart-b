@@ -60,13 +60,13 @@ import axios from '../../axios/http';
           if(response.data.status == 200){
             this.items = response.data.result;
             this.items.forEach(function (item,index) {
-              if(item.project_state == 1){
+              if(item.project_state == 0){
                 item.project_state = "招募中";
               }
-              else if(item.project_state == 2){
+              else if(item.project_state == 1){
                 item.project_state = "开发中";
               }
-              else if(item.project_state == 3){
+              else if(item.project_state == 2){
                 item.project_state = "已完成";
               }
             });

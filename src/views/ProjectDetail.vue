@@ -186,15 +186,16 @@
           if (response.data.status == 200) {
             this.form.name = response.data.result.requirement.requirementName;
             this.form.type = response.data.result.requirement.requirementType;
-            if (response.data.result.requirement.requirementState == 1) {
+            if (response.data.result.requirement.requirementState == 0) {
               this.form.state = '招募中';
               this.isAble = this.isLogin && true;
             }
-            else if (response.data.result.requirement.requirementState == 2) {
+            else if (response.data.result.requirement.requirementState == 1) {
               this.form.state = '开发中';
               this.isAble = this.isLogin && false;
             }
-            else if (response.data.result.requirement.requirementState == 3) {
+            else if (response.data.result.requirement.requirementState == 2) {
+              this.form.state = '已完成';
               this.isAble = this.isLogin && false;
             }
             //需要转换

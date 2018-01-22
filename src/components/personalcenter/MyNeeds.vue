@@ -40,9 +40,9 @@
           </el-form-item>
           <el-form-item label="修改项目状态" prop="state" v-show = "isModify">
             <el-select v-model="ruleForm.state" placeholder="请选择项目状态">
-              <el-option label="招募中" value = 1></el-option>
-              <el-option label="开发中" value = 2></el-option>
-              <el-option label="已完成" value = 3></el-option>
+              <el-option label="招募中" value = 0></el-option>
+              <el-option label="开发中" value = 1></el-option>
+              <el-option label="已完成" value = 2></el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -145,13 +145,13 @@
           if (response.data.status == 200) {
             this.items = response.data.result;
             this.items.forEach(function (item, index) {
-              if (item.requirement_state == 1) {
+              if (item.requirement_state == 0) {
                 item.requirement_state = "招募中";
               }
-              else if (item.requirement_state == 2) {
+              else if (item.requirement_state == 1) {
                 item.requirement_state = "开发中";
               }
-              else if (item.requirement_state == 3) {
+              else if (item.requirement_state == 2) {
                 item.requirement_state = "已完成";
               }
             });
@@ -254,11 +254,11 @@
             this.ruleForm.need_manager = response.data.result.requirement.needManager == 1 ? true : false;
             this.ruleForm.description = response.data.result.requirement.requirementDetail;
             this.ruleForm.state = response.data.result.requirement.requirementState;
-            if( this.ruleForm.state == 1){
+            if( this.ruleForm.state == 0){
               this.ruleForm.state = "招募中";
-            }else if(this.ruleForm.state == 2){
+            }else if(this.ruleForm.state == 1){
               this.ruleForm.state = "开发中";
-            }else if(this.ruleForm.state == 3){
+            }else if(this.ruleForm.state == 2){
               this.ruleForm.state = "已完成";
             }
 
@@ -498,8 +498,7 @@
 
       //查看详情页面
       check(row) {
-        this.$store.commit('setProjectId', row.requirement_id.toString());
-        this.$router.push('/projectDetail');
+        this.$router.push({path:'/projectDetail', query:{id: row.requirement_id}});
       }
     }
   }
